@@ -10,7 +10,7 @@ from utils.classes import Client
 from utils.arg_parser import args_parser
 from utils.initialization_utils import sample_cifargroups
 from utils.training_utils import train_clients_locally
-from utils.training_utils import client_information_exchange
+from utils.training_utils import *
 from utils.visualization_utils import *
 
 from models.cifar_models import simple_CNN
@@ -45,6 +45,11 @@ if __name__ == '__main__':
 
     figpath = 'save/'+results_folder+'/figs/'
 
+    # save args to metadata file
+    with open('save/'+results_folder+'/metadata.txt', 'w') as f:
+        f.write(str(args))
+        f.close()
+
     # load dataset and transform
     trans_cifar = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
     train_dataset = torchvision.datasets.CIFAR10('.', train=True, download=True, transform=trans_cifar)
@@ -76,16 +81,33 @@ if __name__ == '__main__':
     clients = train_clients_locally(clients, args.nbr_local_epochs, verbose=True)
     for round in range(args.nbr_rounds):
         # information exchange
-        parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
+
+        if args.client_information_exchange == 'DAC':
+            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
                       'prior_update_rule': args.prior_update_rule,
                       'similarity_metric': args.similarity_metric,
                       'tau': args.tau,
                       'cosine_alpha': args.cosine_alpha,
                       }
-        clients = client_information_exchange(clients, 
-                                          parameters=parameters,
-                                          verbose=True,
-                                          round=round)
+            clients = client_information_exchange_DAC(clients, 
+                                            parameters=parameters,
+                                            verbose=True,
+                                            round=round)
+        elif args.client_information_exchange == 'oracle':
+            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled}
+            clients = client_information_exchange_oracle(clients, 
+                                            parameters=parameters,
+                                            verbose=True,
+                                            round=round,
+                                            delusional=False)
+        elif args.client_information_exchange == 'delusional':
+            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled}
+            clients = client_information_exchange_oracle(clients, 
+                                            parameters=parameters,
+                                            verbose=True,
+                                            round=round,
+                                            delusional=True)
+        
         # print client validation accuracy and loss
         val_accs = [client.val_acc_list[-1] for client in clients]
         val_losses = [client.val_loss_list[-1] for client in clients]
@@ -111,11 +133,6 @@ if __name__ == '__main__':
     plot_priors_heatmap(clients, figpath)
     plot_neighbor_sampled_heatmap(clients, figpath)
     #similarity_landscape(clients[0], figpath)
-
-    # save args to metadata file
-    with open('save/'+results_folder+'/metadata.txt', 'w') as f:
-        f.write(str(args))
-        f.close()
 
     # dump the clients to clients.pkl
     with open('save/'+results_folder+'/clients.pkl', 'wb') as f:

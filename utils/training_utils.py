@@ -27,7 +27,7 @@ def train_clients_locally(clients, nbr_local_epochs, verbose=False):
 
 # clients exchange information with each other asynchronously in a random order
 # the function is the same for all similarity metrics and how those are distributed in the network
-def client_information_exchange(clients, parameters, verbose=False, round=0):
+def client_information_exchange_DAC(clients, parameters, verbose=False, round=0):
     '''
     parameters:
     n_sampled: number of neighbors sampled
@@ -130,9 +130,15 @@ def client_information_exchange(clients, parameters, verbose=False, round=0):
         
             #### update client priors - can maybe be done in several ways
             clients[i].priors = np.zeros(len(clients)) # TODO ska vi nollställa?
-            if parameters['prior_update_rule'] == 'softmax':
+            if parameters['prior_update_rule'] == 'softmax-variable-tau':
                 #update tau
-                parameters['tau'] = tau_function(round,parameters['tau'],0.2)
+                parameters['tau'] = tau_function(round,parameters['tau'],0.2) # this line differs from softmax
+                for j in range(len(clients)):
+                    if clients[i].similarity_scores[j] > 0:
+                        clients[i].priors[j] = np.exp(clients[i].similarity_scores[j]*parameters['tau'])
+                # normalize
+                clients[i].priors = clients[i].priors/np.sum(clients[i].priors)
+            elif parameters['prior_update_rule'] == 'softmax':
                 for j in range(len(clients)):
                     if clients[i].similarity_scores[j] > 0:
                         clients[i].priors[j] = np.exp(clients[i].similarity_scores[j]*parameters['tau'])
@@ -141,6 +147,69 @@ def client_information_exchange(clients, parameters, verbose=False, round=0):
             else:
                 # other prior update rules here
                 pass
+
+            if verbose:
+                print('Client {} informaton exchange round {} done. Exchanged with {}'.format(i, round, neighbor_indices_sampled))
+
+    return clients
+
+def client_information_exchange_oracle(clients, parameters, verbose=False, round=0, delusional=False):
+    '''
+    parameters:
+    n_sampled: number of neighbors sampled
+    prior_update_rule: how to update priors
+    similarity_metric: how to measure similarity between clients
+    '''
+
+    if verbose:
+        print('Starting information exchange round {}'.format(round))
+
+    # randomize order of asynchronous communication
+    idxs = np.arange(len(clients))
+    np.random.shuffle(idxs)
+    for i in idxs:
+        if verbose:
+            if clients[i].stopped_early:
+                print('Client {} has stopped early'.format(i))
+        if (not clients[i].stopped_early):
+            
+            #### sample neighbors
+            if delusional:
+                neighbor_indices_sampled = np.random.choice(list(set([client.idx for client in clients if client.group != clients[i].group]) - set([i])), 
+                                                        size=parameters['nbr_neighbors_sampled'], 
+                                                        replace=False)
+            else:
+                neighbor_indices_sampled = np.random.choice(list(set([client.idx for client in clients if client.group == clients[i].group]) - set([i])), 
+                                                        size=parameters['nbr_neighbors_sampled'], 
+                                                        replace=False)
+
+            #### aggregate information from chosen neighbors
+            # potentially different model aggregation weightings here
+            neighbor_weights = []
+            train_set_sizes = []
+            for j in neighbor_indices_sampled:
+                # validate on neighbor model, get loss and accuracy
+                neighbor_model = clients[j].local_model
+                train_set_size = len(clients[j].train_set)
+                # save stuff
+                train_set_sizes.append(train_set_size)
+                neighbor_weights.append(neighbor_model.state_dict())
+
+                # update client sampling record
+                clients[i].n_sampled[j] += 1
+            
+            # weighted average of models
+            neighbor_weights.append(clients[i].local_model.state_dict())
+            train_set_sizes.append(len(clients[i].train_set))
+            new_weights = FedAvg(neighbor_weights,train_set_sizes)
+            clients[i].local_model.load_state_dict(new_weights)
+
+            #### calculate new similarity scores
+            
+        
+            #### update client priors - can maybe be done in several ways
+            clients[i].priors = np.zeros(len(clients)) # TODO ska vi nollställa?
+            
 
             if verbose:
                 print('Client {} informaton exchange round {} done. Exchanged with {}'.format(i, round, neighbor_indices_sampled))

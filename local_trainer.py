@@ -10,7 +10,7 @@ from utils.classes import Client
 from utils.arg_parser import args_parser
 from utils.initialization_utils import sample_cifargroups
 from utils.training_utils import train_clients_locally
-from utils.training_utils import client_information_exchange
+from utils.training_utils import client_information_exchange_DAC
 from utils.visualization_utils import *
 
 from models.cifar_models import simple_CNN
@@ -42,6 +42,13 @@ if __name__ == '__main__':
         os.makedirs('save/'+results_folder+'/figs')
 
     figpath = 'save/'+results_folder+'/figs/'
+
+    # save args to metadata file
+    with open('save/'+results_folder+'/metadata.txt', 'w') as f:
+        f.write(str(args))
+        # write that is was a local training
+        f.write('\nLocal training')
+        f.close()
 
     # load dataset and transform
     trans_cifar = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
@@ -88,11 +95,6 @@ if __name__ == '__main__':
     plot_client_validation_accuracy(clients[0], figpath)
     plot_client_validation_and_training_loss(clients[1], figpath)
     plot_client_validation_accuracy(clients[1], figpath)
-
-    # save args to metadata file
-    with open('save/'+results_folder+'/metadata.txt', 'w') as f:
-        f.write(str(args))
-        f.close()
 
     # dump the clients to clients.pkl
     with open('save/'+results_folder+'/clients.pkl', 'wb') as f:
