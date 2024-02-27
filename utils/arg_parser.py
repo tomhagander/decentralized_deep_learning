@@ -21,7 +21,9 @@ def args_parser():
     parser.add_argument('--similarity_metric', type=str, default='inverse_training_loss', help='how to measure similarity between clients')
     parser.add_argument('--cosine_alpha', type=float, default=0.5, help='alpha in cosine similarity')
     parser.add_argument('--tau', type=float, default=1, help='temperature in softmax')
+    parser.add_argument('--client_information_exchange', type=str, default='DAC', help='How clients exchange information')
     parser.add_argument('--experiment_name', type=str, default='experiment', help='name of experiment')
+    
 
 
     # arguments from DAC

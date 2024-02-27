@@ -1,51 +1,43 @@
 import subprocess
 
+commands = []
+# dac - variable learning rates
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 7e-6 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_dac_7e6')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 3e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_dac_3e5')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_dac_1e5')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 7e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_dac_7e5')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_dac_1e4')
 
-'''
-# List of parameters
-parameters = [
-    ['--nbr_clients', '100', 
-     '--nbr_rounds', '200',
-     '--n_data_train', '400', 
-     '--n_data_val', '100', 
-     '--seed', '1', 
-     '--batch_size', '8', 
-     '--nbr_local_epochs', '3', 
-     '--lr', '3e-5', 
-     '--nbr_classes', '10', 
-     '--nbr_channels', '3', 
-     '--stopping_rounds', '10', 
-     '--nbr_neighbors_sampled', '5', 
-     '--prior_update_rule', 'softmax', 
-     '--similarity_metric', 'inverse_training_loss', 
-     '--tau', '30', 
-     '--experiment_name', 'replication_DACvar_1'],
-]
+# variable tau dac - variable learning rates
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 7e-6 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_dac_var_7e6')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 3e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_dac_var_3e5')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_dac_var_1e5')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 7e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_dac_var_7e5')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_dac_var_1e4')
 
-# Iterate over the parameters
-for param in parameters:
-    # Build the command
-    command = ['python3', 'run_experiment.py',
-            param[0], param[1], 
-            param[2], param[3], 
-            param[4], param[5], 
-            param[6], param[7], 
-            param[8], param[9], 
-            param[10], param[11], 
-            param[12], param[13], 
-            param[14], param[15], 
-            param[16], param[17], 
-            param[18], param[19],
-            param[20], param[21],
-            param[22], param[23],
-            param[24], param[25],
-            param[26], param[27],
-            param[28], param[29],
-            ]
-    
-    # Run the command
-    subprocess.run(command)
-'''
+# local - variable learning rates
+commands.append('python3 local_trainer.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 7e-6 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_local_7e6')
+commands.append('python3 local_trainer.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 3e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_local_3e5')
+commands.append('python3 local_trainer.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_local_1e5')
+commands.append('python3 local_trainer.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 7e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_local_7e5')
+commands.append('python3 local_trainer.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_local_1e4')
 
-command  = 'python3 run_experiment.py --nbr_clients 10 --nbr_rounds 1 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 3e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --experiment_name dev2'
-subprocess.run(command, shell=True)
+# delusional - variable learning rates
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 7e-6 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange delusional --experiment_name wk_delusional_7e6')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 3e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange delusional --experiment_name wk_delusional_3e5')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange delusional --experiment_name wk_delusional_1e5')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 7e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange delusional --experiment_name wk_delusional_7e5')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange delusional --experiment_name wk_delusional_1e4')
+
+# oracle - variable learning rates
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 7e-6 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange oracle --experiment_name wk_oracle_7e6')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 3e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange oracle --experiment_name wk_oracle_3e5')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange oracle --experiment_name wk_oracle_1e5')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 7e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange oracle --experiment_name wk_oracle_7e5')
+commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange oracle --experiment_name wk_oracle_1e4')
+
+
+
+
+for command in commands:
+    subprocess.run(command, shell=True)

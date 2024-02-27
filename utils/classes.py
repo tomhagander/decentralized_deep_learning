@@ -28,6 +28,9 @@ class Client(object):
         self.criterion = criterion
         self.lr = lr
         self.idx = idx
+        if(idx<int(num_users*0.4)): # Only for cifar10 with 40% vehicles and 60% animals
+            self.group = 0
+        else: self.group = 1
 
         # set rot deg to 0 because only label shift is implemented
         rot_deg = 0
@@ -58,7 +61,7 @@ class Client(object):
         self.best_val_acc = -np.inf
         self.count = 0
         self.stopped_early = False
-        self.all_similarities = [1/(num_users-1)]*(num_users)
+        self.all_similarities = []
 
         # validate initial model
         init_loss, init_acc = self.validate(self.local_model, train_set = False)
