@@ -15,7 +15,7 @@ def args_parser():
     parser.add_argument('--lr', type=float, default=3e-5, help="learning rate")
     parser.add_argument('--nbr_classes', type=int, default=10, help="number of classes")
     parser.add_argument('--nbr_channels', type=int, default=3, help="number of channels of imges")
-    parser.add_argument('--stopping_rounds', type=int, default=10, help='rounds of early stopping')
+    parser.add_argument('--stopping_rounds', type=int, default=50, help='rounds of early stopping')
     parser.add_argument('--nbr_neighbors_sampled', type=int, default=5, help='number of neighbors sampled')
     parser.add_argument('--prior_update_rule', type=str, default='softmax', help='how to update priors')
     parser.add_argument('--similarity_metric', type=str, default='inverse_training_loss', help='how to measure similarity between clients')
@@ -23,6 +23,7 @@ def args_parser():
     parser.add_argument('--tau', type=float, default=1, help='temperature in softmax')
     parser.add_argument('--client_information_exchange', type=str, default='DAC', help='How clients exchange information')
     parser.add_argument('--experiment_name', type=str, default='experiment', help='name of experiment')
+    parser.add_argument('--delusion', type=float, default=0, help='If oracle, the chance that a client communicates with the wrong cluster in a round. If -1, communication is random')
     
 
 
