@@ -20,10 +20,51 @@ class DatasetSplit(Dataset):
         if self.transform:
             image = self.transform(image)
         return image, label
+    
+
+class EarlyStopping:
+    def __init__(self, patience=10, min_delta=0):
+        '''
+        Initializes the EarlyStopping instance.
+        :param patience: Number of epochs to wait after min has been hit.
+        :param min_delta: Minimum change to qualify as an improvement.
+        '''
+        self.patience = patience
+        self.min_delta = min_delta
+        self.patience_counter = 0
+        self.best_score = None
+        self.stop_training = False
+
+    def __call__(self, val_loss):
+        '''
+        Evaluates the current validation loss.
+        :param val_loss: Current validation loss.
+        :return: True if the training should stop, False otherwise.
+        '''
+        if self.best_score is None:
+            self.best_score = val_loss
+        elif val_loss < self.best_score - self.min_delta:
+            self.best_score = val_loss
+            self.patience_counter = 0
+        else:
+            self.patience_counter += 1
+            if self.patience_counter >= self.patience:
+                self.stop_training = True
+        return self.stop_training
+    
+    def is_stopped(self):
+        '''
+        Returns whether the training should stop or not.
+        :return: True if the training should stop, False otherwise.
+        '''
+        return self.stop_training
+
+    
+
 
 # client object
 class Client(object):
-    def __init__(self, train_set, idxs_train, idxs_val, criterion, lr, device, batch_size, num_users, model, idx):
+    def __init__(self, train_set, idxs_train, idxs_val, criterion, lr, device, batch_size, num_users, model, idx, stopping_rounds):
         self.device = device
         self.criterion = criterion
         self.lr = lr
@@ -45,6 +86,9 @@ class Client(object):
         # copy model and send to device
         self.local_model = copy.deepcopy(model)
         self.local_model.to(self.device)
+
+        # Early stopping
+        self.early_stopping = EarlyStopping(patience=stopping_rounds, min_delta=0)
         
         # place to store best model
         self.best_model = copy.deepcopy(self.local_model)
@@ -53,6 +97,10 @@ class Client(object):
         self.train_loss_list = []
         self.val_loss_list = []
         self.val_acc_list = []
+
+        self.val_losses_post_exchange = []
+        self.val_accs_post_exchange = []
+
         self.n_received = 0
         self.n_sampled = np.zeros(num_users, dtype=int)
         self.n_sampled_prev = np.zeros(num_users)
@@ -60,7 +108,6 @@ class Client(object):
         self.best_val_loss = np.inf
         self.best_val_acc = -np.inf
         self.count = 0
-        self.stopped_early = False
         self.all_similarities = []
 
         # validate initial model
@@ -74,6 +121,10 @@ class Client(object):
         self.grad_a = None
         self.grad_b = None
         self.initial_weights = copy.deepcopy(self.local_model.state_dict())
+
+        # more stuff for cosine similarity
+        self.N = []
+        self.B = []
 
         # prior distribution over neighbors, this can be cleaned up
         # uniform distribution
@@ -117,6 +168,9 @@ class Client(object):
             self.best_model.load_state_dict(self.local_model.state_dict())
         else:
             self.count += 1
+
+        # early stopping
+        self.early_stopping(val_loss)
             
         return self.best_model, epoch_loss[-1], self.best_val_loss, self.best_val_acc
     

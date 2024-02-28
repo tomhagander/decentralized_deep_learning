@@ -74,7 +74,8 @@ if __name__ == '__main__':
                         batch_size=args.batch_size, 
                         num_users=args.nbr_clients, 
                         model=client_model_init,
-                        idx=i)
+                        idx=i,
+                        stopping_rounds=args.stopping_rounds)
         clients.append(client)
 
     # training
@@ -99,18 +100,17 @@ if __name__ == '__main__':
                                             parameters=parameters,
                                             verbose=True,
                                             round=round,
-                                            delusional=False)
-        elif args.client_information_exchange == 'delusional':
-            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled}
-            clients = client_information_exchange_oracle(clients, 
-                                            parameters=parameters,
-                                            verbose=True,
-                                            round=round,
-                                            delusional=True)
+                                            delusion=args.delusion)
+            
+        # validate post exchange and save to each clients val_losses_post_exchange and val_accs_post_exchange
+        for client in clients:
+            val_loss, val_acc = client.validate(client.local_model, train_set = False)
+            client.val_losses_post_exchange.append(val_loss)
+            client.val_accs_post_exchange.append(val_acc)
         
         # print client validation accuracy and loss
-        val_accs = [client.val_acc_list[-1] for client in clients]
-        val_losses = [client.val_loss_list[-1] for client in clients]
+        val_accs = [client.val_accs_post_exchange[-1] for client in clients]
+        val_losses = [client.val_losses_post_exchange[-1] for client in clients]
         print('Round {} post exchange. Average val acc: {:.3f}, average val loss: {:.3f}'.format(round, np.mean(val_accs), np.mean(val_losses)))
         # local training
         clients = train_clients_locally(clients, args.nbr_local_epochs, verbose=True)
@@ -121,18 +121,6 @@ if __name__ == '__main__':
 
     # done with training
     print('Done with training')
-
-    #plotting
-    plot_similarity_heatmap(clients, figpath)
-    plot_average_client_validation_and_training_loss(clients, figpath)
-    plot_average_client_validation_accuracy(clients, figpath)
-    plot_client_validation_and_training_loss(clients[0], figpath)
-    plot_client_validation_accuracy(clients[0], figpath)
-    plot_client_similarity_scores(clients[0], figpath)
-    plot_variable_nbr_of_clients_validation_accuracy(clients, 5, figpath)
-    plot_priors_heatmap(clients, figpath)
-    plot_neighbor_sampled_heatmap(clients, figpath)
-    #similarity_landscape(clients[0], figpath)
 
     # dump the clients to clients.pkl
     with open('save/'+results_folder+'/clients.pkl', 'wb') as f:
