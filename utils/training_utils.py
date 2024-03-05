@@ -1,4 +1,6 @@
 import numpy as np
+from scipy.stats import norm
+from copy import deepcopy
 import copy
 
 def FedAvg(w,alpha):
@@ -91,8 +93,10 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
             # weighted average of models
             neighbor_weights.append(clients[i].local_model.state_dict())
             train_set_sizes.append(len(clients[i].train_set))
-            new_weights = FedAvg(neighbor_weights,train_set_sizes)
-            clients[i].local_model.load_state_dict(new_weights)
+            # do the actual averaging at the end of the round, after calculating similarity scores
+
+            """ new_weights = FedAvg(neighbor_weights,train_set_sizes)
+            clients[i].local_model.load_state_dict(new_weights) """
 
             #### calculate new similarity scores
             if parameters['similarity_metric'] == 'inverse_training_loss':
@@ -105,12 +109,11 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
                     j_grad_a = clients[j].get_grad_a()
                     j_grad_b = clients[j].get_grad_b()
                     ij_similarities.append(parameters['cosine_alpha']*np.dot(i_grad_a,j_grad_a)/(np.linalg.norm(i_grad_a)*np.linalg.norm(j_grad_a))
-                    + (1 - parameters['cosine_alpha'])*np.dot(i_grad_b,j_grad_b)/(np.linalg.norm(i_grad_b)*np.linalg.norm(j_grad_b)) + 1)
-                    # shifted to be in [0,2] here, should we do this?? Only done to make softmax not be wierd
+                    + (1 - parameters['cosine_alpha'])*np.dot(i_grad_b,j_grad_b)/(np.linalg.norm(i_grad_b)*np.linalg.norm(j_grad_b)) + 1.1)
+                    # shifted to be in [0.1,2.1] here, should we do this?? Only done to make softmax not be wierd
                     # print info
                     # print('Client {} type a similarity to {}: {}'.format(i, j, np.dot(i_grad_a,j_grad_a)/(np.linalg.norm(i_grad_a)*np.linalg.norm(j_grad_a))))
                     # print('Client {} type b similarity to {}: {}'.format(i, j, np.dot(i_grad_b,j_grad_b)/(np.linalg.norm(i_grad_b)*np.linalg.norm(j_grad_b))))
-
 
             else:
                 # other similarity metrics here
@@ -163,6 +166,10 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
             else:
                 # other prior update rules here
                 pass
+            
+            # FEDERATED AVERAGING
+            new_weights = FedAvg(neighbor_weights,train_set_sizes)
+            clients[i].local_model.load_state_dict(new_weights)
 
             if verbose:
                 print('Client {} informaton exchange round {} done. Exchanged with {}'.format(i, round, neighbor_indices_sampled))
@@ -205,9 +212,9 @@ def client_information_exchange_oracle(clients, parameters, verbose=False, round
 
             # if delusion is -1, sample randomly from all clients
             if delusion == -1:
-                neighbor_indices_sampled = np.random.choice(list(set(range(len(clients))) - set([i]), 
+                neighbor_indices_sampled = np.random.choice(list(set(range(len(clients))) - set([i])), 
                                                         size=parameters['nbr_neighbors_sampled'], 
-                                                        replace=False))
+                                                        replace=False)
             else:
                 
                 # client is delusional if a random number between 0 and 1 is less than delusion
@@ -259,13 +266,23 @@ def NSMC(clients, N, i, nbr_neighbors_sampled):
     # N is a list of tuples (client, similarity)
     # neighbors is first index of each tuple
     neighbors = [tup[0] for tup in N]
-    valid_samples = list(set(clients) - set(neighbors) - set([i]))
+    valid_samples = list(set(range(len(clients))) - set(neighbors) - set([i]))
     # return random uniform sample from valid samples
     return np.random.choice(valid_samples, size=nbr_neighbors_sampled, replace=False)
 
-def NAEM(clients, B, i, parameters):
+def NAEM(clients, B, i, parameters, verbose=False):
     # B is a list of tuples (client, similarity)
     unsampled_neighbors_idxs = NSMC(clients, B, i, parameters['nbr_neighbors_sampled']) # C in paper
+
+    # gamma_ij initialization for each new random client
+    gamma_ij = []
+    for j in unsampled_neighbors_idxs:
+        gamma_ij.append([j,1]) # [client index, gamma_ij]
+
+    # for cosine
+    i_grad_a = clients[i].get_grad_a()
+    i_grad_b = clients[i].get_grad_b()
+
     # calculate similarity scores
     unsampled_neighbors = []
     for j in unsampled_neighbors_idxs:
@@ -273,14 +290,90 @@ def NAEM(clients, B, i, parameters):
             train_loss_ij, train_acc_ij = clients[i].validate(clients[j].local_model, train_set=True)
             unsampled_neighbors.append((j,1/train_loss_ij))
         elif parameters['similarity_metric'] == 'cosine_similarity':
-            pass #TODO
-
+            j_grad_a = clients[j].get_grad_a()
+            j_grad_b = clients[j].get_grad_b()
+            similarity = parameters['cosine_alpha']*np.dot(i_grad_a,j_grad_a)/(np.linalg.norm(i_grad_a)*np.linalg.norm(j_grad_a))
+            + (1 - parameters['cosine_alpha'])*np.dot(i_grad_b,j_grad_b)/(np.linalg.norm(i_grad_b)*np.linalg.norm(j_grad_b))
+            clients[i].N.append((j,similarity))
+        
     # sample from bag
-    bag_samples = np.random.choice(B, size=parameters['nbr_neighbors_sampled'], replace=False) # S in paper
+    if len(B) > parameters['nbr_neighbors_sampled']:
+        bag_idxs = np.random.choice(len(B), size=parameters['nbr_neighbors_sampled'], replace=False) # S in paper
+        bag_samples = [B[i] for i in bag_idxs]
+        left_in_bag = [item for idx, item in enumerate(B) if idx not in bag_idxs]
+        # b-s ska returnas också
+    else:
+        bag_samples = B
+        left_in_bag = []
+
+    
     # M is the union of C and S
-    M = list(set(unsampled_neighbors_idxs) | set(bag_samples))
-    # TODO
-    return B
+    M = list(set(unsampled_neighbors) | set(bag_samples))
+    
+    # gamma_ij initialization for each client in bag
+    for sample in bag_samples: 
+        j = sample[0]
+        gamma_ij.append([j,0]) # [client index, gamma_ij]
+
+    changing = True
+    not_to_many_rounds = 0
+    while(changing):       
+        gamma_ij_old = deepcopy(gamma_ij)
+        #### E-step ####
+        # estimate mu_0, sigma_0 beta_0, mu_1, sigma_1, beta_1
+        # mu_r = sum(gamma_jr*similarity_j) / sum(gamma_jr)
+        # beta_r = sum(gamma_jr)/len(M)
+        # sigma_r² = sum(gamma_jr*(similarity_j - mu_r)²) / sum(gamma_jr)
+        cluster_0_client_indexes = [gamma[0] for gamma in gamma_ij if gamma[1] == 0]
+        simalarity_cluster_0 = [m[1] for m in M if m[0] in cluster_0_client_indexes] 
+
+        if simalarity_cluster_0:
+            mu_0 = np.sum(simalarity_cluster_0)/len(simalarity_cluster_0)
+            beta_0 = len(simalarity_cluster_0)/len(M)        
+            var_0 = (sum((element - mu_0) ** 2 for element in simalarity_cluster_0))/len(simalarity_cluster_0) # sigma_0²
+        else: # if simalrity cluser 0 is empty
+            gamma_ij = []
+            for sample in bag_samples: 
+                j = sample[0]
+                gamma_ij.append([j,0])
+                if verbose:
+                    print('cluster 0 empty, breaking loop')
+            break
+
+        cluster_1_client_indexes = [gamma[0] for gamma in gamma_ij if gamma[1] == 1]
+        simalarity_cluster_1 = [m[1] for m in M if m[0] in cluster_1_client_indexes]
+
+        if simalarity_cluster_1:
+            mu_1 = np.sum(simalarity_cluster_1)/len(simalarity_cluster_1)
+            beta_1 = len(simalarity_cluster_1)/len(M)
+            var_1 = (sum((element - mu_1) ** 2 for element in simalarity_cluster_1))/len(simalarity_cluster_1) # sigma_1²
+        else: #if similarity cluster 1 is empty
+            break
+
+        #### M-step ####
+        # update gamma_ij 
+        for m_index, m_sim in M:
+            row_index_list = [idx for idx, item in enumerate(gamma_ij) if item[0] == m_index]
+            row_index = row_index_list[0]
+            
+            if beta_0*norm.pdf(m_sim, mu_0, np.sqrt(var_0)) > beta_1*norm.pdf(m_sim, mu_1, np.sqrt(var_1)):
+                gamma_ij[row_index][1] = 0
+            else:
+                gamma_ij[row_index][1] = 1
+        
+        if sorted(gamma_ij) == sorted(gamma_ij_old):
+            changing = False
+
+        if not_to_many_rounds >= 100:
+            changing = False
+            if verbose:
+                print('NAEM did not converge in 100 rounds, breaking loop. (client {})'.format(i))
+        not_to_many_rounds += 1
+    if verbose:
+        print('client {} finished EM in {} rounds'.format(i, not_to_many_rounds))
+ 
+    worthy_clients_index = [i[0] for i in gamma_ij if i[1] == 0]
+    return [tuple(row) for row in M if row[0] in worthy_clients_index] + left_in_bag
 
 def client_information_exchange_PANM(clients, parameters, verbose=False, round=0):
     '''
@@ -291,6 +384,17 @@ def client_information_exchange_PANM(clients, parameters, verbose=False, round=0
     T1: how many rounds to use NSMC
     T2: how many rounds to use NAEM
     '''
+    # check if all clients have stopped early
+    all_stopped = True
+    for client in clients:
+        if not client.early_stopping.is_stopped():
+            all_stopped = False
+            break
+    
+    if all_stopped:
+        if verbose:
+            print('All clients have stopped early, stopping information exchange')
+        return clients
 
     if verbose:
         print('Starting information exchange round {}'.format(round))
@@ -300,33 +404,45 @@ def client_information_exchange_PANM(clients, parameters, verbose=False, round=0
     np.random.shuffle(idxs)
     for i in idxs:
         if verbose:
-            if clients[i].stopped_early:
+            if clients[i].early_stopping.is_stopped():
                 print('Client {} has stopped early'.format(i))
-        if (not clients[i].stopped_early):
+        if (not clients[i].early_stopping.is_stopped()):
             
             # check T1 or T2
             if round < parameters['T1']:
                 # sample neighbors uniformly, but dont sample neighbors already in N or oneself
                 neighbor_indices_sampled = NSMC(clients, clients[i].N, i, parameters['nbr_neighbors_sampled'])
                 
+                # for cosine
+                i_grad_a = clients[i].get_grad_a()
+                i_grad_b = clients[i].get_grad_b()
+
                 # calculate similarity scores
                 # for each neighbor
                 for j in neighbor_indices_sampled:
                     if parameters['similarity_metric'] == 'inverse_training_loss':
                         train_loss_ij, train_acc_ij = clients[i].validate(clients[j].local_model, train_set=True)
                         clients[i].N.append((j,1/train_loss_ij))
+                        clients[i].similarity_scores[j] = 1/train_loss_ij
                     elif parameters['similarity_metric'] == 'cosine_similarity':
-                        pass #TODO
+                        j_grad_a = clients[j].get_grad_a()
+                        j_grad_b = clients[j].get_grad_b()
+                        similarity = parameters['cosine_alpha']*np.dot(i_grad_a,j_grad_a)/(np.linalg.norm(i_grad_a)*np.linalg.norm(j_grad_a))
+                        + (1 - parameters['cosine_alpha'])*np.dot(i_grad_b,j_grad_b)/(np.linalg.norm(i_grad_b)*np.linalg.norm(j_grad_b))
+                        clients[i].N.append((j,similarity))
+                        clients[i].similarity_scores[j] = similarity
 
                 # find top-k neighbors
-                clients[i].N.sort(key=lambda x: x[1])
+                clients[i].N.sort(key=lambda x: x[1], reverse=True)
                 clients[i].N = clients[i].N[:parameters['nbr_neighbors_sampled']]
 
                 # aggregate information from chosen neighbors
                 neighbor_weights = []
                 train_set_sizes = []
+                neighbor_indices_sampled = []
                 for tup in clients[i].N:
                     j = tup[0]
+                    neighbor_indices_sampled.append(j)
                     neighbor_model = clients[j].local_model
                     train_set_size = len(clients[j].train_set)
                     train_set_sizes.append(train_set_size)
@@ -347,19 +463,28 @@ def client_information_exchange_PANM(clients, parameters, verbose=False, round=0
                     clients[i].B = clients[i].N
                 
                 if round%parameters['NAEM_frequency'] == 0: # perform NAEM
-                    clients[i].B = NAEM(clients[i].B)
-                else: # dont perform NAEM
+                    clients[i].B = NAEM(clients, clients[i].B, i, parameters, verbose=verbose)
+                    if verbose:
+                        print('client {} - bag: {}'.format(i, clients[i].B))
+                else: # dont perform NAEM.
                     pass
 
                 # N uniform sample from B
-                N = np.random.choice(clients[i].B, 
+                if len(clients[i].B) > parameters['nbr_neighbors_sampled']:
+                    N_idxs = np.random.choice(len(clients[i].B), 
                                     size=parameters['nbr_neighbors_sampled'], 
                                     replace=False)
+                
+                    N = [clients[i].B[n] for n in N_idxs]
+                else:
+                    N = clients[i].B
                 # aggregate information from chosen neighbors
                 neighbor_weights = []
                 train_set_sizes = []
+                neighbor_indices_sampled = []
                 for tup in N:
                     j = tup[0]
+                    neighbor_indices_sampled.append(j)
                     neighbor_model = clients[j].local_model
                     train_set_size = len(clients[j].train_set)
                     train_set_sizes.append(train_set_size)
@@ -372,4 +497,8 @@ def client_information_exchange_PANM(clients, parameters, verbose=False, round=0
 
                 new_weights = FedAvg(neighbor_weights,train_set_sizes)
                 clients[i].local_model.load_state_dict(new_weights)
+            if verbose:
+                print('Client {} informaton exchange round {} done. Exchanged with {}'.format(i, round, neighbor_indices_sampled))
+    
+    return clients
 

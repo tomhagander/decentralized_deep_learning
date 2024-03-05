@@ -1,33 +1,36 @@
 import subprocess
 
 commands = []
-'''
-# dac - variable learning rates
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 7e-6 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_dac_7e6')
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 3e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_dac_3e5')
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_dac_1e5')
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 7e-5 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_dac_7e5')
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name wk_dac_1e4')
-'''
 
-'''
-# variable delusion, lr 1e-4
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange oracle --delusion 0 --experiment_name delusion_0_1e4')
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange oracle --delusion 0.2 --experiment_name delusion_20_1e4')
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange oracle --delusion 0.4 --experiment_name delusion_40_1e4')
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange oracle --delusion 0.6 --experiment_name delusion_60_1e4')
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange oracle --delusion 0.8 --experiment_name delusion_80_1e4')
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax-variable-tau --similarity_metric inverse_training_loss --tau 30 --client_information_exchange oracle --delusion 1 --experiment_name delusion_100_1e4')
-'''
+lrs = [1e-4, 5e-4, 5e-5]
+delusions = [-1, 0, 0.25, 0.75, 1]
 
-# dac - test stopping rounds
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 10 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name stop_test_10')
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 25 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name stop_test_25')
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name stop_test_50')
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 75 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name stop_test_75')
-commands.append('python3 run_experiment.py --nbr_clients 100 --nbr_rounds 270 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 3 --lr 1e-4 --nbr_classes 10 --nbr_channels 3 --stopping_rounds 100 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30 --client_information_exchange DAC --experiment_name stop_test_100')
+###### oracle - change lr for all
+for lr in lrs:
+    for delusion in delusions:
+        commands.append('python3 run_experiment.py --lr {} --client_information_exchange oracle --delusion {} --experiment_name big1_oracle_lr_{}_delusion_{}'.format(lr, delusion, lr, delusion))
 
+lrs = [1e-4, 5e-4, 5e-5]
+alphas = [0, 0.5, 1]
+###### DAC - change lr for all
+for lr in lrs:
+    #inverse training loss
+    commands.append('python3 run_experiment.py --lr {} --client_information_exchange DAC --similarity_metric inverse_training_loss --prior_update_rule softmax --tau 30 --experiment_name big1_DAC_lr_{}_inverse_training_loss_fixed_tau'.format(lr, lr))
+    commands.append('python3 run_experiment.py --lr {} --client_information_exchange DAC --similarity_metric inverse_training_loss --prior_update_rule softmax-variable-tau --tau 30 --experiment_name big1_DAC_lr_{}_inverse_training_loss_variable_tau'.format(lr, lr))
+    #cosine - change alpha for all - only do variable tau
+    for alpha in alphas:
+        commands.append('python3 run_experiment.py --lr {} --client_information_exchange DAC --similarity_metric cosine_similarity --cosine_alpha {} --prior_update_rule softmax-variable-tau --tau 30 --experiment_name big1_DAC_lr_{}_cosine_alpha_{}_variable_tau'.format(lr, alpha, lr, alpha))
 
+lrs = [1e-4, 5e-4, 5e-5]
+alphas = [0, 0.5, 1]
+###### PANM - change lr for all
+for lr in lrs:
+    # inverse training loss
+    commands.append('python3 run_experiment.py --lr {} --client_information_exchange PANM --similarity_metric inverse_training_loss --NAEM_frequency 2 --T1 80 --experiment_name big1_PANM_lr_{}_inverse_training_loss_NAEM_2'.format(lr, lr))
+    commands.append('python3 run_experiment.py --lr {} --client_information_exchange PANM --similarity_metric inverse_training_loss --NAEM_frequency 10 --T1 80 --experiment_name big1_PANM_lr_{}_inverse_training_loss_NAEM_10'.format(lr, lr))
+    # cosine - change alpha for all - only do quicker NAEM frequency
+    for alpha in alphas:
+        commands.append('python3 run_experiment.py --lr {} --client_information_exchange PANM --similarity_metric cosine_similarity --cosine_alpha {} --NAEM_frequency 2 --T1 80 --experiment_name big1_PANM_lr_{}_cosine_alpha_{}_NAEM_2'.format(lr, alpha, lr, alpha))
 
 for command in commands:
     subprocess.run(command, shell=True)

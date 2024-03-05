@@ -64,28 +64,47 @@ class EarlyStopping:
 
 # client object
 class Client(object):
-    def __init__(self, train_set, idxs_train, idxs_val, criterion, lr, device, batch_size, num_users, model, idx, stopping_rounds):
+    def __init__(self, train_set=None, val_set=None, idxs_train=None, idxs_val=None, criterion=None, lr=None, 
+                 device=None, batch_size=None, num_users=None, model=None, idx=None, stopping_rounds=None, 
+                 ratio=None, dataset = None):
         self.device = device
         self.criterion = criterion
         self.lr = lr
         self.idx = idx
-        if(idx<int(num_users*0.4)): # Only for cifar10 with 40% vehicles and 60% animals
-            self.group = 0
-        else: self.group = 1
 
-        # set rot deg to 0 because only label shift is implemented
-        rot_deg = 0
-        rot_transform = transforms.RandomRotation(degrees=(rot_deg,rot_deg))
-        self.train_set = DatasetSplit(train_set,idxs_train,rot_transform)
-        if(idxs_val):
-            self.val_set = DatasetSplit(train_set,idxs_val,rot_transform)
-            self.ldr_val = DataLoader(self.val_set, batch_size = 1, shuffle=False)
-        
-        self.ldr_train = DataLoader(self.train_set, batch_size=batch_size, shuffle=True)
+        # if dataset is cifar
+        if dataset == 'cifar10':
+            if(idx<int(num_users*ratio)): # Only for cifar10 with 40% vehicles and 60% animals
+                self.group = 0
+            else: self.group = 1
+
+            # set rot deg to 0 because only label shift is implemented
+            rot_deg = 0
+            rot_transform = transforms.RandomRotation(degrees=(rot_deg,rot_deg))
+            self.train_set = DatasetSplit(train_set,idxs_train,rot_transform)
+            if(idxs_val):
+                self.val_set = DatasetSplit(train_set,idxs_val,rot_transform)
+                self.ldr_val = DataLoader(self.val_set, batch_size = 1, shuffle=False)
+            
+            self.ldr_train = DataLoader(self.train_set, batch_size=batch_size, shuffle=True)
+        elif dataset == 'PACS':
+            if(idx<int(num_users*ratio)):
+                self.group = 0
+            elif(idx<int(num_users*ratio*2)):
+                self.group = 1
+            elif(idx<int(num_users*ratio*3)):
+                self.group = 2
+            else:
+                self.group = 3
+            
+            # create train_loader, val_loader
+            self.ldr_train = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=1, drop_last=False)
+            self.ldr_val = DataLoader(val_set, batch_size=1, shuffle=False)
+
         
         # copy model and send to device
         self.local_model = copy.deepcopy(model)
-        self.local_model.to(self.device)
+        
 
         # Early stopping
         self.early_stopping = EarlyStopping(patience=stopping_rounds, min_delta=0)
@@ -121,6 +140,7 @@ class Client(object):
         self.grad_a = None
         self.grad_b = None
         self.initial_weights = copy.deepcopy(self.local_model.state_dict())
+        self.last_weights = copy.deepcopy(self.local_model.state_dict())
 
         # more stuff for cosine similarity
         self.N = []
@@ -136,6 +156,11 @@ class Client(object):
         self.neighbour_list = []
         
     def train(self,n_epochs):
+        self.local_model.to(self.device)
+
+        # save last weights
+        self.last_weights = copy.deepcopy(self.local_model.state_dict())
+
         self.local_model.train()
         optimizer = torch.optim.Adam(self.local_model.parameters(),lr=self.lr)
         
@@ -152,9 +177,6 @@ class Client(object):
                 optimizer.step()
                 batch_loss.append(loss.item())
             epoch_loss.append(sum(batch_loss)/len(batch_loss))
-
-        self.grad_a = self.get_grad_a()
-        self.grad_b = self.get_grad_b()
         
         self.train_loss_list.append(epoch_loss[-1])
         val_loss, val_acc = self.validate(self.local_model, train_set = False)
@@ -171,6 +193,9 @@ class Client(object):
 
         # early stopping
         self.early_stopping(val_loss)
+        
+        del optimizer
+        self.local_model.to('cpu')
             
         return self.best_model, epoch_loss[-1], self.best_val_loss, self.best_val_acc
     
@@ -180,6 +205,8 @@ class Client(object):
         else:
             ldr = self.ldr_val
             
+        model.to(self.device)
+        
         correct = 0
         total = 0
         with torch.no_grad():
@@ -199,15 +226,28 @@ class Client(object):
             val_acc = 100 * correct / total
             val_loss = sum(batch_loss)/len(batch_loss)
 
+        model.to('cpu')
         return val_loss, val_acc
     
     def get_grad_a(self):
+        # find difference between current weights and last weights
+        w_diff = {}
+        for (name, param) in self.local_model.named_parameters():
+            w_diff[name] = param - self.last_weights[name]
+        all_gradients = []
+        for p in w_diff.values(): 
+            grad = p.view(-1).cpu().detach().numpy()
+            all_gradients.append(grad)
+        return np.concatenate(all_gradients)
+    
+        '''
         all_gradients = []
         for p in self.local_model.parameters():
             grad = p.grad.view(-1).cpu().detach().numpy()
             all_gradients.append(grad)
         return np.concatenate(all_gradients)
         # implementation from paper might be better here as method would be same as for b
+        '''
     
     def get_grad_b(self):
         # find difference between current weights and initial weights

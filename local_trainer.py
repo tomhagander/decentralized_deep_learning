@@ -75,7 +75,8 @@ if __name__ == '__main__':
                         batch_size=args.batch_size, 
                         num_users=args.nbr_clients, 
                         model=client_model_init,
-                        idx=i)
+                        idx=i,
+                        stopping_rounds=args.stopping_rounds,)
         clients.append(client)
 
 
