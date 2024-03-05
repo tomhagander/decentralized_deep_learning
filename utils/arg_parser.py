@@ -5,16 +5,15 @@ def args_parser():
 
     # arguments
     parser.add_argument('--gpu', type=int, default=0, help="GPU ID, 0 for our GPU, -1 for CPU")
-    parser.add_argument('--nbr_rounds', type=int, default=100, help="rounds of information exchange")
+    parser.add_argument('--dataset', type=str, default='cifar10', help="name of dataset")
+    parser.add_argument('--nbr_rounds', type=int, default=270, help="rounds of information exchange")
     parser.add_argument('--nbr_clients', type=int, default=100, help="number of clients: K")
     parser.add_argument('--n_data_train', type=int, default=400, help="train size")
     parser.add_argument('--n_data_val', type=int, default=100, help="validation size")
     parser.add_argument('--seed', type=int, default=1, help='random seed (default: 1)')
     parser.add_argument('--batch_size', type=int, default=8, help="batch size")
     parser.add_argument('--nbr_local_epochs', type=int, default=3, help="the number of local epochs: E")
-    parser.add_argument('--lr', type=float, default=3e-5, help="learning rate")
-    parser.add_argument('--nbr_classes', type=int, default=10, help="number of classes")
-    parser.add_argument('--nbr_channels', type=int, default=3, help="number of channels of imges")
+    parser.add_argument('--lr', type=float, default=1e-4, help="learning rate")
     parser.add_argument('--stopping_rounds', type=int, default=50, help='rounds of early stopping')
     parser.add_argument('--nbr_neighbors_sampled', type=int, default=5, help='number of neighbors sampled')
     parser.add_argument('--prior_update_rule', type=str, default='softmax', help='how to update priors')
@@ -24,9 +23,13 @@ def args_parser():
     parser.add_argument('--client_information_exchange', type=str, default='DAC', help='How clients exchange information')
     parser.add_argument('--experiment_name', type=str, default='experiment', help='name of experiment')
     parser.add_argument('--delusion', type=float, default=0, help='If oracle, the chance that a client communicates with the wrong cluster in a round. If -1, communication is random')
-    
+    parser.add_argument('--NAEM_frequency', type = int, default=5, help='How often NAEM is performed')
+    parser.add_argument('--T1', type=int, default=50, help='When to change from NSMS to NAEM')
+    parser.add_argument('--CIFAR_ratio', type=float, default=0.4, help='Ratio of size of clients in vehicles cluster to animals cluster in CIFAR10')
 
-
+    # wierdos dont change
+    parser.add_argument('--nbr_classes', type=int, default=10, help="number of classes")
+    parser.add_argument('--nbr_channels', type=int, default=3, help="number of channels of images")
     # arguments from DAC
     '''
     parser.add_argument('--n_rounds', type=int, default=100, help="rounds of training")
