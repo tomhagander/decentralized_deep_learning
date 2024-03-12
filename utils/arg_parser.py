@@ -1,4 +1,5 @@
 import argparse
+import os
 
 def args_parser():
     parser = argparse.ArgumentParser()
@@ -6,17 +7,18 @@ def args_parser():
     # arguments
     parser.add_argument('--gpu', type=int, default=0, help="GPU ID, 0 for our GPU, -1 for CPU")
     parser.add_argument('--dataset', type=str, default='cifar10', help="name of dataset")
+    parser.add_argument('--shift', type=str, default='label', help="(type of shift)")
     parser.add_argument('--nbr_rounds', type=int, default=270, help="rounds of information exchange")
     parser.add_argument('--nbr_clients', type=int, default=100, help="number of clients: K")
     parser.add_argument('--n_data_train', type=int, default=400, help="train size")
     parser.add_argument('--n_data_val', type=int, default=100, help="validation size")
-    parser.add_argument('--seed', type=int, default=1, help='random seed (default: 1)')
+    parser.add_argument('--seed', type=int, default= int.from_bytes(os.urandom(4), 'big'), help='random seed (default: random int)')
     parser.add_argument('--batch_size', type=int, default=8, help="batch size")
     parser.add_argument('--nbr_local_epochs', type=int, default=3, help="the number of local epochs: E")
     parser.add_argument('--lr', type=float, default=1e-4, help="learning rate")
     parser.add_argument('--stopping_rounds', type=int, default=50, help='rounds of early stopping')
     parser.add_argument('--nbr_neighbors_sampled', type=int, default=5, help='number of neighbors sampled')
-    parser.add_argument('--prior_update_rule', type=str, default='softmax', help='how to update priors')
+    parser.add_argument('--prior_update_rule', type=str, default='softmax-variable-tau', help='how to update priors')
     parser.add_argument('--similarity_metric', type=str, default='inverse_training_loss', help='how to measure similarity between clients')
     parser.add_argument('--cosine_alpha', type=float, default=0.5, help='alpha in cosine similarity')
     parser.add_argument('--tau', type=float, default=1, help='temperature in softmax')

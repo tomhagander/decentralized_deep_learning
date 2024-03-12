@@ -36,3 +36,39 @@ def test_model(model, testloader):
     accuracy = 100 * total_correct / total_samples
 
     return accuracy
+
+
+
+def test_on_PACS(clients, quick=False):
+    import torchvision.transforms as transforms
+    from utils.classes import DatasetSplit
+    from torch.utils.data import DataLoader
+    from utils.initialization_utils import load_pacs
+    import numpy as np
+
+    client_train_datasets, val_sets, test_sets = load_pacs('./PACS/', 8, len(clients) // 4, augment=False)
+    testset_P, testset_A, testset_C, testset_S = test_sets
+    testloader_P = DataLoader(testset_P, batch_size=1, shuffle=False)
+    testloader_A = DataLoader(testset_A, batch_size=1, shuffle=False)
+    testloader_C = DataLoader(testset_C, batch_size=1, shuffle=False)
+    testloader_S = DataLoader(testset_S, batch_size=1, shuffle=False)
+    testloaders = [testloader_P, testloader_A, testloader_C, testloader_S]
+
+    # the end goal is a 4x4 matrix with the accuracy of each group on each test set
+    # acc_matrix[i,j] = a list of accuracies of group i on test set j
+    acc_matrix = np.zeros((4,4,len(clients)//4))
+    for i, testloader in enumerate(testloaders):
+        for client in clients:
+            client.best_model.to(client.device)
+            j = client.group
+            k = client.idx%(len(clients)//4)
+            if quick:
+                if i != j:
+                    break
+            acc = test_model(client.best_model, testloader)
+            print('Client: {} Group: {} Testset: {} Acc: {:.2f}'.format(k, j, i, acc))
+            acc_matrix[i, j, k] = acc
+            client.best_model.to('cpu')
+
+
+    return acc_matrix

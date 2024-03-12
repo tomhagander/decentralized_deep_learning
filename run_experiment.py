@@ -9,10 +9,11 @@ import pickle
 
 from utils.classes import Client
 from utils.arg_parser import args_parser
-from utils.initialization_utils import sample_cifargroups, load_pacs
+from utils.initialization_utils import sample_cifargroups, load_pacs, uniform_split
 from utils.training_utils import train_clients_locally
 from utils.training_utils import *
 from utils.visualization_utils import *
+from utils.initialization_utils import set_seed
 
 from models.cifar_models import simple_CNN
 
@@ -23,17 +24,14 @@ from models.cifar_models import simple_CNN
 if __name__ == '__main__':
     args = args_parser()
 
+    # set random seed
+    set_seed(args.seed)
+
     # Set the device to use
     if args.gpu == -1:
         device = torch.device('cpu')
     else:
         device = torch.device('cuda:{}'.format(args.gpu))
-
-    # set random seed
-    torch.manual_seed(args.seed)
-    torch.cuda.manual_seed(args.seed)
-    np.random.seed(args.seed)
-    random.seed(args.seed)
 
     # create folder for results
     results_folder = args.experiment_name
@@ -46,6 +44,10 @@ if __name__ == '__main__':
         for arg in vars(args):
             f.write(arg + ': ' + str(getattr(args, arg)) + '\n')
         f.close()
+
+    # create ipynb copy of analyze_data.ipynb in folder
+    import shutil
+    shutil.copy('analyze_data.ipynb', 'save/'+results_folder+'/analyze_'+args.experiment_name+'.ipynb')
 
     # set number of classes and channels
     if args.dataset == 'cifar10':
@@ -60,10 +62,73 @@ if __name__ == '__main__':
         trans_cifar = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
         train_dataset = torchvision.datasets.CIFAR10('.', train=True, download=True, transform=trans_cifar)
 
-        # assign data to clients (for now label shift, animals and vehicles)
-        # TODO: covariate shift
-        dict_users, dict_users_val = sample_cifargroups(train_dataset, args.nbr_clients, args.n_data_train, args.n_data_val, args.CIFAR_ratio)
-        # dicts contain indices of data for each client
+        if args.shift == 'label':
+            # assign data to clients (label shift, animals and vehicles)
+            dict_users, dict_users_val = sample_cifargroups(train_dataset, args.nbr_clients, args.n_data_train, args.n_data_val, args.CIFAR_ratio)
+            # dicts contain indices of data for each client
+        elif args.shift == 'PANM_swap':
+            dict_users, dict_users_val = uniform_split(train_dataset, args.nbr_clients, args.n_data_train, args.n_data_val)
+            
+            # if client belongs to cluster 0, swap labels 0 and 1
+            # if client belongs to cluster 1, swap labels 6 and 7
+
+            for i in range(args.nbr_clients):
+                if i < args.nbr_clients * args.CIFAR_ratio:
+                    # cluster 0
+                    for j in range(len(dict_users[i])):
+                        if train_dataset.targets[dict_users[i][j]] == 0:
+                            train_dataset.targets[dict_users[i][j]] = 1
+                        elif train_dataset.targets[dict_users[i][j]] == 1:
+                            train_dataset.targets[dict_users[i][j]] = 0
+                else:
+                    # cluster 1
+                    for j in range(len(dict_users[i])):
+                        if train_dataset.targets[dict_users[i][j]] == 6:
+                            train_dataset.targets[dict_users[i][j]] = 7
+                        elif train_dataset.targets[dict_users[i][j]] == 7:
+                            train_dataset.targets[dict_users[i][j]] = 6
+
+        elif args.shift == 'PANM_swap4':
+            dict_users, dict_users_val = uniform_split(train_dataset, args.nbr_clients, args.n_data_train, args.n_data_val)
+            
+            # if client belongs to cluster 0, swap labels 0 and 1
+            # if client belongs to cluster 1, swap labels 2 and 3
+            # if client belongs to cluster 2, swap labels 4 and 5
+            # if client belongs to cluster 3, swap labels 6 and 7
+
+            for i in range(args.nbr_clients):
+                if i < args.nbr_clients * args.CIFAR_ratio:
+                    # cluster 0
+                    for j in range(len(dict_users[i])):
+                        if train_dataset.targets[dict_users[i][j]] == 0:
+                            train_dataset.targets[dict_users[i][j]] = 1
+                        elif train_dataset.targets[dict_users[i][j]] == 1:
+                            train_dataset.targets[dict_users[i][j]] = 0
+                elif i < 2 * args.nbr_clients * args.CIFAR_ratio:
+                    # cluster 1
+                    for j in range(len(dict_users[i])):
+                        if train_dataset.targets[dict_users[i][j]] == 2:
+                            train_dataset.targets[dict_users[i][j]] = 3
+                        elif train_dataset.targets[dict_users[i][j]] == 3:
+                            train_dataset.targets[dict_users[i][j]] = 2
+                elif i < 3 * args.nbr_clients * args.CIFAR_ratio:
+                    # cluster 2
+                    for j in range(len(dict_users[i])):
+                        if train_dataset.targets[dict_users[i][j]] == 4:
+                            train_dataset.targets[dict_users[i][j]] = 5
+                        elif train_dataset.targets[dict_users[i][j]] == 5:
+                            train_dataset.targets[dict_users[i][j]] = 4
+                else:
+                    # cluster 3
+                    for j in range(len(dict_users[i])):
+                        if train_dataset.targets[dict_users[i][j]] == 6:
+                            train_dataset.targets[dict_users[i][j]] = 7
+                        elif train_dataset.targets[dict_users[i][j]] == 7:
+                            train_dataset.targets[dict_users[i][j]] = 6
+        else:
+            pass
+
+
     elif args.dataset == 'PACS':
         # check if args.nbr_clients is divisible by 4, throw error otherwise
         if args.nbr_clients % 4 != 0:
@@ -94,7 +159,8 @@ if __name__ == '__main__':
                             idx=i,
                             stopping_rounds=args.stopping_rounds,
                             ratio = args.CIFAR_ratio,
-                            dataset = 'cifar10')
+                            dataset = 'cifar10',
+                            shift=args.shift)
             clients.append(client)
     elif args.dataset == 'PACS':
         for i in range(args.nbr_clients):
@@ -121,9 +187,13 @@ if __name__ == '__main__':
                             idx=i,
                             stopping_rounds=args.stopping_rounds,
                             ratio = 0.25,
-                            dataset = 'PACS')
+                            dataset = 'PACS',
+                            shift=args.shift)
             clients.append(client)
 
+    if args.client_information_exchange == 'some_dilusion': #ONLY for some_dilusion (Ignore)
+        dilusional_client_idxs = get_dilusional_clients(clients) 
+    
     # training
     clients = train_clients_locally(clients, args.nbr_local_epochs, verbose=True)
     for round in range(args.nbr_rounds):
@@ -154,9 +224,21 @@ if __name__ == '__main__':
                       'T1': args.T1,
                       'cosine_alpha': args.cosine_alpha,
                       }
-            clients = client_information_exchange_PANM(clients, parameters, verbose = True, round = round)
+            clients = client_information_exchange_PANM(clients, 
+                                                       parameters=parameters, 
+                                                       verbose = True, 
+                                                       round = round)
         elif args.client_information_exchange == 'no_exchange':
             pass
+        elif args.client_information_exchange == 'some_dilusion':
+
+            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
+                          'start_dilusion': 50,
+                          'dilusional_client_idxs': dilusional_client_idxs}
+            clients = client_information_exchange_some_dilusion(clients, 
+                                                                parameters=parameters, 
+                                                                verbose = True, 
+                                                                round = round)
             
         # validate post exchange and save to each clients val_losses_post_exchange and val_accs_post_exchange
         for client in clients:
@@ -175,16 +257,12 @@ if __name__ == '__main__':
         val_losses = [client.val_loss_list[-1] for client in clients]
         print('Round {} post local. Average val acc: {:.3f}, average val loss: {:.3f}'.format(round, np.mean(val_accs), np.mean(val_losses)))
 
+        # dump the clients to clients.pkl
+        with open('save/'+results_folder+'/clients.pkl', 'wb') as f:
+            pickle.dump(clients, f)
+            f.close()
+
     # done with training
     print('Done with training')
-
-    # dump the clients to clients.pkl
-    with open('save/'+results_folder+'/clients.pkl', 'wb') as f:
-        pickle.dump(clients, f)
-        f.close()
-
-    # create ipynb copy of analyze_data.ipynb in folder
-    import shutil
-    shutil.copy('analyze_data.ipynb', 'save/'+results_folder+'/analyze_'+args.experiment_name+'.ipynb')
 
     

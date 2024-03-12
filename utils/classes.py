@@ -5,6 +5,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from torch.utils.data import Dataset
 
+
 # not entirely sure what this is for
 class DatasetSplit(Dataset):
     def __init__(self, dataset, idxs, transform):
@@ -66,7 +67,7 @@ class EarlyStopping:
 class Client(object):
     def __init__(self, train_set=None, val_set=None, idxs_train=None, idxs_val=None, criterion=None, lr=None, 
                  device=None, batch_size=None, num_users=None, model=None, idx=None, stopping_rounds=None, 
-                 ratio=None, dataset = None):
+                 ratio=None, dataset = None, shift = None):
         self.device = device
         self.criterion = criterion
         self.lr = lr
@@ -74,9 +75,19 @@ class Client(object):
 
         # if dataset is cifar
         if dataset == 'cifar10':
-            if(idx<int(num_users*ratio)): # Only for cifar10 with 40% vehicles and 60% animals
-                self.group = 0
-            else: self.group = 1
+            if(shift == 'PANM_swap4'):
+                if(idx<int(num_users*ratio)):
+                    self.group = 0
+                elif(idx<int(num_users*ratio*2)):
+                    self.group = 1
+                elif(idx<int(num_users*ratio*3)):
+                    self.group = 2
+                else:
+                    self.group = 3
+            elif(shift == 'PANM_swap'):
+                if(idx<int(num_users*ratio)): # Only for cifar10 with 40% vehicles and 60% animals
+                    self.group = 0
+                else: self.group = 1
 
             # set rot deg to 0 because only label shift is implemented
             rot_deg = 0
@@ -86,7 +97,7 @@ class Client(object):
                 self.val_set = DatasetSplit(train_set,idxs_val,rot_transform)
                 self.ldr_val = DataLoader(self.val_set, batch_size = 1, shuffle=False)
             
-            self.ldr_train = DataLoader(self.train_set, batch_size=batch_size, shuffle=True)
+            self.ldr_train = DataLoader(self.train_set, batch_size=batch_size, shuffle=True, num_workers=1, drop_last=False)
         elif dataset == 'PACS':
             if(idx<int(num_users*ratio)):
                 self.group = 0
@@ -96,6 +107,9 @@ class Client(object):
                 self.group = 2
             else:
                 self.group = 3
+
+            self.train_set = train_set
+            self.val_set = val_set
             
             # create train_loader, val_loader
             self.ldr_train = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=1, drop_last=False)
@@ -112,7 +126,6 @@ class Client(object):
         # place to store best model
         self.best_model = copy.deepcopy(self.local_model)
         
-        self.received_models = []
         self.train_loss_list = []
         self.val_loss_list = []
         self.val_acc_list = []
@@ -120,7 +133,6 @@ class Client(object):
         self.val_losses_post_exchange = []
         self.val_accs_post_exchange = []
 
-        self.n_received = 0
         self.n_sampled = np.zeros(num_users, dtype=int)
         self.n_sampled_prev = np.zeros(num_users)
         self.n_selected = np.zeros(num_users)
@@ -128,6 +140,7 @@ class Client(object):
         self.best_val_acc = -np.inf
         self.count = 0
         self.all_similarities = []
+        self.exchanges_every_round = []
 
         # validate initial model
         init_loss, init_acc = self.validate(self.local_model, train_set = False)
@@ -156,10 +169,10 @@ class Client(object):
         self.neighbour_list = []
         
     def train(self,n_epochs):
-        self.local_model.to(self.device)
-
         # save last weights
         self.last_weights = copy.deepcopy(self.local_model.state_dict())
+
+        self.local_model.to(self.device)
 
         self.local_model.train()
         optimizer = torch.optim.Adam(self.local_model.parameters(),lr=self.lr)

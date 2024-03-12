@@ -3,8 +3,12 @@ import pickle
 from torch.utils.data import DataLoader
 from torchvision import transforms
 import torch
+import random
+import os
+
 
 def sample_cifargroups(dataset, num_users, n_data_train, n_data_val, ratio):
+    # set random seed
 
     group1 = np.array([0,1,8,9]) #vehicles
     group2 = np.array([2,3,4,5,6,7]) #animals
@@ -51,6 +55,28 @@ def sample_cifargroups(dataset, num_users, n_data_train, n_data_val, ratio):
         
     return dict_users, dict_users_val
 
+def uniform_split(dataset, num_users, n_data_train, n_data_val):
+    dict_users = {i: np.array([], dtype='int64') for i in range(num_users)}
+    dict_users_val = {i: np.array([], dtype='int64') for i in range(num_users)}
+    
+    idxs = np.arange(len(dataset),dtype=int)
+    labels = np.array(dataset.targets)
+    label_list = np.unique(dataset.targets)
+    
+    # sort labels
+    idxs_labels = np.vstack((idxs, labels))
+    idxs_labels = idxs_labels[:,idxs_labels[1,:].argsort()]
+    idxs = idxs_labels[0,:]
+    idxs = idxs.astype(int)
+    
+    for i in range(num_users):
+        sub_data_idxs = np.random.choice(idxs, int(n_data_train+n_data_val), replace=False)
+        dict_users[i] = list(np.concatenate((dict_users[i], sub_data_idxs[:n_data_train])))
+        dict_users_val[i] = list(np.concatenate((dict_users_val[i], sub_data_idxs[n_data_train:])))
+        idxs = np.array(list(set(idxs) - set(sub_data_idxs)))
+        
+    return dict_users, dict_users_val
+
 
 def load_pickle_files(path, filenames):
     loaded_files = []
@@ -59,12 +85,20 @@ def load_pickle_files(path, filenames):
             loaded_files.append(pickle.load(f))
     return loaded_files
 
+def set_seed(seed):
+    np.random.seed(seed)
+    random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
 
-def split_dataset(dataset, n_clients):  
+
+def split_dataset(dataset, n_clients): 
     if(len(dataset)%n_clients==0):
         dataset_sizes = [int(len(dataset)/n_clients)]*n_clients
     else:
-        dataset_sizes = [int(np.floor(len(dataset)/(n_clients-1)))]*(n_clients-1)
+        dataset_sizes = [int(np.floor(len(dataset)/(n_clients)))]*(n_clients-1)
         dataset_sizes.append(int(len(dataset) - sum(dataset_sizes)))
 
     datasets = torch.utils.data.random_split(dataset, lengths=dataset_sizes)
