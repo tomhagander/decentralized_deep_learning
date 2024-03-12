@@ -12,6 +12,7 @@ from utils.initialization_utils import sample_cifargroups
 from utils.training_utils import train_clients_locally
 from utils.training_utils import client_information_exchange_DAC
 from utils.visualization_utils import *
+from utils.initialization_utils import set_seed 
 
 from models.cifar_models import simple_CNN
 
@@ -26,12 +27,8 @@ if __name__ == '__main__':
     else:
         device = torch.device('cuda:{}'.format(args.gpu))
 
-    # set random seed
-    torch.manual_seed(args.seed)
-    torch.cuda.manual_seed(args.seed)
-    np.random.seed(args.seed)
-    random.seed(args.seed)
-
+    set_seed(args.seed)
+    
     # create folder for results
     results_folder = args.experiment_name
     if not os.path.exists('save/'+results_folder):

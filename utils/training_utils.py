@@ -40,7 +40,6 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
     prior_update_rule: how to update priors
     similarity_metric: how to measure similarity between clients
     '''
-
     if verbose:
         print('Starting information exchange round {}'.format(round))
 
@@ -109,7 +108,7 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
                     j_grad_a = clients[j].get_grad_a()
                     j_grad_b = clients[j].get_grad_b()
                     ij_similarities.append(parameters['cosine_alpha']*np.dot(i_grad_a,j_grad_a)/(np.linalg.norm(i_grad_a)*np.linalg.norm(j_grad_a))
-                    + (1 - parameters['cosine_alpha'])*np.dot(i_grad_b,j_grad_b)/(np.linalg.norm(i_grad_b)*np.linalg.norm(j_grad_b)) + 1.1)
+                    + (1 - parameters['cosine_alpha'])*np.dot(i_grad_b,j_grad_b)/(np.linalg.norm(i_grad_b)*np.linalg.norm(j_grad_b)))
                     # shifted to be in [0.1,2.1] here, should we do this?? Only done to make softmax not be wierd
                     # print info
                     # print('Client {} type a similarity to {}: {}'.format(i, j, np.dot(i_grad_a,j_grad_a)/(np.linalg.norm(i_grad_a)*np.linalg.norm(j_grad_a))))
@@ -144,8 +143,11 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
                 if two_step_similarities[k][0] != -1:
                     clients[i].similarity_scores[k] = two_step_similarities[k][1]
 
-            # save all similarity scores
-            clients[i].all_similarities.append(clients[i].similarity_scores)
+            # save a copy of the similarity scores to all_similarities
+            clients[i].all_similarities.append(copy.deepcopy(clients[i].similarity_scores))
+
+            # save a copy of the neighbors to exchanges_every_round
+            clients[i].exchanges_every_round.append(copy.deepcopy(neighbor_indices_sampled))
         
             #### update client priors - can maybe be done in several ways
             clients[i].priors = np.zeros(len(clients)) # TODO ska vi nollställa?
@@ -183,7 +185,6 @@ def client_information_exchange_oracle(clients, parameters, verbose=False, round
     prior_update_rule: how to update priors
     similarity_metric: how to measure similarity between clients
     '''
-
     if verbose:
         print('Starting information exchange round {}'.format(round))
 
@@ -259,6 +260,99 @@ def client_information_exchange_oracle(clients, parameters, verbose=False, round
 
             if verbose:
                 print('Client {} informaton exchange round {} done. Exchanged with {}'.format(i, round, neighbor_indices_sampled))
+
+    return clients
+
+def get_dilusional_clients(clients):
+    nbr_clients_dilusion = 40
+    group_with_dilusion = 0
+    dilusional_client_idxs = np.random.choice([client.idx for client in clients if client.group == group_with_dilusion], nbr_clients_dilusion, replace=False)
+    return dilusional_client_idxs
+
+def client_information_exchange_some_dilusion(clients, parameters, verbose=False, round=0):
+    '''
+    parameters:
+    n_sampled: number of neighbors sampled
+    prior_update_rule: how to update priors
+    similarity_metric: how to measure similarity between clients
+    '''
+    # 'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
+    # 'start_dilusion': 20,
+    # 'dilusional_client_idxs': dilusional_client_idxs
+    
+    if verbose:
+        print('Starting information exchange round {}'.format(round))
+
+    # check if all clients have stopped early
+    all_stopped = True
+    for client in clients:
+        if not client.early_stopping.is_stopped():
+            all_stopped = False
+            break
+    
+    if all_stopped:
+        if verbose:
+            print('All clients have stopped early, stopping information exchange')
+        return clients
+    
+    # randomize order of asynchronous communication
+    idxs = np.arange(len(clients))
+    np.random.shuffle(idxs)
+    for i in idxs:
+        if verbose:
+            if clients[i].early_stopping.is_stopped():
+                print('Client {} has stopped early'.format(i))
+        if (not clients[i].early_stopping.is_stopped()):
+            
+            #### sample neighbors
+            # client is delusional if a random number between 0 and 1 is less than delusion
+
+            if round < parameters['start_dilusion']:
+                neighbor_indices_sampled = np.random.choice(list(set([client.idx for client in clients if client.group == clients[i].group]) - set([i])), 
+                                                        size=parameters['nbr_neighbors_sampled'], 
+                                                        replace=False)
+            else:
+                if i in parameters['dilusional_client_idxs']:
+                    neighbor_indices_sampled = np.random.choice(list(set([client.idx for client in clients if client.group != clients[i].group]) - set([i])), 
+                                                        size=parameters['nbr_neighbors_sampled'], 
+                                                        replace=False)
+                else:
+                    neighbor_indices_sampled = np.random.choice(list(set([client.idx for client in clients if client.group == clients[i].group]) - set([i])), 
+                                                        size=parameters['nbr_neighbors_sampled'], 
+                                                        replace=False)
+
+            #### aggregate information from chosen neighbors
+            # potentially different model aggregation weightings here
+            neighbor_weights = []
+            train_set_sizes = []
+            for j in neighbor_indices_sampled:
+                # validate on neighbor model, get loss and accuracy
+                neighbor_model = clients[j].local_model
+                train_set_size = len(clients[j].train_set)
+                # save stuff
+                train_set_sizes.append(train_set_size)
+                neighbor_weights.append(neighbor_model.state_dict())
+
+                # update client sampling record
+                clients[i].n_sampled[j] += 1
+            
+            # weighted average of models
+            neighbor_weights.append(clients[i].local_model.state_dict())
+            train_set_sizes.append(len(clients[i].train_set))
+            new_weights = FedAvg(neighbor_weights,train_set_sizes)
+            clients[i].local_model.load_state_dict(new_weights)
+
+            #### calculate new similarity scores
+            
+        
+            #### update client priors - can maybe be done in several ways
+            clients[i].priors = np.zeros(len(clients)) # TODO ska vi nollställa?
+            
+
+            if verbose:
+                print('Client {} informaton exchange round {} done. Exchanged with {}'.format(i, round, neighbor_indices_sampled))
+                if i in parameters['dilusional_client_idxs'] and round >= parameters['start_dilusion']:
+                    print('Client {} has become dilusional'.format(i))
 
     return clients
 
@@ -448,6 +542,12 @@ def client_information_exchange_PANM(clients, parameters, verbose=False, round=0
                     train_set_sizes.append(train_set_size)
                     neighbor_weights.append(neighbor_model.state_dict())
                     clients[i].n_sampled[j] += 1
+
+                # save a copy of the similarity scores to all_similarities
+                clients[i].all_similarities.append(copy.deepcopy(clients[i].similarity_scores))
+
+                # save a copy of the neighbors to exchanges_every_round
+                clients[i].exchanges_every_round.append(copy.deepcopy(neighbor_indices_sampled))
 
                 # weighted average of models
                 neighbor_weights.append(clients[i].local_model.state_dict())
