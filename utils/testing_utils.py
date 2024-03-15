@@ -39,14 +39,14 @@ def test_model(model, testloader):
 
 
 
-def test_on_PACS(clients, quick=False):
+def test_on_PACS(clients, quick):
     import torchvision.transforms as transforms
     from utils.classes import DatasetSplit
     from torch.utils.data import DataLoader
     from utils.initialization_utils import load_pacs
     import numpy as np
 
-    client_train_datasets, val_sets, test_sets = load_pacs('./PACS/', 8, len(clients) // 4, augment=False)
+    client_train_datasets, val_sets, test_sets = load_pacs(path='./PACS/', BATCH_SIZE=8, nbr_clients_per_group=len(clients) // 4, augment=False)
     testset_P, testset_A, testset_C, testset_S = test_sets
     testloader_P = DataLoader(testset_P, batch_size=1, shuffle=False)
     testloader_A = DataLoader(testset_A, batch_size=1, shuffle=False)
@@ -64,9 +64,9 @@ def test_on_PACS(clients, quick=False):
             k = client.idx%(len(clients)//4)
             if quick:
                 if i != j:
-                    break
+                    pass
             acc = test_model(client.best_model, testloader)
-            print('Client: {} Group: {} Testset: {} Acc: {:.2f}'.format(k, j, i, acc))
+            print('Client: {} Group: {} Testset: {} Acc: {:.2f}'.format(k + j*len(clients)//4, j, i, acc))
             acc_matrix[i, j, k] = acc
             client.best_model.to('cpu')
 

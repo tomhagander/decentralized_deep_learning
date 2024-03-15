@@ -95,9 +95,9 @@ class Client(object):
             self.train_set = DatasetSplit(train_set,idxs_train,rot_transform)
             if(idxs_val):
                 self.val_set = DatasetSplit(train_set,idxs_val,rot_transform)
-                self.ldr_val = DataLoader(self.val_set, batch_size = 1, shuffle=False)
+                self.ldr_val = DataLoader(self.val_set, batch_size = 32, num_workers=1, pin_memory=True, shuffle=False)
             
-            self.ldr_train = DataLoader(self.train_set, batch_size=batch_size, shuffle=True, num_workers=1, drop_last=False)
+            self.ldr_train = DataLoader(self.train_set, batch_size=batch_size, shuffle=True, num_workers=1, pin_memory=True, drop_last=False)
         elif dataset == 'PACS':
             if(idx<int(num_users*ratio)):
                 self.group = 0
@@ -112,8 +112,8 @@ class Client(object):
             self.val_set = val_set
             
             # create train_loader, val_loader
-            self.ldr_train = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=1, drop_last=False)
-            self.ldr_val = DataLoader(val_set, batch_size=1, shuffle=False)
+            self.ldr_train = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=1, pin_memory=True, drop_last=False)
+            self.ldr_val = DataLoader(val_set, batch_size=32, num_workers=1, pin_memory=True, shuffle=False)
 
         
         # copy model and send to device

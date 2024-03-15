@@ -22,6 +22,11 @@ from models.cifar_models import simple_CNN
 # we can change models, and similiarity metrics, as well as other hyperparameters
 
 if __name__ == '__main__':
+    # measure run time
+    import time
+    start_time = time.time()
+
+    # parse arguments
     args = args_parser()
 
     # set random seed
@@ -264,5 +269,14 @@ if __name__ == '__main__':
 
     # done with training
     print('Done with training')
+
+    # end time
+    end_time = time.time()
+    print('Runtime: {}'.format(end_time - start_time))
+    # save time to metadata file
+    with open('save/'+results_folder+'/metadata.txt', 'a') as f:
+        f.write('runtime: {}'.format(end_time - start_time))
+        f.close()
+
 
     

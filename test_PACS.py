@@ -5,7 +5,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment', type=str, default='None', help='Experiment name')
-    parser.add_argument('--quick', action='store_true', help='Set quick to true')
+    parser.add_argument('--quick', type=bool, default=False, help='Quick test')
     args = parser.parse_args()
 
     quick = args.quick
@@ -17,7 +17,7 @@ if __name__ == '__main__':
     with open(path, 'rb') as f:
         clients = pickle.load(f)
 
-    acc_matrix = test_on_PACS(clients, quick=True)
+    acc_matrix = test_on_PACS(clients, quick=quick)
     
     #save acc_matrix to pickle file called PACS_acc_matrix.pkl in save/experiment_name
 

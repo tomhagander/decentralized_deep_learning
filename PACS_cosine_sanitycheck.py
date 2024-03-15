@@ -93,17 +93,56 @@ if __name__ == '__main__':
                             shift=args.shift)
             clients.append(client)
 
-    # keep only the first four clients
-    clients = clients[:4]
+    # keep the first two and the 30th and 31st client
+    clients = clients[:2] + clients[30:32]
+
+    photo_a = []
+    sketch_a = []
+    mixed_1_a = []
+    mixed_2_a = []
+    mixed_3_a = []
+    mixed_4_a = []
+
+    photo_b = []
+    sketch_b = []
+    mixed_1_b = []
+    mixed_2_b = []
+    mixed_3_b = []
+    mixed_4_b = []
+
+    def cosine_similarity(ci, cj):
+        return np.dot(ci,cj)/(np.linalg.norm(ci)*np.linalg.norm(cj))
 
     # train clients locally
-            
-
     clients = train_clients_locally(clients, args.nbr_local_epochs, verbose=True)
     for round in range(args.nbr_rounds):
 
-        
+        c0_a = clients[0].get_grad_a()
+        c1_a = clients[1].get_grad_a()
+        c2_a = clients[2].get_grad_a()
+        c3_a = clients[3].get_grad_a()
+        c0_b = clients[0].get_grad_b()
+        c1_b = clients[1].get_grad_b()
+        c2_b = clients[2].get_grad_b()
+        c3_b = clients[3].get_grad_b()
 
+        photo_a.append(cosine_similarity(c0_a, c1_a))
+        photo_b.append(cosine_similarity(c0_b, c1_b))
+
+        sketch_a.append(cosine_similarity(c2_a, c3_a))
+        sketch_b.append(cosine_similarity(c2_b, c3_b))
+
+        mixed_1_a.append(cosine_similarity(c0_a, c2_a))
+        mixed_1_b.append(cosine_similarity(c0_b, c2_b))
+
+        mixed_2_a.append(cosine_similarity(c0_a, c3_a))
+        mixed_2_b.append(cosine_similarity(c0_b, c3_b))
+
+        mixed_3_a.append(cosine_similarity(c1_a, c2_a))
+        mixed_3_b.append(cosine_similarity(c1_b, c2_b))
+
+        mixed_4_a.append(cosine_similarity(c1_a, c3_a))
+        mixed_4_b.append(cosine_similarity(c1_b, c3_b))
         
         # validate post exchange and save to each clients val_losses_post_exchange and val_accs_post_exchange
         for client in clients:
@@ -122,9 +161,9 @@ if __name__ == '__main__':
         val_losses = [client.val_loss_list[-1] for client in clients]
         print('Round {} post local. Average val acc: {:.3f}, average val loss: {:.3f}'.format(round, np.mean(val_accs), np.mean(val_losses)))
 
-        # dump the clients to clients.pkl
-        with open('save/'+results_folder+'/clients.pkl', 'wb') as f:
-            pickle.dump(clients, f)
+        cosines = (photo_a, photo_b, sketch_a, sketch_b, mixed_1_a, mixed_1_b, mixed_2_a, mixed_2_b, mixed_3_a, mixed_3_b, mixed_4_a, mixed_4_b)
+        with open('save/'+results_folder+'/cosines.pkl', 'wb') as f:
+            pickle.dump(cosines, f)
             f.close()
 
     # done with training
