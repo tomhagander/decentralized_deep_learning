@@ -26,3 +26,7 @@ Then, some clients choose the wrong cluser which is very detrimental, and this s
 To prove this, we need to show that 'cluster death' is possible, and that that is what happens in our case
 Also, we need to show that cosine similarity is effective in the way they have implemented it in the paper
 To rule out errors in our code
+
+
+mar 18:
+Rerun all_data test with lower lr, or maybe not. Performance is similar to oracle, but curves look shaky and like lr is too high
