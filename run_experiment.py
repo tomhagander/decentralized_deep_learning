@@ -196,11 +196,17 @@ if __name__ == '__main__':
                             shift=args.shift)
             clients.append(client)
 
-    if args.client_information_exchange == 'some_dilusion': #ONLY for some_dilusion (Ignore)
-        dilusional_client_idxs = get_dilusional_clients(clients) 
+    if args.client_information_exchange == 'some_delusion': #ONLY for some_delusion (Ignore)
+        delusional_client_idxs = get_delusional_clients(clients, args.nbr_deluded_clients) 
     
     # training
     clients = train_clients_locally(clients, args.nbr_local_epochs, verbose=True)
+
+    # measure all similarities if flag is set
+    if args.measure_all_similarities:
+        for client in clients:
+            client.measure_all_similarities(clients, args.similarity_metric)
+    
     for round in range(args.nbr_rounds):
         # information exchange
 
@@ -235,12 +241,12 @@ if __name__ == '__main__':
                                                        round = round)
         elif args.client_information_exchange == 'no_exchange':
             pass
-        elif args.client_information_exchange == 'some_dilusion':
+        elif args.client_information_exchange == 'some_delusion':
 
             parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
-                          'start_dilusion': 50,
-                          'dilusional_client_idxs': dilusional_client_idxs}
-            clients = client_information_exchange_some_dilusion(clients, 
+                          'start_delusion': 15,
+                          'delusional_client_idxs': delusional_client_idxs}
+            clients = client_information_exchange_some_delusion(clients, 
                                                                 parameters=parameters, 
                                                                 verbose = True, 
                                                                 round = round)
@@ -261,6 +267,11 @@ if __name__ == '__main__':
         val_accs = [client.val_acc_list[-1] for client in clients]
         val_losses = [client.val_loss_list[-1] for client in clients]
         print('Round {} post local. Average val acc: {:.3f}, average val loss: {:.3f}'.format(round, np.mean(val_accs), np.mean(val_losses)))
+
+        # measure all similarities if flag is set
+        if args.measure_all_similarities:
+            for client in clients:
+                client.measure_all_similarities(clients, args.similarity_metric)
 
         # dump the clients to clients.pkl
         with open('save/'+results_folder+'/clients.pkl', 'wb') as f:

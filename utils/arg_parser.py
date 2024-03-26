@@ -13,9 +13,9 @@ def args_parser():
     parser.add_argument('--n_data_train', type=int, default=400, help="train size")
     parser.add_argument('--n_data_val', type=int, default=100, help="validation size")
     parser.add_argument('--seed', type=int, default= int.from_bytes(os.urandom(4), 'big'), help='random seed (default: random int)')
-    parser.add_argument('--batch_size', type=int, default=8, help="batch size")
+    parser.add_argument('--batch_size', type=int, default=32, help="batch size")
     parser.add_argument('--nbr_local_epochs', type=int, default=3, help="the number of local epochs: E")
-    parser.add_argument('--lr', type=float, default=1e-4, help="learning rate")
+    parser.add_argument('--lr', type=float, default=7.5e-5, help="learning rate")
     parser.add_argument('--stopping_rounds', type=int, default=50, help='rounds of early stopping')
     parser.add_argument('--nbr_neighbors_sampled', type=int, default=5, help='number of neighbors sampled')
     parser.add_argument('--prior_update_rule', type=str, default='softmax-variable-tau', help='how to update priors')
@@ -28,6 +28,8 @@ def args_parser():
     parser.add_argument('--NAEM_frequency', type = int, default=5, help='How often NAEM is performed')
     parser.add_argument('--T1', type=int, default=50, help='When to change from NSMS to NAEM')
     parser.add_argument('--CIFAR_ratio', type=float, default=0.4, help='Ratio of size of clients in vehicles cluster to animals cluster in CIFAR10')
+    parser.add_argument('--nbr_deluded_clients', type=int, default=0, help='If comms is some_delusion, the number of clients that communicate with the wrong cluster in a round')
+    parser.add_argument('--measure_all_similarities', type=bool, default=False, help='If True, all similarities are measured parallel to training and saved')
 
     # wierdos dont change
     parser.add_argument('--nbr_classes', type=int, default=10, help="number of classes")

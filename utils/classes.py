@@ -167,6 +167,9 @@ class Client(object):
         # might need 
         self.similarity_scores = np.zeros(num_users)
         self.neighbour_list = []
+
+        # true_similarities
+        self.true_similarities = []
         
     def train(self,n_epochs):
         # save last weights
@@ -272,3 +275,31 @@ class Client(object):
             grad = p.view(-1).cpu().detach().numpy()
             all_gradients.append(grad)
         return np.concatenate(all_gradients)
+    
+    def measure_all_similarities(self, all_clients, similarity_metric, alpha=0):
+        similarities = np.zeros(len(all_clients))
+        if similarity_metric == 'cosine_similarity':
+            # measure cosine similarity between all clients
+            for client in all_clients:
+                if client.idx != self.idx:
+                    self_grad_a = self.get_grad_a()
+                    self_grad_b = self.get_grad_b()
+                    client_grad_a = client.get_grad_a()
+                    client_grad_b = client.get_grad_b()
+                    # get cosine similarity from torch function cosine_similarity
+                    cosine_similarity_a = torch.nn.functional.cosine_similarity(torch.tensor(self_grad_a), torch.tensor(client_grad_a), dim=0)
+                    cosine_similarity_b = torch.nn.functional.cosine_similarity(torch.tensor(self_grad_b), torch.tensor(client_grad_b), dim=0)
+                    # calculate cosine similarity
+                    cosine_similarity = alpha*cosine_similarity_a + (1-alpha)*cosine_similarity_b
+                    similarities[client.idx] = cosine_similarity
+        elif similarity_metric == 'inverse_training_loss':
+            for client in all_clients:
+                if client.idx != self.idx:
+                    # take clients model and validate it on own training set
+                    client_model = copy.deepcopy(client.local_model)
+                    val_loss, _ = self.validate(client_model, train_set = True)
+                    similarities[client.idx] = 1/(val_loss)
+        else:
+            pass 
+        
+        self.all_similarities.append(similarities)

@@ -2,6 +2,7 @@ import numpy as np
 from scipy.stats import norm
 from copy import deepcopy
 import copy
+import torch
 
 def FedAvg(w,alpha):
     w_avg = copy.deepcopy(w[0])
@@ -107,12 +108,10 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
                 for idx, j in enumerate(neighbor_indices_sampled):
                     j_grad_a = clients[j].get_grad_a()
                     j_grad_b = clients[j].get_grad_b()
-                    ij_similarities.append(parameters['cosine_alpha']*np.dot(i_grad_a,j_grad_a)/(np.linalg.norm(i_grad_a)*np.linalg.norm(j_grad_a))
-                    + (1 - parameters['cosine_alpha'])*np.dot(i_grad_b,j_grad_b)/(np.linalg.norm(i_grad_b)*np.linalg.norm(j_grad_b)))
-                    # shifted to be in [0.1,2.1] here, should we do this?? Only done to make softmax not be wierd
-                    # print info
-                    # print('Client {} type a similarity to {}: {}'.format(i, j, np.dot(i_grad_a,j_grad_a)/(np.linalg.norm(i_grad_a)*np.linalg.norm(j_grad_a))))
-                    # print('Client {} type b similarity to {}: {}'.format(i, j, np.dot(i_grad_b,j_grad_b)/(np.linalg.norm(i_grad_b)*np.linalg.norm(j_grad_b))))
+                    # calculate cosine similarity using torches cosine similarity function
+                    cosine_similarity_a = torch.nn.functional.cosine_similarity(i_grad_a, j_grad_a, dim=0)
+                    cosine_similarity_b = torch.nn.functional.cosine_similarity(i_grad_b, j_grad_b, dim=0)
+                    ij_similarities.append(parameters['cosine_alpha']*cosine_similarity_a + (1 - parameters['cosine_alpha'])*cosine_similarity_b)
 
             else:
                 # other similarity metrics here
@@ -263,13 +262,13 @@ def client_information_exchange_oracle(clients, parameters, verbose=False, round
 
     return clients
 
-def get_dilusional_clients(clients):
-    nbr_clients_dilusion = 40
-    group_with_dilusion = 0
-    dilusional_client_idxs = np.random.choice([client.idx for client in clients if client.group == group_with_dilusion], nbr_clients_dilusion, replace=False)
-    return dilusional_client_idxs
+def get_delusional_clients(clients, nbr_deluded_clients, deluded_group=0):
+    nbr_clients_delusion = nbr_deluded_clients
+    group_with_delusion = deluded_group
+    delusional_client_idxs = np.random.choice([client.idx for client in clients if client.group == group_with_delusion], nbr_clients_delusion, replace=False)
+    return delusional_client_idxs
 
-def client_information_exchange_some_dilusion(clients, parameters, verbose=False, round=0):
+def client_information_exchange_some_delusion(clients, parameters, verbose=False, round=0):
     '''
     parameters:
     n_sampled: number of neighbors sampled
@@ -277,8 +276,8 @@ def client_information_exchange_some_dilusion(clients, parameters, verbose=False
     similarity_metric: how to measure similarity between clients
     '''
     # 'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
-    # 'start_dilusion': 20,
-    # 'dilusional_client_idxs': dilusional_client_idxs
+    # 'start_delusion': 20,
+    # 'delusional_client_idxs': delusional_client_idxs
     
     if verbose:
         print('Starting information exchange round {}'.format(round))
@@ -307,12 +306,12 @@ def client_information_exchange_some_dilusion(clients, parameters, verbose=False
             #### sample neighbors
             # client is delusional if a random number between 0 and 1 is less than delusion
 
-            if round < parameters['start_dilusion']:
+            if round < parameters['start_delusion']:
                 neighbor_indices_sampled = np.random.choice(list(set([client.idx for client in clients if client.group == clients[i].group]) - set([i])), 
                                                         size=parameters['nbr_neighbors_sampled'], 
                                                         replace=False)
             else:
-                if i in parameters['dilusional_client_idxs']:
+                if i in parameters['delusional_client_idxs']:
                     neighbor_indices_sampled = np.random.choice(list(set([client.idx for client in clients if client.group != clients[i].group]) - set([i])), 
                                                         size=parameters['nbr_neighbors_sampled'], 
                                                         replace=False)
@@ -351,8 +350,8 @@ def client_information_exchange_some_dilusion(clients, parameters, verbose=False
 
             if verbose:
                 print('Client {} informaton exchange round {} done. Exchanged with {}'.format(i, round, neighbor_indices_sampled))
-                if i in parameters['dilusional_client_idxs'] and round >= parameters['start_dilusion']:
-                    print('Client {} has become dilusional'.format(i))
+                if i in parameters['delusional_client_idxs'] and round >= parameters['start_delusion']:
+                    print('Client {} has become delusional'.format(i))
 
     return clients
 
@@ -521,8 +520,9 @@ def client_information_exchange_PANM(clients, parameters, verbose=False, round=0
                     elif parameters['similarity_metric'] == 'cosine_similarity':
                         j_grad_a = clients[j].get_grad_a()
                         j_grad_b = clients[j].get_grad_b()
-                        similarity = parameters['cosine_alpha']*np.dot(i_grad_a,j_grad_a)/(np.linalg.norm(i_grad_a)*np.linalg.norm(j_grad_a))
-                        + (1 - parameters['cosine_alpha'])*np.dot(i_grad_b,j_grad_b)/(np.linalg.norm(i_grad_b)*np.linalg.norm(j_grad_b))
+                        cosine_similarity_a = torch.nn.functional.cosine_similarity(i_grad_a, j_grad_a, dim=0)
+                        cosine_similarity_b = torch.nn.functional.cosine_similarity(i_grad_b, j_grad_b, dim=0)
+                        similarity = parameters['cosine_alpha']*cosine_similarity_a + (1 - parameters['cosine_alpha'])*cosine_similarity_b
                         clients[i].N.append((j,similarity))
                         clients[i].similarity_scores[j] = similarity
 

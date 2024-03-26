@@ -8,4 +8,4 @@ commands.append('python3 run_experiment.py --lr {} --CIFAR_ratio 0.5 --nbr_clien
 
 
 for command in commands:
-    subprocess.run(command, shell=True)
+    subprocess.run(command, shell=True) 
