@@ -250,7 +250,8 @@ if __name__ == '__main__':
                                                                 parameters=parameters, 
                                                                 verbose = True, 
                                                                 round = round)
-            
+        
+        
         # validate post exchange and save to each clients val_losses_post_exchange and val_accs_post_exchange
         for client in clients:
             val_loss, val_acc = client.validate(client.local_model, train_set = False)
@@ -261,6 +262,7 @@ if __name__ == '__main__':
         val_accs = [client.val_accs_post_exchange[-1] for client in clients]
         val_losses = [client.val_losses_post_exchange[-1] for client in clients]
         print('Round {} post exchange. Average val acc: {:.3f}, average val loss: {:.3f}'.format(round, np.mean(val_accs), np.mean(val_losses)))
+    
         # local training
         clients = train_clients_locally(clients, args.nbr_local_epochs, verbose=True)
         # print average client validation accuracy and loss§
@@ -283,7 +285,7 @@ if __name__ == '__main__':
 
     # end time
     end_time = time.time()
-    print('Runtime: {}'.format(end_time - start_time))
+    print('Runtime: {} = {} hours'.format(end_time - start_time, (end_time - start_time)/3600))
     # save time to metadata file
     with open('save/'+results_folder+'/metadata.txt', 'a') as f:
         f.write('runtime: {}'.format(end_time - start_time))

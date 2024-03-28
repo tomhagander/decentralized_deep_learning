@@ -94,17 +94,11 @@ def set_seed(seed):
     os.environ['PYTHONHASHSEED'] = str(seed)
 
 
-def split_dataset(dataset, n_clients): 
-    if(len(dataset)%n_clients==0):
-        dataset_sizes = [int(len(dataset)/n_clients)]*n_clients
-    else:
-        dataset_sizes = [int(np.floor(len(dataset)/(n_clients)))]*(n_clients-1)
-        dataset_sizes.append(int(len(dataset) - sum(dataset_sizes)))
-
+def split_dataset(dataset, n_clients):  
+    dataset_length = len(dataset)
+    splits = np.array_split(np.arange(dataset_length), n_clients)
+    dataset_sizes = [len(split) for split in splits]
     datasets = torch.utils.data.random_split(dataset, lengths=dataset_sizes)
-    print('Size of normal clients dataset')
-    print(len(datasets[0]))
-    print('Size of last clients dataset')
     print(len(datasets[-1]))
     return datasets
 
@@ -156,4 +150,3 @@ def load_pacs(path, BATCH_SIZE, nbr_clients_per_group, augment=False):
             client_train_datasets.append(s)
 
     return client_train_datasets, val_datasets, test_datasets
-            
