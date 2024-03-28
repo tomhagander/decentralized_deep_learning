@@ -276,6 +276,17 @@ class Client(object):
             all_gradients.append(grad)
         return np.concatenate(all_gradients)
     
+    def get_grad_origin(self):
+        # find difference between current weights and origin
+        w_diff = {}
+        for (name, param) in self.local_model.named_parameters():
+            w_diff[name] = param
+        all_gradients = []
+        for p in w_diff.values(): 
+            grad = p.view(-1).cpu().detach().numpy()
+            all_gradients.append(grad)
+        return np.concatenate(all_gradients)
+    
     def measure_all_similarities(self, all_clients, similarity_metric, alpha=0):
         similarities = np.zeros(len(all_clients))
         if similarity_metric == 'cosine_similarity':
@@ -298,8 +309,28 @@ class Client(object):
                     # take clients model and validate it on own training set
                     client_model = copy.deepcopy(client.local_model)
                     val_loss, _ = self.validate(client_model, train_set = True)
-                    similarities[client.idx] = 1/(val_loss)
+                    similarities[client.idx] = 1/(val_loss + 1e-6)
+
+        elif similarity_metric == 'cosine_origin':
+            for client in all_clients:
+                if client.idx != self.idx:
+                    self_grad_origin = self.get_grad_origin()
+                    client_grad_origin = client.get_grad_origin()
+                    # get cosine similarity from torch function cosine_similarity
+                    cosine_similarity_origin = torch.nn.functional.cosine_similarity(torch.tensor(self_grad_origin), torch.tensor(client_grad_origin), dim=0)
+                    # calculate cosine similarity
+                    similarities[client.idx] = cosine_similarity_origin
+
+        elif similarity_metric == 'l2':
+            for client in all_clients:
+                if client.idx != self.idx:
+                    self_grad_origin = self.get_grad_origin()
+                    client_grad_origin = client.get_grad_origin()
+                    # get cosine similarity from torch function cosine_similarity
+                    l2_distance = np.linalg.norm(self_grad_origin - client_grad_origin)
+                    # calculate cosine similarity
+                    similarities[client.idx] = 1/(l2_distance + 1e-6)
         else:
             pass 
         
-        self.all_similarities.append(similarities)
+        self.true_similarities.append(similarities)

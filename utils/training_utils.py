@@ -41,6 +41,9 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
     prior_update_rule: how to update priors
     similarity_metric: how to measure similarity between clients
     '''
+
+    inv_epsilon = 1e-6
+
     if verbose:
         print('Starting information exchange round {}'.format(round))
 
@@ -100,7 +103,7 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
 
             #### calculate new similarity scores
             if parameters['similarity_metric'] == 'inverse_training_loss':
-                ij_similarities = [1/(train_losses_ij[i]) for i in range(len(train_losses_ij))]
+                ij_similarities = [1/(train_losses_ij[i] + inv_epsilon) for i in range(len(train_losses_ij))]
             elif parameters['similarity_metric'] == 'cosine_similarity':
                 i_grad_a = clients[i].get_grad_a()
                 i_grad_b = clients[i].get_grad_b()
@@ -109,9 +112,26 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
                     j_grad_a = clients[j].get_grad_a()
                     j_grad_b = clients[j].get_grad_b()
                     # calculate cosine similarity using torches cosine similarity function
-                    cosine_similarity_a = torch.nn.functional.cosine_similarity(i_grad_a, j_grad_a, dim=0)
-                    cosine_similarity_b = torch.nn.functional.cosine_similarity(i_grad_b, j_grad_b, dim=0)
+                    cosine_similarity_a = torch.nn.functional.cosine_similarity(torch.tensor(i_grad_a), torch.tensor(j_grad_a), dim=0)
+                    cosine_similarity_b = torch.nn.functional.cosine_similarity(torch.tensor(i_grad_b), torch.tensor(j_grad_b), dim=0)
                     ij_similarities.append(parameters['cosine_alpha']*cosine_similarity_a + (1 - parameters['cosine_alpha'])*cosine_similarity_b)
+
+            elif parameters['similarity_metric'] == 'cosine_origin':
+                i_grad_origin = clients[i].get_grad_origin()
+                ij_similarities = []
+                for idx, j in enumerate(neighbor_indices_sampled):
+                    j_grad_origin = clients[j].get_grad_origin()
+                    # calculate cosine similarity using torches cosine similarity function
+                    cosine_similarity = torch.nn.functional.cosine_similarity(torch.tensor(i_grad_origin), torch.tensor(j_grad_origin), dim=0)
+                    ij_similarities.append(cosine_similarity)
+
+            elif parameters['similarity_metric'] == 'l2':
+                i_grad_origin = clients[i].get_grad_origin()
+                ij_similarities = []
+                for idx, j in enumerate(neighbor_indices_sampled):
+                    j_grad_origin = clients[j].get_grad_origin()
+                    l2_distance = np.linalg.norm(i_grad_origin - j_grad_origin)
+                    ij_similarities.append(1/(l2_distance + inv_epsilon))
 
             else:
                 # other similarity metrics here
@@ -149,24 +169,32 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
             clients[i].exchanges_every_round.append(copy.deepcopy(neighbor_indices_sampled))
         
             #### update client priors - can maybe be done in several ways
-            clients[i].priors = np.zeros(len(clients)) # TODO ska vi nollställa?
+            clients[i].priors = np.zeros(len(clients)) # set priors to zero
+
+            # if variable tau, update tau
             if parameters['prior_update_rule'] == 'softmax-variable-tau':
                 #update tau
-                parameters['tau'] = tau_function(round,parameters['tau'],0.2) # this line differs from softmax
+                parameters['tau'] = tau_function(round,parameters['tau'],0.2)
+
+            # do the priors update
+            if parameters['prior_update_rule'] == 'softmax-variable-tau' or parameters['prior_update_rule'] == 'softmax':
                 for j in range(len(clients)):
-                    if clients[i].similarity_scores[j] > 0:
-                        clients[i].priors[j] = np.exp(clients[i].similarity_scores[j]*parameters['tau'])
-                # normalize
-                clients[i].priors = clients[i].priors/np.sum(clients[i].priors)
-            elif parameters['prior_update_rule'] == 'softmax':
-                for j in range(len(clients)):
-                    if clients[i].similarity_scores[j] > 0:
-                        clients[i].priors[j] = np.exp(clients[i].similarity_scores[j]*parameters['tau'])
-                # normalize
-                clients[i].priors = clients[i].priors/np.sum(clients[i].priors)
-            else:
-                # other prior update rules here
-                pass
+                    # Extract non-zero similarity scores
+                    non_zero_indices = [j for j, score in enumerate(clients[i].similarity_scores) if score > 0]
+                    non_zero_scores = [clients[i].similarity_scores[j] for j in non_zero_indices]
+
+                    # Apply the softmax transformation to non-zero entries
+                    if non_zero_scores:  # Check if there are any non-zero scores
+                        max_score = max(non_zero_scores)
+                        exp_scores = np.exp(np.array(non_zero_scores - max_score) * parameters['tau'])
+                        
+                        # Normalize
+                        sum_exp_scores = np.sum(exp_scores)
+                        for j, score in zip(non_zero_indices, exp_scores):
+                            clients[i].priors[j] = score / sum_exp_scores
+                    else:
+                        # throw error if no non-zero scores
+                        raise ValueError('No non-zero similarity scores for client {}'.format(i))
             
             # FEDERATED AVERAGING
             new_weights = FedAvg(neighbor_weights,train_set_sizes)
@@ -355,6 +383,9 @@ def client_information_exchange_some_delusion(clients, parameters, verbose=False
 
     return clients
 
+
+### BIG NOTE, PANM does not have new fancy similarity scores, and neither does it have torches cosine similarity function
+
 def NSMC(clients, N, i, nbr_neighbors_sampled):
     # N is a list of tuples (client, similarity)
     # neighbors is first index of each tuple
@@ -364,6 +395,9 @@ def NSMC(clients, N, i, nbr_neighbors_sampled):
     return np.random.choice(valid_samples, size=nbr_neighbors_sampled, replace=False)
 
 def NAEM(clients, B, i, parameters, verbose=False):
+
+    inv_epsilon = 1e-6
+
     # B is a list of tuples (client, similarity)
     unsampled_neighbors_idxs = NSMC(clients, B, i, parameters['nbr_neighbors_sampled']) # C in paper
 
@@ -381,7 +415,7 @@ def NAEM(clients, B, i, parameters, verbose=False):
     for j in unsampled_neighbors_idxs:
         if parameters['similarity_metric'] == 'inverse_training_loss':
             train_loss_ij, train_acc_ij = clients[i].validate(clients[j].local_model, train_set=True)
-            unsampled_neighbors.append((j,1/train_loss_ij))
+            unsampled_neighbors.append((j,1/train_loss_ij + inv_epsilon))
         elif parameters['similarity_metric'] == 'cosine_similarity':
             j_grad_a = clients[j].get_grad_a()
             j_grad_b = clients[j].get_grad_b()
@@ -477,6 +511,9 @@ def client_information_exchange_PANM(clients, parameters, verbose=False, round=0
     T1: how many rounds to use NSMC
     T2: how many rounds to use NAEM
     '''
+
+    inv_epsilon = 1e-6
+
     # check if all clients have stopped early
     all_stopped = True
     for client in clients:
@@ -515,13 +552,13 @@ def client_information_exchange_PANM(clients, parameters, verbose=False, round=0
                 for j in neighbor_indices_sampled:
                     if parameters['similarity_metric'] == 'inverse_training_loss':
                         train_loss_ij, train_acc_ij = clients[i].validate(clients[j].local_model, train_set=True)
-                        clients[i].N.append((j,1/train_loss_ij))
-                        clients[i].similarity_scores[j] = 1/train_loss_ij
+                        clients[i].N.append((j,1/(train_loss_ij + inv_epsilon)))
+                        clients[i].similarity_scores[j] = 1/(train_loss_ij + inv_epsilon)
                     elif parameters['similarity_metric'] == 'cosine_similarity':
                         j_grad_a = clients[j].get_grad_a()
                         j_grad_b = clients[j].get_grad_b()
-                        cosine_similarity_a = torch.nn.functional.cosine_similarity(i_grad_a, j_grad_a, dim=0)
-                        cosine_similarity_b = torch.nn.functional.cosine_similarity(i_grad_b, j_grad_b, dim=0)
+                        cosine_similarity_a = torch.nn.functional.cosine_similarity(torch.tensor(i_grad_a), torch.tensor(j_grad_a), dim=0)
+                        cosine_similarity_b = torch.nn.functional.cosine_similarity(torch.tensor(i_grad_b), torch.tensor(j_grad_b), dim=0)
                         similarity = parameters['cosine_alpha']*cosine_similarity_a + (1 - parameters['cosine_alpha'])*cosine_similarity_b
                         clients[i].N.append((j,similarity))
                         clients[i].similarity_scores[j] = similarity
