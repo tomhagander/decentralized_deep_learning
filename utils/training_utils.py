@@ -178,23 +178,26 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
 
             # do the priors update
             if parameters['prior_update_rule'] == 'softmax-variable-tau' or parameters['prior_update_rule'] == 'softmax':
-                for j in range(len(clients)):
-                    # Extract non-zero similarity scores
-                    non_zero_indices = [j for j, score in enumerate(clients[i].similarity_scores) if score > 0]
-                    non_zero_scores = [clients[i].similarity_scores[j] for j in non_zero_indices]
+                # Extract non-zero similarity scores
+                non_zero_indices = [k for k, score in enumerate(clients[i].similarity_scores) if score > 0]
+                non_zero_scores = [clients[i].similarity_scores[j] for j in non_zero_indices]
 
-                    # Apply the softmax transformation to non-zero entries
-                    if non_zero_scores:  # Check if there are any non-zero scores
-                        max_score = max(non_zero_scores)
-                        exp_scores = np.exp(np.array(non_zero_scores - max_score) * parameters['tau'])
-                        
-                        # Normalize
-                        sum_exp_scores = np.sum(exp_scores)
-                        for j, score in zip(non_zero_indices, exp_scores):
-                            clients[i].priors[j] = score / sum_exp_scores
-                    else:
-                        # throw error if no non-zero scores
-                        raise ValueError('No non-zero similarity scores for client {}'.format(i))
+                # Apply the softmax transformation to non-zero entries
+                if non_zero_scores:  # Check if there are any non-zero scores
+                    max_score = max(non_zero_scores)
+                    exp_scores = np.exp(np.array(non_zero_scores - max_score) * parameters['tau'])
+                    
+                    # Normalize
+                    sum_exp_scores = np.sum(exp_scores)
+                    for j, score in zip(non_zero_indices, exp_scores):
+                        clients[i].priors[j] = score / sum_exp_scores
+                else:
+                    # throw error if no non-zero scores
+                    raise ValueError('No non-zero similarity scores for client {}'.format(i))
+                
+                clients[i].priors += 1e-6
+                clients[i].priors[i] = 0
+                clients[i].priors = clients[i].priors / np.sum(clients[i].priors)
             
             # FEDERATED AVERAGING
             new_weights = FedAvg(neighbor_weights,train_set_sizes)
