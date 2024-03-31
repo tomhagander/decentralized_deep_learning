@@ -334,3 +334,4 @@ class Client(object):
             pass 
         
         self.true_similarities.append(similarities)
+        return similarities

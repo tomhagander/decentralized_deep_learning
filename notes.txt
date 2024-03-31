@@ -30,3 +30,9 @@ To rule out errors in our code
 
 mar 18:
 Rerun all_data test with lower lr, or maybe not. Performance is similar to oracle, but curves look shaky and like lr is too high
+
+
+
+# new algo
+uninformed merging might not always be bad for accuracy, but it is bad for similarity signal strength
+
