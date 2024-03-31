@@ -287,7 +287,7 @@ class Client(object):
             all_gradients.append(grad)
         return np.concatenate(all_gradients)
     
-    def measure_all_similarities(self, all_clients, similarity_metric, alpha=0):
+    def measure_all_similarities(self, all_clients, similarity_metric, alpha=0, store=True):
         similarities = np.zeros(len(all_clients))
         if similarity_metric == 'cosine_similarity':
             # measure cosine similarity between all clients
@@ -333,5 +333,7 @@ class Client(object):
         else:
             pass 
         
-        self.true_similarities.append(similarities)
+        if store:
+            self.true_similarities.append(similarities)
+            
         return similarities

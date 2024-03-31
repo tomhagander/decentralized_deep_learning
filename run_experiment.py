@@ -250,6 +250,16 @@ if __name__ == '__main__':
                                                                 parameters=parameters, 
                                                                 verbose = True, 
                                                                 round = round)
+            
+        elif args.client_information_exchange == 'look_hard_once':
+            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
+                      'similarity_metric': args.similarity_metric,
+                      'cosine_alpha': args.cosine_alpha,
+                      }
+            clients = client_information_exchange_LHO(clients, 
+                                            parameters=parameters,
+                                            verbose=True,
+                                            round=round)
         
         
         # validate post exchange and save to each clients val_losses_post_exchange and val_accs_post_exchange
