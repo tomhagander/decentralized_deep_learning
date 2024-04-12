@@ -64,15 +64,23 @@ commands = []
 
 ### LOOK HARD ONCE
 # DAC with cosine similarity and inverse training loss, cosine origin and l2
-commands.append('python3 run_experiment.py --gpu 0 --dataset PACS --nbr_rounds 50 --nbr_clients 40 --seed 1 --batch_size 32 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 30 --nbr_neighbors_sampled 2 --client_information_exchange look_hard_once --similarity_metric cosine_similarity --measure_all_similarities True --experiment_name PACS_40_clients_LHO_cosine_initial_1')
-commands.append('python3 run_experiment.py --gpu 0 --dataset PACS --nbr_rounds 50 --nbr_clients 40 --seed 1 --batch_size 32 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 30 --nbr_neighbors_sampled 2 --client_information_exchange look_hard_once --similarity_metric inverse_training_loss --measure_all_similarities True --experiment_name PACS_40_clients_LHO_inv_loss_1')
-commands.append('python3 run_experiment.py --gpu 0 --dataset PACS --nbr_rounds 50 --nbr_clients 40 --seed 1 --batch_size 32 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 30 --nbr_neighbors_sampled 2 --client_information_exchange look_hard_once --similarity_metric cosine_origin --measure_all_similarities True --experiment_name PACS_40_clients_LHO_cosine_origin_1')
-commands.append('python3 run_experiment.py --gpu 0 --dataset PACS --nbr_rounds 50 --nbr_clients 40 --seed 1 --batch_size 32 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 30 --nbr_neighbors_sampled 2 --client_information_exchange look_hard_once --similarity_metric l2 --measure_all_similarities True --experiment_name PACS_40_clients_LHO_l2_1')
-# testing for the previous four commands
-commands.append('python3 test_PACS.py --experiment PACS_40_clients_LHO_cosine_initial_1')
-commands.append('python3 test_PACS.py --experiment PACS_40_clients_LHO_inv_loss_1')
-commands.append('python3 test_PACS.py --experiment PACS_40_clients_LHO_cosine_origin_1')
-commands.append('python3 test_PACS.py --experiment PACS_40_clients_LHO_l2_1')
+# commands.append('python3 run_experiment.py --gpu 0 --dataset PACS --nbr_rounds 50 --nbr_clients 40 --seed 1 --batch_size 32 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 30 --nbr_neighbors_sampled 2 --client_information_exchange look_hard_once --similarity_metric cosine_similarity --measure_all_similarities True --experiment_name PACS_40_clients_LHO_cosine_initial_1')
+# commands.append('python3 run_experiment.py --gpu 0 --dataset PACS --nbr_rounds 50 --nbr_clients 40 --seed 1 --batch_size 32 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 30 --nbr_neighbors_sampled 2 --client_information_exchange look_hard_once --similarity_metric inverse_training_loss --measure_all_similarities True --experiment_name PACS_40_clients_LHO_inv_loss_1')
+# commands.append('python3 run_experiment.py --gpu 0 --dataset PACS --nbr_rounds 50 --nbr_clients 40 --seed 1 --batch_size 32 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 30 --nbr_neighbors_sampled 2 --client_information_exchange look_hard_once --similarity_metric cosine_origin --measure_all_similarities True --experiment_name PACS_40_clients_LHO_cosine_origin_1')
+# commands.append('python3 run_experiment.py --gpu 0 --dataset PACS --nbr_rounds 50 --nbr_clients 40 --seed 1 --batch_size 32 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 30 --nbr_neighbors_sampled 2 --client_information_exchange look_hard_once --similarity_metric l2 --measure_all_similarities True --experiment_name PACS_40_clients_LHO_l2_1')
+# # testing for the previous four commands
+# commands.append('python3 test_PACS.py --experiment PACS_40_clients_LHO_cosine_initial_1')
+# commands.append('python3 test_PACS.py --experiment PACS_40_clients_LHO_inv_loss_1')
+# commands.append('python3 test_PACS.py --experiment PACS_40_clients_LHO_cosine_origin_1')
+# commands.append('python3 test_PACS.py --experiment PACS_40_clients_LHO_l2_1')
 
+### tuning learning rate for NOT pre-trained model
+#commands.append('python3 run_experiment.py --gpu 0 --dataset PACS --nbr_rounds 50 --nbr_clients 40 --seed 1 --batch_size 32 --nbr_local_epochs 1 --lr 1e-02 --stopping_rounds 30 --nbr_neighbors_sampled 2 --client_information_exchange oracle --similarity_metric inverse_training_loss --measure_all_similarities True --experiment_name PACS_oracle_localepochs_1_lr_1e-02')
+commands.append('python3 run_experiment.py --gpu 0 --dataset PACS --nbr_rounds 50 --nbr_clients 40 --seed 1 --batch_size 32 --nbr_local_epochs 1 --lr 1e-03 --stopping_rounds 30 --nbr_neighbors_sampled 2 --client_information_exchange oracle --similarity_metric inverse_training_loss --measure_all_similarities False --experiment_name PACS_oracle_localepochs_1_lr_1e-03')
+commands.append('python3 run_experiment.py --gpu 0 --dataset PACS --nbr_rounds 50 --nbr_clients 40 --seed 1 --batch_size 32 --nbr_local_epochs 1 --lr 1e-04 --stopping_rounds 30 --nbr_neighbors_sampled 2 --client_information_exchange oracle --similarity_metric inverse_training_loss --measure_all_similarities False --experiment_name PACS_oracle_localepochs_1_lr_1e-04')
+
+commands.append('python3 run_experiment.py --gpu 0 --dataset PACS --nbr_rounds 50 --nbr_clients 40 --seed 1 --batch_size 32 --nbr_local_epochs 3 --lr 1e-02 --stopping_rounds 30 --nbr_neighbors_sampled 2 --client_information_exchange oracle --similarity_metric inverse_training_loss --measure_all_similarities False --experiment_name PACS_oracle_localepochs_3_lr_1e-02')
+commands.append('python3 run_experiment.py --gpu 0 --dataset PACS --nbr_rounds 50 --nbr_clients 40 --seed 1 --batch_size 32 --nbr_local_epochs 3 --lr 1e-03 --stopping_rounds 30 --nbr_neighbors_sampled 2 --client_information_exchange oracle --similarity_metric inverse_training_loss --measure_all_similarities False --experiment_name PACS_oracle_localepochs_3_lr_1e-03')
+commands.append('python3 run_experiment.py --gpu 0 --dataset PACS --nbr_rounds 50 --nbr_clients 40 --seed 1 --batch_size 32 --nbr_local_epochs 3 --lr 1e-04 --stopping_rounds 30 --nbr_neighbors_sampled 2 --client_information_exchange oracle --similarity_metric inverse_training_loss --measure_all_similarities False --experiment_name PACS_oracle_localepochs_3_lr_1e-04')
 for command in commands:
     subprocess.run(command, shell=True)
