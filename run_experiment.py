@@ -145,7 +145,8 @@ if __name__ == '__main__':
     if args.dataset == 'cifar10': # custom cnn
         client_model_init = simple_CNN(nbr_classes=args.nbr_classes)
     elif args.dataset == 'PACS': # pretrained resnet18
-        client_model_init = torchvision.models.resnet18(weights=ResNet18_Weights.DEFAULT)
+        # client_model_init = torchvision.models.resnet18(weights=ResNet18_Weights.DEFAULT) # change here for pretrained
+        client_model_init = torchvision.models.resnet18(weights=None) # change here for Not pretrained
         client_model_init.fc = torch.nn.Linear(client_model_init.fc.in_features, args.nbr_classes)
 
     # create clients
