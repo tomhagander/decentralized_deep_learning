@@ -73,6 +73,8 @@ class Client(object):
         self.lr = lr
         self.idx = idx
 
+        self.shift = shift
+
         # if dataset is cifar
         if dataset == 'cifar10':
             if(shift == 'PANM_swap4'):
@@ -92,6 +94,17 @@ class Client(object):
                 if(idx<int(num_users*ratio)):
                     self.group = 0
                 else: self.group = 1
+            elif(shift == '5_clusters'):
+                if(idx<int(num_users*ratio)):
+                    self.group = 0
+                elif(idx<int(num_users*ratio*2)):
+                    self.group = 1
+                elif(idx<int(num_users*ratio*3)):
+                    self.group = 2
+                elif(idx<int(num_users*ratio*4)):
+                    self.group = 3
+                else:
+                    self.group = 4
 
             # set rot deg to 0 because only label shift is implemented
             rot_deg = 0
@@ -177,6 +190,9 @@ class Client(object):
 
         # taus for fixed entropy
         self.all_taus = []
+
+        # for mergatron
+        self.pre_merge_weights = copy.deepcopy(self.local_model.state_dict())
         
         
     def train(self,n_epochs):
@@ -296,8 +312,12 @@ class Client(object):
         return np.concatenate(all_gradients)
     
     def measure_all_similarities(self, all_clients, similarity_metric, alpha=0, store=True):
-        if self.idx != 0 and self.idx != 70:
-            return np.zeros(len(all_clients))
+        if self.shift == 'label':
+            if self.idx != 0 and self.idx != 70:
+                return np.zeros(len(all_clients))
+        elif self.shift == '5_clusters':
+            if self.idx != 0 and self.idx != 20 and self.idx != 40 and self.idx != 60 and self.idx != 80:
+                return np.zeros(len(all_clients))
         print('Measuring similarities of client {}'.format(self.idx))
         similarities = np.zeros(len(all_clients))
         for client in all_clients:

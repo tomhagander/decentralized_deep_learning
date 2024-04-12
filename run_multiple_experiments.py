@@ -109,7 +109,6 @@ commands.append('python3 test_CIFAR.py --experiment CIFAR_DAC_invloss_tau_FE_see
 commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax-fixed-entropy --similarity_metric cosine_similarity --cosine_alpha 0 --client_information_exchange DAC --experiment_name CIFAR_DAC_cosine_tau_FE_seed_2 --CIFAR_ratio 0.4 --measure_all_similarities True'.format(lr))
 commands.append('python3 test_CIFAR.py --experiment CIFAR_DAC_cosine_tau_FE_seed_2')
 
-'''
 
 # setup 7
 # testing of existing runs, should be fairly quick
@@ -121,6 +120,10 @@ commands.append('python3 test_CIFAR.py --experiment CIFAR_inverse_loss_no_comm_l
 commands.append('python3 test_CIFAR.py --experiment CIFAR_oracle_learning_rate_0.001')
 commands.append('python3 test_CIFAR.py --experiment CIFAR_random_learning_rate_0.001')
 
+'''
+
+#mergatron dev
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 4 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau 30.0 --client_information_exchange oracle --experiment_name 5_cluster_dev --delusion 0.0 --CIFAR_ratio 0.2 --nbr_deluded_clients 0 --measure_all_similarities True --mergatron activate')
 
 for command in commands:
     subprocess.run(command, shell=True)
