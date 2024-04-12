@@ -131,9 +131,6 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
             train_set_sizes.append(len(clients[i].train_set))
             # do the actual averaging at the end of the round, after calculating similarity scores
 
-            """ new_weights = FedAvg(neighbor_weights,train_set_sizes)
-            clients[i].local_model.load_state_dict(new_weights) """
-
             #### calculate new similarity scores
             if parameters['similarity_metric'] == 'inverse_training_loss':
                 ij_similarities = [1/(train_losses_ij[i] + inv_epsilon) for i in range(len(train_losses_ij))]
@@ -238,6 +235,9 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
             
             # FEDERATED AVERAGING
             new_weights = FedAvg(neighbor_weights,train_set_sizes)
+            # save old model
+            clients[i].pre_merge_model = copy.deepcopy(clients[i].local_model.state_dict())
+            # update client model
             clients[i].local_model.load_state_dict(new_weights)
 
             if verbose:
@@ -316,6 +316,9 @@ def client_information_exchange_oracle(clients, parameters, verbose=False, round
             neighbor_weights.append(clients[i].local_model.state_dict())
             train_set_sizes.append(len(clients[i].train_set))
             new_weights = FedAvg(neighbor_weights,train_set_sizes)
+            # save old model
+            clients[i].pre_merge_model = copy.deepcopy(clients[i].local_model.state_dict())
+            # update client model
             clients[i].local_model.load_state_dict(new_weights)
 
             #### calculate new similarity scores
