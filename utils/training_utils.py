@@ -20,12 +20,45 @@ def tau_function(x,a,b):
     tau = 2*a/(1+np.exp(-b*x)) - a +1
     return tau
 
+def _find_tau(similarities, entropy, lower_bound, upper_bound):
+    # calculate the middle point
+    tau = (lower_bound + upper_bound) / 2
+    # calculate the entropy for the given tau
+    # priors given tau: 
+    priors = np.exp(similarities*tau - max(similarities*tau))
+    priors = priors / np.sum(priors)
+    entropy_tau = -np.sum([(p)*np.log2(p) for p in priors if p > 0])
+    # if the entropy is close enough to the desired entropy, return the tau
+
+    print('tau: {}, entropy_tau: {}, entropy: {}'.format(tau, entropy_tau, entropy))
+
+    if np.abs(entropy_tau - entropy) < 0.1:
+        return tau
+    # if the entropy is too high, the tau is too low, and vice versa
+    elif entropy_tau > entropy:
+        return _find_tau(similarities, entropy, tau, upper_bound)
+    else:
+        return _find_tau(similarities, entropy, lower_bound, tau)
+
+def find_tau(similarities, entropy):
+    # call function recursively to minimize the interval of tau
+
+    print('Starting to find tau for new client')
+    print('Similarities: {}'.format(similarities))
+
+    lower_bound = 0
+    upper_bound = 10000
+    tau = _find_tau(similarities, entropy, lower_bound, upper_bound)
+    return tau
+
 # trains all clients locally, one by one, for the set number of local epochs
 def train_clients_locally(clients, nbr_local_epochs, verbose=False):
     if verbose:
         print('Starting local training')
     for client in clients:
         if not client.early_stopping.is_stopped():
+            if verbose:
+                print('Training client {}'.format(client.idx))
             client.train(nbr_local_epochs)
         else:
             if verbose:
@@ -176,8 +209,15 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
                 #update tau
                 parameters['tau'] = tau_function(round,parameters['tau'],0.2)
 
+            elif parameters['prior_update_rule'] == 'softmax-fixed-entropy':
+                # find tau that gives an entropy of of 2 bits for the given similarities
+                # entropy = -sum(p*log(p))
+                found_tau = find_tau(clients[i].similarity_scores, 2)
+                clients[i].all_taus.append(found_tau)
+                parameters['tau'] = found_tau
+
             # do the priors update
-            if parameters['prior_update_rule'] == 'softmax-variable-tau' or parameters['prior_update_rule'] == 'softmax':
+            if parameters['prior_update_rule'] == 'softmax-variable-tau' or parameters['prior_update_rule'] == 'softmax' or parameters['prior_update_rule'] == 'softmax-fixed-entropy':
                 # Extract non-zero similarity scores
                 non_zero_indices = [k for k, score in enumerate(clients[i].similarity_scores) if score > 0]
                 non_zero_scores = [clients[i].similarity_scores[j] for j in non_zero_indices]
@@ -191,9 +231,6 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
                     sum_exp_scores = np.sum(exp_scores)
                     for j, score in zip(non_zero_indices, exp_scores):
                         clients[i].priors[j] = score / sum_exp_scores
-                else:
-                    # throw error if no non-zero scores
-                    raise ValueError('No non-zero similarity scores for client {}'.format(i))
                 
                 clients[i].priors += 1e-6
                 clients[i].priors[i] = 0

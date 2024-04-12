@@ -17,6 +17,9 @@ from utils.initialization_utils import set_seed
 
 from models.cifar_models import simple_CNN
 
+import sys
+sys.setrecursionlimit(200)
+
 
 # for now we use cifar10 and dont implement possibility to change dataset
 # we can change models, and similiarity metrics, as well as other hyperparameters
@@ -29,6 +32,7 @@ if __name__ == '__main__':
     # parse arguments
     args = args_parser()
 
+    print('Starting ', args.experiment_name)
     # set random seed
     set_seed(args.seed)
 
@@ -153,6 +157,7 @@ if __name__ == '__main__':
     clients = []
     if args.dataset == 'cifar10':
         for i in range(args.nbr_clients):
+            print('creating client {}'.format(i))
             client = Client(train_set=train_dataset, 
                             idxs_train=dict_users[i], 
                             idxs_val=dict_users_val[i], 
