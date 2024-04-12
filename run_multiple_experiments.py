@@ -110,7 +110,6 @@ commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift lab
 commands.append('python3 test_CIFAR.py --experiment CIFAR_DAC_cosine_tau_FE_seed_2')
 
 
-
 # setup 7
 # testing of existing runs, should be fairly quick
 commands.append('python3 test_CIFAR.py --experiment CIFAR_inverse_loss_fixed_entropy_learning_rate_0.001')
@@ -120,8 +119,6 @@ commands.append('python3 test_CIFAR.py --experiment CIFAR_inverse_loss_tau_30_le
 commands.append('python3 test_CIFAR.py --experiment CIFAR_inverse_loss_no_comm_learning_rate_0.0001')
 commands.append('python3 test_CIFAR.py --experiment CIFAR_oracle_learning_rate_0.001')
 commands.append('python3 test_CIFAR.py --experiment CIFAR_random_learning_rate_0.001')
-
-'''
 
 
 for command in commands:
