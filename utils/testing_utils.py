@@ -72,3 +72,54 @@ def test_on_PACS(clients, quick):
 
 
     return acc_matrix
+
+def test_on_CIFAR(clients, quick, verbose):
+    import torchvision.transforms as transforms
+    from utils.classes import DatasetSplit
+    from torch.utils.data import DataLoader
+    import numpy as np
+    from torchvision.datasets import CIFAR10
+
+    # --------------------------
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+    ])
+
+    # Load the CIFAR-10 test set
+    testset = CIFAR10(root='.', train=False, download=True, transform=transform)
+
+    vehicle_idxs = [i for i in range(len(testset)) if testset[i][1] in [0, 1, 8, 9]]
+    animal_idxs = [i for i in range(len(testset)) if testset[i][1] in [2,3,4,5,6,7]]
+
+    # set rot deg to 0 because only label shift is implemented
+    rot_deg = 0
+    rot_transform = transforms.RandomRotation(degrees=(rot_deg,rot_deg))
+    vehicle_set = DatasetSplit(testset,vehicle_idxs,rot_transform)
+    testloader_vehicle = DataLoader(vehicle_set, batch_size=1, shuffle=False)
+
+    animal_set = DatasetSplit(testset,animal_idxs,rot_transform)
+    testloader_animal = DataLoader(animal_set, batch_size= 1, shuffle=False)
+    # --------------------------
+    if verbose:
+        print('CIFAR-10 testset loaded')
+
+    zero_on_zero = []
+    zero_on_one = []
+    one_on_zero = []
+    one_on_one = []
+
+    for client in clients:
+        if verbose:
+            print('Testing client: {}'.format(client.idx))
+        client.best_model.to(client.device)
+        acc_v = test_model(client.best_model, testloader_vehicle)
+        acc_a = test_model(client.best_model, testloader_animal)
+        if client.group == 0:
+            zero_on_zero.append(acc_v)
+            zero_on_one.append(acc_a)
+        else:
+            one_on_zero.append(acc_v)
+            one_on_one.append(acc_a)
+    # V_within, A_within, V_on_A, A_on_V 
+    return zero_on_zero, one_on_one, zero_on_one, one_on_zero

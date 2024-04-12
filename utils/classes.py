@@ -88,6 +88,10 @@ class Client(object):
                 if(idx<int(num_users*ratio)): # Only for cifar10 with 40% vehicles and 60% animals
                     self.group = 0
                 else: self.group = 1
+            elif(shift == 'label'):
+                if(idx<int(num_users*ratio)):
+                    self.group = 0
+                else: self.group = 1
 
             # set rot deg to 0 because only label shift is implemented
             rot_deg = 0
@@ -95,9 +99,9 @@ class Client(object):
             self.train_set = DatasetSplit(train_set,idxs_train,rot_transform)
             if(idxs_val):
                 self.val_set = DatasetSplit(train_set,idxs_val,rot_transform)
-                self.ldr_val = DataLoader(self.val_set, batch_size = 32, num_workers=1, pin_memory=True, shuffle=False)
+                self.ldr_val = DataLoader(self.val_set, batch_size = 8, pin_memory=False, shuffle=False)
             
-            self.ldr_train = DataLoader(self.train_set, batch_size=batch_size, shuffle=True, num_workers=1, pin_memory=True, drop_last=False)
+            self.ldr_train = DataLoader(self.train_set, batch_size=batch_size, shuffle=True, pin_memory=False, drop_last=False)
         elif dataset == 'PACS':
             if(idx<int(num_users*ratio)):
                 self.group = 0
@@ -118,7 +122,7 @@ class Client(object):
         
         # copy model and send to device
         self.local_model = copy.deepcopy(model)
-        
+        self.local_model.to(self.device) # change 2
 
         # Early stopping
         self.early_stopping = EarlyStopping(patience=stopping_rounds, min_delta=0)
@@ -170,12 +174,16 @@ class Client(object):
 
         # true_similarities
         self.true_similarities = []
+
+        # taus for fixed entropy
+        self.all_taus = []
+        
         
     def train(self,n_epochs):
         # save last weights
         self.last_weights = copy.deepcopy(self.local_model.state_dict())
 
-        self.local_model.to(self.device)
+        #self.local_model.to(self.device) # change 1
 
         self.local_model.train()
         optimizer = torch.optim.Adam(self.local_model.parameters(),lr=self.lr)
@@ -210,8 +218,8 @@ class Client(object):
         # early stopping
         self.early_stopping(val_loss)
         
-        del optimizer
-        self.local_model.to('cpu')
+        #del optimizer # change 1
+        # self.local_model.to('cpu') # change 1
             
         return self.best_model, epoch_loss[-1], self.best_val_loss, self.best_val_acc
     
@@ -221,7 +229,7 @@ class Client(object):
         else:
             ldr = self.ldr_val
             
-        model.to(self.device)
+        # model.to(self.device) # change 1
         
         correct = 0
         total = 0
@@ -242,7 +250,7 @@ class Client(object):
             val_acc = 100 * correct / total
             val_loss = sum(batch_loss)/len(batch_loss)
 
-        model.to('cpu')
+        # model.to('cpu') # change 1
         return val_loss, val_acc
     
     def get_grad_a(self):
@@ -288,11 +296,16 @@ class Client(object):
         return np.concatenate(all_gradients)
     
     def measure_all_similarities(self, all_clients, similarity_metric, alpha=0, store=True):
+        if self.idx != 0 and self.idx != 70:
+            return np.zeros(len(all_clients))
+        print('Measuring similarities of client {}'.format(self.idx))
         similarities = np.zeros(len(all_clients))
-        if similarity_metric == 'cosine_similarity':
-            # measure cosine similarity between all clients
-            for client in all_clients:
-                if client.idx != self.idx:
+        for client in all_clients:
+            if client.idx != self.idx:
+                if client.early_stopping.is_stopped() and self.early_stopping.is_stopped(): # test if early stopping is stopped
+                    similarities[client.idx] = self.true_similarities[-1][client.idx]
+                elif similarity_metric == 'cosine_similarity':
+                    # measure cosine similarity between all clients
                     self_grad_a = self.get_grad_a()
                     self_grad_b = self.get_grad_b()
                     client_grad_a = client.get_grad_a()
@@ -303,17 +316,13 @@ class Client(object):
                     # calculate cosine similarity
                     cosine_similarity = alpha*cosine_similarity_a + (1-alpha)*cosine_similarity_b
                     similarities[client.idx] = cosine_similarity
-        elif similarity_metric == 'inverse_training_loss':
-            for client in all_clients:
-                if client.idx != self.idx:
+                elif similarity_metric == 'inverse_training_loss':
                     # take clients model and validate it on own training set
                     client_model = copy.deepcopy(client.local_model)
                     val_loss, _ = self.validate(client_model, train_set = True)
                     similarities[client.idx] = 1/(val_loss + 1e-6)
 
-        elif similarity_metric == 'cosine_origin':
-            for client in all_clients:
-                if client.idx != self.idx:
+                elif similarity_metric == 'cosine_origin':
                     self_grad_origin = self.get_grad_origin()
                     client_grad_origin = client.get_grad_origin()
                     # get cosine similarity from torch function cosine_similarity
@@ -321,17 +330,15 @@ class Client(object):
                     # calculate cosine similarity
                     similarities[client.idx] = cosine_similarity_origin
 
-        elif similarity_metric == 'l2':
-            for client in all_clients:
-                if client.idx != self.idx:
+                elif similarity_metric == 'l2':
                     self_grad_origin = self.get_grad_origin()
                     client_grad_origin = client.get_grad_origin()
                     # get cosine similarity from torch function cosine_similarity
                     l2_distance = np.linalg.norm(self_grad_origin - client_grad_origin)
                     # calculate cosine similarity
                     similarities[client.idx] = 1/(l2_distance + 1e-6)
-        else:
-            pass 
+                else:
+                    pass 
         
         if store:
             self.true_similarities.append(similarities)

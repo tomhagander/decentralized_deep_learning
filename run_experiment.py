@@ -17,6 +17,9 @@ from utils.initialization_utils import set_seed
 
 from models.cifar_models import simple_CNN
 
+import sys
+sys.setrecursionlimit(200)
+
 
 # for now we use cifar10 and dont implement possibility to change dataset
 # we can change models, and similiarity metrics, as well as other hyperparameters
@@ -29,6 +32,7 @@ if __name__ == '__main__':
     # parse arguments
     args = args_parser()
 
+    print('Starting ', args.experiment_name)
     # set random seed
     set_seed(args.seed)
 
@@ -145,13 +149,15 @@ if __name__ == '__main__':
     if args.dataset == 'cifar10': # custom cnn
         client_model_init = simple_CNN(nbr_classes=args.nbr_classes)
     elif args.dataset == 'PACS': # pretrained resnet18
-        client_model_init = torchvision.models.resnet18(weights=ResNet18_Weights.DEFAULT)
+        # client_model_init = torchvision.models.resnet18(weights=ResNet18_Weights.DEFAULT) # change here for pretrained
+        client_model_init = torchvision.models.resnet18(weights=None) # change here for Not pretrained
         client_model_init.fc = torch.nn.Linear(client_model_init.fc.in_features, args.nbr_classes)
 
     # create clients
     clients = []
     if args.dataset == 'cifar10':
         for i in range(args.nbr_clients):
+            print('creating client {}'.format(i))
             client = Client(train_set=train_dataset, 
                             idxs_train=dict_users[i], 
                             idxs_val=dict_users_val[i], 
