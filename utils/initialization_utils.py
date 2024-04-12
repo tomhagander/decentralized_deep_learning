@@ -52,6 +52,93 @@ def sample_cifargroups(dataset, num_users, n_data_train, n_data_val, ratio):
             sub_data_idxs2 = np.random.choice(idxs2, int(n_data_val), replace=False)
             dict_users_val[i] = list(np.concatenate((dict_users_val[i], sub_data_idxs2)))
             idxs2 = np.array(list(set(idxs2) - set(sub_data_idxs2)))
+
+    return dict_users, dict_users_val
+
+def sample_cifargroups_5clusters(dataset, num_users, n_data_train, n_data_val, ratio):
+    # set random seed
+
+    group1 = np.array([0,1])
+    group2 = np.array([2,3])
+    group3 = np.array([4,5])
+    group4 = np.array([6,7])
+    group5 = np.array([8,9])
+
+    dict_users = {i: np.array([], dtype='int64') for i in range(num_users)}
+    dict_users_val = {i: np.array([], dtype='int64') for i in range(num_users)}
+
+    idxs = np.arange(len(dataset),dtype=int)
+    labels = np.array(dataset.targets)
+    label_list = np.unique(dataset.targets)
+
+    # sort labels
+    idxs_labels = np.vstack((idxs, labels))
+    idxs_labels = idxs_labels[:,idxs_labels[1,:].argsort()]
+    idxs = idxs_labels[0,:]
+    idxs = idxs.astype(int)
+
+    idxs1, idxs2, idxs3, idxs4, idxs5 = np.array([]), np.array([]), np.array([]), np.array([]), np.array([])
+    idxs1 = idxs1.astype(int)
+    idxs2 = idxs1.astype(int)
+    idxs3 = idxs1.astype(int)
+    idxs4 = idxs1.astype(int)
+    idxs5 = idxs1.astype(int)
+    for x in group1:
+        idxs1 = np.append(idxs1, idxs[x == labels[idxs]])
+    
+    for x in group2:
+        idxs2 = np.append(idxs2, idxs[x == labels[idxs]])
+
+    for x in group3:
+        idxs3 = np.append(idxs3, idxs[x == labels[idxs]])
+
+    for x in group4:
+        idxs4 = np.append(idxs4, idxs[x == labels[idxs]])
+
+    for x in group5:
+        idxs5 = np.append(idxs5, idxs[x == labels[idxs]])
+
+    for i in range(num_users):
+        if(i<int(num_users*ratio)):
+            sub_data_idxs1 = np.random.choice(idxs1, int(n_data_train), replace=False)
+            dict_users[i] = list(np.concatenate((dict_users[i], sub_data_idxs1)))
+            idxs1 = np.array(list(set(idxs1) - set(sub_data_idxs1)))
+
+            sub_data_idxs1 = np.random.choice(idxs1, int(n_data_val), replace=False)
+            dict_users_val[i] = list(np.concatenate((dict_users_val[i], sub_data_idxs1)))
+            idxs1 = np.array(list(set(idxs1) - set(sub_data_idxs1)))
+        elif(i<int(num_users*2*ratio)):
+            sub_data_idxs2 = np.random.choice(idxs2, int(n_data_train), replace=False)
+            dict_users[i] = list(np.concatenate((dict_users[i], sub_data_idxs2)))
+            idxs2 = np.array(list(set(idxs2) - set(sub_data_idxs2)))
+
+            sub_data_idxs2 = np.random.choice(idxs2, int(n_data_val), replace=False)
+            dict_users_val[i] = list(np.concatenate((dict_users_val[i], sub_data_idxs2)))
+            idxs2 = np.array(list(set(idxs2) - set(sub_data_idxs2)))
+        elif(i<int(num_users*3*ratio)):
+            sub_data_idxs3 = np.random.choice(idxs3, int(n_data_train), replace=False)
+            dict_users[i] = list(np.concatenate((dict_users[i], sub_data_idxs3)))
+            idxs3 = np.array(list(set(idxs3) - set(sub_data_idxs3)))
+
+            sub_data_idxs3 = np.random.choice(idxs3, int(n_data_val), replace=False)
+            dict_users_val[i] = list(np.concatenate((dict_users_val[i], sub_data_idxs3)))
+            idxs3 = np.array(list(set(idxs3) - set(sub_data_idxs3)))
+        elif(i<int(num_users*4*ratio)):
+            sub_data_idxs4 = np.random.choice(idxs4, int(n_data_train), replace=False)
+            dict_users[i] = list(np.concatenate((dict_users[i], sub_data_idxs4)))
+            idxs4 = np.array(list(set(idxs4) - set(sub_data_idxs4)))
+
+            sub_data_idxs4 = np.random.choice(idxs4, int(n_data_val), replace=False)
+            dict_users_val[i] = list(np.concatenate((dict_users_val[i], sub_data_idxs4)))
+            idxs4 = np.array(list(set(idxs4) - set(sub_data_idxs4)))
+        else:
+            sub_data_idxs5 = np.random.choice(idxs5, int(n_data_train), replace=False)
+            dict_users[i] = list(np.concatenate((dict_users[i], sub_data_idxs5)))
+            idxs5 = np.array(list(set(idxs5) - set(sub_data_idxs5)))
+
+            sub_data_idxs5 = np.random.choice(idxs5, int(n_data_val), replace=False)
+            dict_users_val[i] = list(np.concatenate((dict_users_val[i], sub_data_idxs5)))
+            idxs5 = np.array(list(set(idxs5) - set(sub_data_idxs5)))
         
     return dict_users, dict_users_val
 

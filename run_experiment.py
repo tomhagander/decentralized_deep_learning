@@ -9,7 +9,7 @@ import pickle
 
 from utils.classes import Client
 from utils.arg_parser import args_parser
-from utils.initialization_utils import sample_cifargroups, load_pacs, uniform_split
+from utils.initialization_utils import sample_cifargroups, load_pacs, uniform_split, sample_cifargroups_5clusters
 from utils.training_utils import train_clients_locally
 from utils.training_utils import *
 from utils.visualization_utils import *
@@ -54,6 +54,9 @@ if __name__ == '__main__':
             f.write(arg + ': ' + str(getattr(args, arg)) + '\n')
         f.close()
 
+    # mergatron data
+    mergatron_stops = np.zeros(args.nbr_rounds)
+
     # create ipynb copy of analyze_data.ipynb in folder
     import shutil
     shutil.copy('analyze_data.ipynb', 'save/'+results_folder+'/analyze_'+args.experiment_name+'.ipynb')
@@ -75,6 +78,9 @@ if __name__ == '__main__':
             # assign data to clients (label shift, animals and vehicles)
             dict_users, dict_users_val = sample_cifargroups(train_dataset, args.nbr_clients, args.n_data_train, args.n_data_val, args.CIFAR_ratio)
             # dicts contain indices of data for each client
+        elif args.shift == '5_clusters':
+            args.CIFAR_ratio = 0.2
+            dict_users, dict_users_val = sample_cifargroups_5clusters(train_dataset, args.nbr_clients, args.n_data_train, args.n_data_val, args.CIFAR_ratio)
         elif args.shift == 'PANM_swap':
             dict_users, dict_users_val = uniform_split(train_dataset, args.nbr_clients, args.n_data_train, args.n_data_val)
             
@@ -172,6 +178,7 @@ if __name__ == '__main__':
                             ratio = args.CIFAR_ratio,
                             dataset = 'cifar10',
                             shift=args.shift)
+            
             clients.append(client)
     elif args.dataset == 'PACS':
         for i in range(args.nbr_clients):
@@ -271,6 +278,15 @@ if __name__ == '__main__':
         # validate post exchange and save to each clients val_losses_post_exchange and val_accs_post_exchange
         for client in clients:
             val_loss, val_acc = client.validate(client.local_model, train_set = False)
+
+            if args.mergatron == 'activate':
+                last_acc = client.val_acc_list[-1]
+                if val_acc < last_acc: # cancel merge
+                    print('Mergatron denies merge!')
+                    print('Client {} did not improve after merge, reverting to previous model'.format(client.idx))
+                    client.local_model.load_state_dict(client.pre_merge_model)
+                    mergatron_stops[round] += 1
+
             client.val_losses_post_exchange.append(val_loss)
             client.val_accs_post_exchange.append(val_acc)
         
@@ -306,6 +322,12 @@ if __name__ == '__main__':
     with open('save/'+results_folder+'/metadata.txt', 'a') as f:
         f.write('runtime: {}'.format(end_time - start_time))
         f.close()
+
+    # dump mergatron stops
+    if args.mergatron == 'activate':
+        with open('save/'+results_folder+'/mergatron_stops.pkl', 'wb') as f:
+            pickle.dump(mergatron_stops, f)
+            f.close()
 
 
     

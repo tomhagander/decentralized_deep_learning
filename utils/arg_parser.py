@@ -30,6 +30,7 @@ def args_parser():
     parser.add_argument('--CIFAR_ratio', type=float, default=0.4, help='Ratio of size of clients in vehicles cluster to animals cluster in CIFAR10')
     parser.add_argument('--nbr_deluded_clients', type=int, default=0, help='If comms is some_delusion, the number of clients that communicate with the wrong cluster in a round')
     parser.add_argument('--measure_all_similarities', type=bool, default=False, help='If True, all similarities are measured parallel to training and saved')
+    parser.add_argument('--mergatron', type=str, default='chill', help='type activate to activate mergatron')
 
     # wierdos dont change
     parser.add_argument('--nbr_classes', type=int, default=10, help="number of classes")
