@@ -73,6 +73,7 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
     n_sampled: number of neighbors sampled
     prior_update_rule: how to update priors
     similarity_metric: how to measure similarity between clients
+    mergatron: protector of merge
     '''
 
     inv_epsilon = 1e-6
@@ -235,8 +236,9 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
             
             # FEDERATED AVERAGING
             new_weights = FedAvg(neighbor_weights,train_set_sizes)
-            # save old model
-            clients[i].pre_merge_model = copy.deepcopy(clients[i].local_model.state_dict())
+            if parameters['mergatron'] == 'activate':
+                # save old model
+                clients[i].pre_merge_model = copy.deepcopy(clients[i].local_model.state_dict())
             # update client model
             clients[i].local_model.load_state_dict(new_weights)
 
@@ -251,6 +253,7 @@ def client_information_exchange_oracle(clients, parameters, verbose=False, round
     n_sampled: number of neighbors sampled
     prior_update_rule: how to update priors
     similarity_metric: how to measure similarity between clients
+    mergatron: protector of merge
     '''
     if verbose:
         print('Starting information exchange round {}'.format(round))
@@ -316,8 +319,9 @@ def client_information_exchange_oracle(clients, parameters, verbose=False, round
             neighbor_weights.append(clients[i].local_model.state_dict())
             train_set_sizes.append(len(clients[i].train_set))
             new_weights = FedAvg(neighbor_weights,train_set_sizes)
-            # save old model
-            clients[i].pre_merge_model = copy.deepcopy(clients[i].local_model.state_dict())
+            if parameters['mergatron'] == 'activate':
+                # save old model
+                clients[i].pre_merge_model = copy.deepcopy(clients[i].local_model.state_dict())
             # update client model
             clients[i].local_model.load_state_dict(new_weights)
 
