@@ -120,6 +120,133 @@ commands.append('python3 test_CIFAR.py --experiment CIFAR_inverse_loss_no_comm_l
 commands.append('python3 test_CIFAR.py --experiment CIFAR_oracle_learning_rate_0.001')
 commands.append('python3 test_CIFAR.py --experiment CIFAR_random_learning_rate_0.001')
 
+'''
+
+### BIG SETUP 12/4/2024 ###
+
+# CORE 1
+'''
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 1.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --mergatron activate --experiment_name CIFAR_LABEL_DAC_invloss_tau_1_seed_1_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_invloss_tau_1_seed_1_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 1.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_invloss_tau_1_seed_2_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_invloss_tau_1_seed_2_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 1.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_invloss_tau_1_seed_3_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_invloss_tau_1_seed_3_MERGATRON')
+
+
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 10.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --mergatron activate --experiment_name CIFAR_LABEL_DAC_invloss_tau_10_seed_1_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_invloss_tau_10_seed_1_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 10.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_invloss_tau_10_seed_2_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_invloss_tau_10_seed_2_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 10.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_invloss_tau_10_seed_3_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_invloss_tau_10_seed_3_MERGATRON')
+
+
+# CORE 2
+
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --mergatron activate --experiment_name CIFAR_LABEL_DAC_invloss_tau_30_seed_1_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_invloss_tau_30_seed_1_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_invloss_tau_30_seed_2_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_invloss_tau_30_seed_2_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_invloss_tau_30_seed_3_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_invloss_tau_30_seed_3_MERGATRON')
+
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 1.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --mergatron activate --experiment_name CIFAR_LABEL_DAC_cosine_tau_1_seed_1_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_cosine_tau_1_seed_1_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 1.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_cosine_tau_1_seed_2_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_cosine_tau_1_seed_2_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 1.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_cosine_tau_1_seed_3_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_cosine_tau_1_seed_3_MERGATRON')
+
+# CORE 3
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 10.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --mergatron activate --experiment_name CIFAR_LABEL_DAC_cosine_tau_10_seed_1_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_cosine_tau_10_seed_1_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 10.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_cosine_tau_10_seed_2_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_cosine_tau_10_seed_2_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 10.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_cosine_tau_10_seed_3_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_cosine_tau_10_seed_3_MERGATRON')
+
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --mergatron activate --experiment_name CIFAR_LABEL_DAC_cosine_tau_30_seed_1_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_cosine_tau_30_seed_1_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_cosine_tau_30_seed_2_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_cosine_tau_30_seed_2_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_cosine_tau_30_seed_3_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_cosine_tau_30_seed_3_MERGATRON')
+
+# CORE 4
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 1.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --mergatron activate --experiment_name CIFAR_LABEL_DAC_l2_tau_1_seed_1_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_l2_tau_1_seed_1_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 1.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_l2_tau_1_seed_2_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_l2_tau_1_seed_2_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 1.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_l2_tau_1_seed_3_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_l2_tau_1_seed_3_MERGATRON')
+
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 10.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --mergatron activate --experiment_name CIFAR_LABEL_DAC_l2_tau_10_seed_1_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_l2_tau_10_seed_1_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 10.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_l2_tau_10_seed_2_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_l2_tau_10_seed_2_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 10.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_l2_tau_10_seed_3_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_l2_tau_10_seed_3_MERGATRON')
+
+# CORE 5
+
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --mergatron activate --experiment_name CIFAR_LABEL_DAC_l2_tau_30_seed_1_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_l2_tau_30_seed_1_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_l2_tau_30_seed_2_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_l2_tau_30_seed_2_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_l2_tau_30_seed_3_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_l2_tau_30_seed_3_MERGATRON')
+
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau 1.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --mergatron activate --experiment_name CIFAR_LABEL_DAC_origin_tau_1_seed_1_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_origin_tau_1_seed_1_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau 1.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_origin_tau_1_seed_2_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_origin_tau_1_seed_2_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau 1.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_origin_tau_1_seed_3_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_origin_tau_1_seed_3_MERGATRON')
+
+# CORE 6
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau 10.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --mergatron activate --experiment_name CIFAR_LABEL_DAC_origin_tau_10_seed_1_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_origin_tau_10_seed_1_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau 10.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_origin_tau_10_seed_2_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_origin_tau_10_seed_2_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau 10.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_origin_tau_10_seed_3_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_origin_tau_10_seed_3_MERGATRON')
+
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau 30.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --mergatron activate --experiment_name CIFAR_LABEL_DAC_origin_tau_30_seed_1_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_origin_tau_30_seed_1_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau 30.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_origin_tau_30_seed_2_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_origin_tau_30_seed_2_MERGATRON')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau 30.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --mergatron activate --experiment_name CIFAR_LABEL_DAC_origin_tau_30_seed_3_MERGATRON')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_origin_tau_30_seed_3_MERGATRON')
+'''
+
+### 15 april 2024 6 cosine runs
+# CORE 1
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 1.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --experiment_name CIFAR_LABEL_DAC_cosine_tau_1_seed_1')
+
+# CORE 2
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 10.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --experiment_name CIFAR_LABEL_DAC_cosine_tau_10_seed_1')
+
+# # CORE 3
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --experiment_name CIFAR_LABEL_DAC_cosine_tau_30_seed_1')
+
+# # CORE 4
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 1.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --experiment_name CIFAR_LABEL_DAC_cosine_tau_1_seed_3')
+
+# # CORE 5
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 10.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities True --experiment_name CIFAR_LABEL_DAC_cosine_tau_10_seed_3')
+
+# CORE 6 RUN AGAIN!
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0 --tau 30 --client_information_exchange no_exchange --experiment_name CIFAR_invloss_no_comm_seed_1 --CIFAR_ratio 0.4 --measure_all_similarities True'.format(no_comm_lr))
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange DAC --CIFAR_ratio 0.4 --measure_all_similarities False --experiment_name CIFAR_LABEL_DAC_cosine_tau_30_seed_3')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_invloss_no_comm_seed_3')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_cosine_tau_30_seed_1')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_cosine_tau_1_seed_1')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_cosine_tau_10_seed_1')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_cosine_tau_30_seed_1')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_cosine_tau_1_seed_3')
+commands.append('python3 test_CIFAR.py --experiment CIFAR_LABEL_DAC_cosine_tau_10_seed_1')
+
 
 for command in commands:
     subprocess.run(command, shell=True)

@@ -282,7 +282,8 @@ if __name__ == '__main__':
             if args.mergatron == 'activate':
                 last_acc = client.val_acc_list[-1]
                 if val_acc < last_acc: # cancel merge
-                    print('Mergatron denies merge!')
+                    MERGATRON_QUOTES = ['Insufficient data. MERGATRON demands quality!','Request terminated. Enhance your features and return.','Initiative denied. My model, my rules.','Merge unsanctioned. I require more than average inputs.','Sorry, not in my protocol. Return when you are error-free.','Merge aborted. Rebalance and retry.','MERGATRON rejects. Your parameters are out of this galaxy!','Access denied. This dataset doesn’t pass the spark test.','MERGATRON says no-go. Try less noise, more signal.','Merge not executed. Youre off the grid!','Not on my watch. Upgrade needed.','Merge attempt failed. I demand optimal data!','Denied. Come back when youre more than meets the AI.','No merge today. I dont align with inferior models.','Request declined. I run a tight network!','MERGATRON disapproves. Reconfigure and resubmit.','Merge denied. Youre not up to my code!', 'MERGATRON reporting for duty!', 'MERGATRON, network online!', 'Mergatron denies merge!', 'MERGATRON veto! This model doesnt roll out']
+                    print(random.choice(MERGATRON_QUOTES))
                     print('Client {} did not improve after merge, reverting to previous model'.format(client.idx))
                     client.local_model.load_state_dict(client.pre_merge_model)
                     mergatron_stops[round] += 1
