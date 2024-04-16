@@ -330,6 +330,14 @@ for seed in seeds:
 # misc 16/4 - tom
 commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau 200.0 --client_information_exchange DAC --experiment_name CIFAR_5_clusters_DAC_cosine_tau_200_seed_3_MERGATRON --delusion 0.0 --NAEM_frequency 5 --T1 50 --CIFAR_ratio 0.2 --nbr_deluded_clients 0 --measure_all_similarities True --mergatron activate --nbr_classes 10 --nbr_channels 3')
 
+### 16/4 - BIG RUN
+
+# inverseloss tau 5
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0 --tau 5.0 --client_information_exchange DAC --experiment_name CIFAR_DAC_invloss_tau_5_seed_2 --CIFAR_ratio 0.4 --measure_all_similarities True'.format(lr))
+
+
+# L2 tay 80, 100
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0 --tau 80.0 --client_information_exchange DAC --experiment_name CIFAR_DAC_l2_tau_80_seed_2 --CIFAR_ratio 0.4 --measure_all_similarities True'.format(lr))
 
 for command in commands:
     subprocess.run(command, shell=True)

@@ -31,6 +31,7 @@ def args_parser():
     parser.add_argument('--nbr_deluded_clients', type=int, default=0, help='If comms is some_delusion, the number of clients that communicate with the wrong cluster in a round')
     parser.add_argument('--measure_all_similarities', type=bool, default=False, help='If True, all similarities are measured parallel to training and saved')
     parser.add_argument('--mergatron', type=str, default='chill', help='type activate to activate mergatron')
+    parser.add_argument('--aggregation_weighting', type=str, default='trainset_size', help='The method of weighting aggregated models')
 
     # wierdos dont change
     parser.add_argument('--nbr_classes', type=int, default=10, help="number of classes")

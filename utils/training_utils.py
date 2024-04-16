@@ -130,6 +130,8 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
             # weighted average of models
             neighbor_weights.append(clients[i].local_model.state_dict())
             train_set_sizes.append(len(clients[i].train_set))
+            priors_of_sampled = [clients[i].priors[j] for j in neighbor_indices_sampled]
+            priors_of_sampled.append(max(priors_of_sampled))
             # do the actual averaging at the end of the round, after calculating similarity scores
 
             #### calculate new similarity scores
@@ -235,7 +237,10 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
                 clients[i].priors = clients[i].priors / np.sum(clients[i].priors)
             
             # FEDERATED AVERAGING
-            new_weights = FedAvg(neighbor_weights,train_set_sizes)
+            if parameters['aggregation_weighting'] == 'trainset_size':
+                new_weights = FedAvg(neighbor_weights,train_set_sizes)
+            elif parameters['aggregation_weighting'] == 'priors':
+                new_weights = FedAvg(neighbor_weights,priors_of_sampled)
             if parameters['mergatron'] == 'activate':
                 # save old model
                 clients[i].pre_merge_model = copy.deepcopy(clients[i].local_model.state_dict())
