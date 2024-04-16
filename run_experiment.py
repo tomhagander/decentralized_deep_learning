@@ -230,6 +230,7 @@ if __name__ == '__main__':
                       'tau': args.tau,
                       'cosine_alpha': args.cosine_alpha,
                       'mergatron': args.mergatron,
+                      'aggregation_weighting': args.aggregation_weighting,
                       }
             clients = client_information_exchange_DAC(clients, 
                                             parameters=parameters,
