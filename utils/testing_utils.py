@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 
 def test_model(model, testloader):
     # Set the model to evaluation
@@ -16,8 +17,8 @@ def test_model(model, testloader):
     # Iterate over the testloader_vehicle
     for images, labels in testloader:
         # Move images and labels to the device
-        images = images.to(device)
-        labels = labels.to(device)
+        #images = images.to(device)
+        #labels = labels.to(device)
     
         # Forward pass
         with torch.no_grad():
@@ -70,8 +71,60 @@ def test_on_PACS(clients, quick):
             acc_matrix[i, j, k] = acc
             client.best_model.to('cpu')
 
+    return acc_matrix
+
+def test_5_clusters(clients):
+    import numpy as np
+    # the end goal is a 5x5x20 matrix with the accuracy of each group on each test set
+    # acc_matrix[i,j,k] = a list of accuracies of group i on test set j for the kth client in group i
+    acc_matrix = np.zeros((5,5,len(clients)//5))
+
+    import torchvision.transforms as transforms
+    from utils.classes import DatasetSplit
+    from torch.utils.data import DataLoader
+    import numpy as np
+    from torchvision.datasets import CIFAR10
+
+    # --------------------------
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+    ])
+
+    # Load the CIFAR-10 test set
+    testset = CIFAR10(root='.', train=False, download=True, transform=transform)
+
+    group1_idxs = [i for i in range(len(testset)) if testset[i][1] in [0, 1]]
+    group2_idxs = [i for i in range(len(testset)) if testset[i][1] in [2,3]]
+    group3_idxs = [i for i in range(len(testset)) if testset[i][1] in [4,5]]
+    group4_idxs = [i for i in range(len(testset)) if testset[i][1] in [6,7]]
+    group5_idxs = [i for i in range(len(testset)) if testset[i][1] in [8,9]]
+
+    # set rot deg to 0 because only label shift is implemented
+    rot_deg = 0
+    rot_transform = transforms.RandomRotation(degrees=(rot_deg,rot_deg))
+
+    testloaders = []
+
+    for group_idxs in [group1_idxs, group2_idxs, group3_idxs, group4_idxs, group5_idxs]:
+        group_set = DatasetSplit(testset,group_idxs,rot_transform)
+        testloader = DataLoader(group_set, batch_size=1, shuffle=False)
+        testloaders.append(testloader)
+
+    for i, testloader in enumerate(testloaders):
+        for client in clients:
+            client.best_model.to('cpu')
+            #client.best_model.to(client.device)
+            j = client.group
+            k = client.idx%(len(clients)//5)
+            acc = test_model(client.best_model, testloader)
+            print('Client: {} Group: {} Testset: {} Acc: {:.2f}'.format(k + j*len(clients)//5, j, i, acc))
+            acc_matrix[i, j, k] = acc
+            client.best_model.to('cpu')
 
     return acc_matrix
+
+
 
 def test_on_CIFAR(clients, quick, verbose):
     import torchvision.transforms as transforms
@@ -112,7 +165,8 @@ def test_on_CIFAR(clients, quick, verbose):
     for client in clients:
         if verbose:
             print('Testing client: {}'.format(client.idx))
-        client.best_model.to(client.device)
+        #client.best_model.to(client.device)
+        client.best_model.to('cpu')
         acc_v = test_model(client.best_model, testloader_vehicle)
         acc_a = test_model(client.best_model, testloader_animal)
         if client.group == 0:

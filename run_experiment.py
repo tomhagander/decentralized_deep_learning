@@ -315,6 +315,11 @@ if __name__ == '__main__':
     # done with training
     print('Done with training')
 
+    # send all models back to cpu:
+    for client in clients:
+        client.local_model.to('cpu')
+        client.best_model.to('cpu')
+
     # end time
     end_time = time.time()
     print('Runtime: {} = {} hours'.format(end_time - start_time, (end_time - start_time)/3600))
