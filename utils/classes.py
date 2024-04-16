@@ -192,7 +192,7 @@ class Client(object):
         self.all_taus = []
 
         # for mergatron
-        self.pre_merge_weights = copy.deepcopy(self.local_model.state_dict())
+        self.pre_merge_weights = None # copy.deepcopy(self.local_model.state_dict())
         
         
     def train(self,n_epochs):

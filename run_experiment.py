@@ -229,13 +229,16 @@ if __name__ == '__main__':
                       'similarity_metric': args.similarity_metric,
                       'tau': args.tau,
                       'cosine_alpha': args.cosine_alpha,
+                      'mergatron': args.mergatron,
                       }
             clients = client_information_exchange_DAC(clients, 
                                             parameters=parameters,
                                             verbose=True,
                                             round=round)
         elif args.client_information_exchange == 'oracle':
-            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled}
+            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
+                          'mergatron': args.mergatron,
+                          }
             clients = client_information_exchange_oracle(clients, 
                                             parameters=parameters,
                                             verbose=True,
