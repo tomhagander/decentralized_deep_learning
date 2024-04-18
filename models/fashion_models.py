@@ -1,9 +1,9 @@
 import torch.nn as nn
 import torch.nn.functional as F
 
-class CNNFashion(nn.Module):
+class fashion_CNN(nn.Module):
     def __init__(self, num_classes):
-        super(CNNFashion, self).__init__()
+        super(fashion_CNN, self).__init__()
         self.conv1 = nn.Conv2d(1, 16, 3) #in-ch, out-ch, kernel_size, 28x28
         self.pool = nn.MaxPool2d(2, 2)
         self.conv2 = nn.Conv2d(16, 32, 3) 
