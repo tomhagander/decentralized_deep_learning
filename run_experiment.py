@@ -16,6 +16,7 @@ from utils.visualization_utils import *
 from utils.initialization_utils import set_seed
 
 from models.cifar_models import simple_CNN
+from models.fashion_models import fashion_CNN
 
 import sys
 sys.setrecursionlimit(200)
@@ -158,6 +159,8 @@ if __name__ == '__main__':
         # client_model_init = torchvision.models.resnet18(weights=ResNet18_Weights.DEFAULT) # change here for pretrained
         client_model_init = torchvision.models.resnet18(weights=None) # change here for Not pretrained
         client_model_init.fc = torch.nn.Linear(client_model_init.fc.in_features, args.nbr_classes)
+    elif args.dataset == 'fashion-mnist':
+        client_model_init = fashion_CNN(nbr_classes=args.nbr_classes)
 
     # create clients
     clients = []
