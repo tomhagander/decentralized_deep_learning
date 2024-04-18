@@ -460,7 +460,39 @@ commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_c
 # MNIST DEV
 commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0.0 --tau 30.0 --client_information_exchange oracle --experiment_name MNIST_dev --delusion 0.0')
 
+# Label PRIORWEIGHTS
+# invloss tau 1
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0 --tau 1.0 --client_information_exchange DAC --experiment_name CIFAR_label_DAC_priorweight_invloss_tau_1_seed_2 --CIFAR_ratio 0.4 --measure_all_similarities True --aggregation_weighting priors'.format(lr))
 
+# # l2 tau 10
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0 --tau 10.0 --client_information_exchange DAC --experiment_name CIFAR_label_DAC_priorweight_l2_tau_10_seed_2 --CIFAR_ratio 0.4 --measure_all_similarities True --aggregation_weighting priors'.format(lr))
+
+# # cosine tau 80, 200, 300
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0 --tau 80.0 --client_information_exchange DAC --experiment_name CIFAR_label_DAC_priorweight_cosine_tau_80_seed_2 --CIFAR_ratio 0.4 --measure_all_similarities True --aggregation_weighting priors'.format(lr))
+# # ----
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0 --tau 200.0 --client_information_exchange DAC --experiment_name CIFAR_label_DAC_priorweight_cosine_tau_200_seed_2 --CIFAR_ratio 0.4 --measure_all_similarities True --aggregation_weighting priors'.format(lr))
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0 --tau 300.0 --client_information_exchange DAC --experiment_name CIFAR_label_DAC_priorweight_cosine_tau_300_seed_2 --CIFAR_ratio 0.4 --measure_all_similarities True --aggregation_weighting priors'.format(lr))
+
+# #origin tau 80, 200, 300
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0 --tau 80.0 --client_information_exchange DAC --experiment_name CIFAR_label_DAC_priorweight_cosine_origin_tau_80_seed_2 --CIFAR_ratio 0.4 --measure_all_similarities True --aggregation_weighting priors'.format(lr))
+# ----
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0 --tau 200.0 --client_information_exchange DAC --experiment_name CIFAR_label_DAC_priorweight_cosine_origin_tau_200_seed_2 --CIFAR_ratio 0.4 --measure_all_similarities True --aggregation_weighting priors'.format(lr))
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0 --tau 300.0 --client_information_exchange DAC --experiment_name CIFAR_label_DAC_priorweight_cosine_origin_tau_300_seed_2 --CIFAR_ratio 0.4 --measure_all_similarities True --aggregation_weighting priors'.format(lr))
+
+
+# # 5 cluster PRIORWEIGHTS
+# # invloss tau 1
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0 --tau 1.0 --client_information_exchange DAC --experiment_name CIFAR_5_clusters_DAC_priorweight_invloss_tau_1_seed_3 --CIFAR_ratio 0.2 --measure_all_similarities True --aggregation_weighting priors'.format(lr))
+# # # ---
+
+# l2 tau 10
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0 --tau 10.0 --client_information_exchange DAC --experiment_name CIFAR_5_clusters_DAC_priorweight_l2_tau_10_seed_3 --CIFAR_ratio 0.2 --measure_all_similarities True --aggregation_weighting priors'.format(lr))
+
+# # cosine tau 300
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0 --tau 300.0 --client_information_exchange DAC --experiment_name CIFAR_5_clusters_DAC_priorweight_cosine_tau_300_seed_3 --CIFAR_ratio 0.2 --measure_all_similarities True --aggregation_weighting priors'.format(lr))
+
+# # origin tau 300
+# commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0 --tau 300.0 --client_information_exchange DAC --experiment_name CIFAR_5_clusters_DAC_priorweight_cosine_origin_tau_300_seed_3 --CIFAR_ratio 0.2 --measure_all_similarities True --aggregation_weighting priors'.format(lr))
 
 for command in commands:
     subprocess.run(command, shell=True)

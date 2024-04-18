@@ -9,7 +9,7 @@ import pickle
 
 from utils.classes import Client
 from utils.arg_parser import args_parser
-from utils.initialization_utils import sample_cifargroups, load_pacs, uniform_split, sample_cifargroups_5clusters
+from utils.initialization_utils import sample_cifargroups, load_pacs, uniform_split, sample_labels_iid, sample_cifargroups_5clusters, split_dataset
 from utils.training_utils import train_clients_locally
 from utils.training_utils import *
 from utils.visualization_utils import *
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     elif args.dataset == 'PACS':
         args.nbr_classes = 7
         args.nbr_channels = 3
-    elif args.dataset == 'fashion-mnist':
+    elif args.dataset == 'fashion_mnist':
         args.nbr_classes = 10
         args.nbr_channels = 1
 
@@ -154,8 +154,20 @@ if __name__ == '__main__':
             raise ValueError('PACS dataset requires number of clients to be divisible by 4')
         client_train_datasets, val_sets, test_sets = load_pacs('./PACS/', args.batch_size, args.nbr_clients // 4, augment=True)
 
-    elif args.dataset == 'fashion-mnist':
-        pass
+    elif args.dataset == 'fashion_mnist':
+        trans_fashion = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
+        train_dataset = torchvision.datasets.FashionMNIST('.', train=True, download=True, transform=trans_fashion)
+        # split train_dataset into train and val, 85/% train, 15% val
+        # the first 85% of indices are train, the rest are val
+        all_idxs = np.arange(len(train_dataset))
+        rng = np.random.default_rng(42)
+        rng.shuffle(all_idxs)
+        train_idxs = all_idxs[:int(0.85*len(all_idxs))]
+        val_idxs = all_idxs[int(0.85*len(all_idxs)):]
+        train_dataset = torch.utils.data.Subset(train_dataset, train_idxs)
+        val_dataset = torch.utils.data.Subset(train_dataset, val_idxs)
+
+        trainsets = split_dataset(train_dataset, args.nbr_clients)
 
     # load model (same initialization for all clients)
     if args.dataset == 'cifar10': # custom cnn
@@ -164,7 +176,7 @@ if __name__ == '__main__':
         # client_model_init = torchvision.models.resnet18(weights=ResNet18_Weights.DEFAULT) # change here for pretrained
         client_model_init = torchvision.models.resnet18(weights=None) # change here for Not pretrained
         client_model_init.fc = torch.nn.Linear(client_model_init.fc.in_features, args.nbr_classes)
-    elif args.dataset == 'fashion-mnist':
+    elif args.dataset == 'fashion_mnist':
         client_model_init = fashion_CNN(nbr_classes=args.nbr_classes)
 
     # create clients
@@ -175,7 +187,7 @@ if __name__ == '__main__':
             client = Client(train_set=train_dataset, 
                             idxs_train=dict_users[i], 
                             idxs_val=dict_users_val[i], 
-                            criterion=torch.nn.CrossEntropyLoss(), 
+                            criterion=torch.nn.CrossEntropyLoss(), # change to NLLL
                             lr=args.lr, 
                             device=device, 
                             batch_size=args.batch_size, 
@@ -217,8 +229,25 @@ if __name__ == '__main__':
                             shift=args.shift)
             clients.append(client)
 
-    elif args.dataset == 'fashion-mnist':
-        pass
+    elif args.dataset == 'fashion_mnist':
+        for i in range(args.nbr_clients):
+            print('creating client {}'.format(i))
+            client = Client(train_set=trainsets[i],
+                            val_set=val_dataset,
+                            idxs_train=None, 
+                            idxs_val=None, 
+                            criterion=torch.nn.NLLLoss(), 
+                            lr=args.lr, 
+                            device=device, 
+                            batch_size=args.batch_size, 
+                            num_users=args.nbr_clients, 
+                            model=client_model_init,
+                            idx=i,
+                            stopping_rounds=args.stopping_rounds,
+                            ratio = 0.25,
+                            dataset = 'fashion_mnist',
+                            shift=args.shift)
+            clients.append(client)
 
     if args.client_information_exchange == 'some_delusion': #ONLY for some_delusion (Ignore)
         delusional_client_idxs = get_delusional_clients(clients, args.nbr_deluded_clients) 
@@ -234,6 +263,8 @@ if __name__ == '__main__':
     for round in range(args.nbr_rounds):
         # information exchange
 
+        print('Experiment name: ', args.experiment_name)
+
         if args.client_information_exchange == 'DAC':
             parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
                       'prior_update_rule': args.prior_update_rule,
@@ -242,6 +273,7 @@ if __name__ == '__main__':
                       'cosine_alpha': args.cosine_alpha,
                       'mergatron': args.mergatron,
                       'aggregation_weighting': args.aggregation_weighting,
+                      'dataset': args.dataset,
                       }
             clients = client_information_exchange_DAC(clients, 
                                             parameters=parameters,
@@ -311,6 +343,8 @@ if __name__ == '__main__':
         val_losses = [client.val_losses_post_exchange[-1] for client in clients]
         print('Round {} post exchange. Average val acc: {:.3f}, average val loss: {:.3f}'.format(round, np.mean(val_accs), np.mean(val_losses)))
     
+        print('Experiment name: ', args.experiment_name)
+
         # local training
         clients = train_clients_locally(clients, args.nbr_local_epochs, verbose=True)
         # print average client validation accuracy and loss§
@@ -318,10 +352,13 @@ if __name__ == '__main__':
         val_losses = [client.val_loss_list[-1] for client in clients]
         print('Round {} post local. Average val acc: {:.3f}, average val loss: {:.3f}'.format(round, np.mean(val_accs), np.mean(val_losses)))
 
+        print('Experiment name: ', args.experiment_name)
+
         # measure all similarities if flag is set
         if args.measure_all_similarities:
             for client in clients:
                 client.measure_all_similarities(clients, args.similarity_metric)
+
 
         # dump the clients to clients.pkl
         with open('save/'+results_folder+'/clients.pkl', 'wb') as f:
