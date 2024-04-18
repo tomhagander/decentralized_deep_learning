@@ -74,6 +74,7 @@ class Client(object):
         self.idx = idx
 
         self.shift = shift
+        self.dataset = dataset
 
         # if dataset is cifar
         if dataset == 'cifar10':
@@ -333,12 +334,17 @@ class Client(object):
         return np.concatenate(all_gradients)
     
     def measure_all_similarities(self, all_clients, similarity_metric, alpha=0, store=True):
-        if self.shift == 'label':
-            if self.idx != 0 and self.idx != 70:
+        if self.dataset == 'cifar10':
+            if self.shift == 'label':
+                if self.idx != 0 and self.idx != 70:
+                    return np.zeros(len(all_clients))
+            elif self.shift == '5_clusters':
+                if self.idx != 0 and self.idx != 20 and self.idx != 40 and self.idx != 60 and self.idx != 80:
+                    return np.zeros(len(all_clients))
+        elif self.dataset == 'fashion_mnist':
+            if self.idx != 0 and self.idx != 70 and self.idx != 90 and self.idx != 95:
                 return np.zeros(len(all_clients))
-        elif self.shift == '5_clusters':
-            if self.idx != 0 and self.idx != 20 and self.idx != 40 and self.idx != 60 and self.idx != 80:
-                return np.zeros(len(all_clients))
+            
         print('Measuring similarities of client {}'.format(self.idx))
         similarities = np.zeros(len(all_clients))
         for client in all_clients:
