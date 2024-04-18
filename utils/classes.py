@@ -132,6 +132,27 @@ class Client(object):
             self.ldr_train = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=1, pin_memory=True, drop_last=False)
             self.ldr_val = DataLoader(val_set, batch_size=32, num_workers=1, pin_memory=True, shuffle=False)
 
+        elif dataset == 'fashion_mnist':
+            if idx<int(num_users*0.7):
+                self.group = 0
+            elif idx<int(num_users*0.9):
+                self.group = 1
+            elif idx<int(num_users*0.95):
+                self.group = 2
+            else:
+                self.group = 3
+
+            rot_degs = [0, 180, 10, 350]
+            rot_deg = rot_degs[self.group]
+            rot_transform = transforms.RandomRotation(degrees=(rot_deg,rot_deg))
+            all_idxs = np.arange(len(train_set))
+            self.train_set = DatasetSplit(train_set,all_idxs,rot_transform)
+            all_idxs = np.arange(len(val_set))
+            self.val_set = DatasetSplit(val_set,all_idxs,rot_transform)
+            
+            self.ldr_val = DataLoader(self.val_set, batch_size = 8, pin_memory=False, shuffle=False)
+            self.ldr_train = DataLoader(self.train_set, batch_size=batch_size, shuffle=True, pin_memory=False, drop_last=False)
+
         
         # copy model and send to device
         self.local_model = copy.deepcopy(model)
