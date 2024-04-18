@@ -162,12 +162,16 @@ if __name__ == '__main__':
         all_idxs = np.arange(len(train_dataset))
         rng = np.random.default_rng(42)
         rng.shuffle(all_idxs)
-        train_idxs = all_idxs[:int(0.85*len(all_idxs))]
-        val_idxs = all_idxs[int(0.85*len(all_idxs)):]
-        train_dataset = torch.utils.data.Subset(train_dataset, train_idxs)
-        val_dataset = torch.utils.data.Subset(train_dataset, val_idxs)
+        train_idxs = all_idxs[:int(0.8333*len(all_idxs))]
+        val_idxs = all_idxs[int(0.8333*len(all_idxs)):]
+        train_subset = torch.utils.data.Subset(train_dataset, train_idxs)
+        val_subset = torch.utils.data.Subset(train_dataset, val_idxs)
 
-        trainsets = split_dataset(train_dataset, args.nbr_clients)
+        print('Train dataset size: ', len(train_subset))
+        print('Val dataset size: ', len(val_subset))
+
+        trainsets = split_dataset(train_subset, args.nbr_clients)
+        valsets = split_dataset(val_subset, args.nbr_clients)
 
     # load model (same initialization for all clients)
     if args.dataset == 'cifar10': # custom cnn
@@ -233,7 +237,7 @@ if __name__ == '__main__':
         for i in range(args.nbr_clients):
             print('creating client {}'.format(i))
             client = Client(train_set=trainsets[i],
-                            val_set=val_dataset,
+                            val_set=valsets[i], # remommaöbner
                             idxs_train=None, 
                             idxs_val=None, 
                             criterion=torch.nn.NLLLoss(), 

@@ -458,7 +458,9 @@ commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_c
 
 
 # MNIST DEV
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0.0 --tau 30.0 --client_information_exchange oracle --experiment_name MNIST_dev --delusion 0.0')
+# finding learning rate for MNIST with oracle 10^-4, 5*10^-5, 10^-5, 5*10^-6
+lr_tuning = 3e-4#1e-3 #7e-4 #3e-4 #1e-4 5e-5, 1e-5, 5e-6
+commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0.0 --tau 30.0 --client_information_exchange oracle --experiment_name fashion_MNIST_oracle_tuning_lr_{}_seed_1 --delusion 0.0'.format(lr_tuning, lr_tuning))
 
 # Label PRIORWEIGHTS
 # invloss tau 1
@@ -493,6 +495,8 @@ commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_c
 
 # # origin tau 300
 # commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0 --tau 300.0 --client_information_exchange DAC --experiment_name CIFAR_5_clusters_DAC_priorweight_cosine_origin_tau_300_seed_3 --CIFAR_ratio 0.2 --measure_all_similarities True --aggregation_weighting priors'.format(lr))
+
+
 
 for command in commands:
     subprocess.run(command, shell=True)
