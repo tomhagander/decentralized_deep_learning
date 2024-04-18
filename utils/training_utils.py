@@ -116,7 +116,14 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
             train_set_sizes = []
             for j in neighbor_indices_sampled:
                 # validate on neighbor model, get loss and accuracy
-                neighbor_model = clients[j].local_model
+                # if neighbor is early stopped, take best model instead
+                if parameters['dataset'] == 'fashion_mnist':
+                    if clients[j].early_stopping.is_stopped():
+                        neighbor_model = clients[j].best_model
+                    else:
+                        neighbor_model = clients[j].local_model
+                else:
+                    neighbor_model = clients[j].local_model
                 train_set_size = len(clients[j].train_set)
                 train_loss_ij, train_acc_ij = clients[i].validate(neighbor_model, train_set=True)
                 # save stuff
