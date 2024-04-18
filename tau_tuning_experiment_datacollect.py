@@ -18,14 +18,18 @@ label_cosine_expnames = ['CIFAR_DAC_cosine_tau_1_seed_2',
                          'CIFAR_DAC_cosine_tau_10_seed_2',
                          'CIFAR_DAC_cosine_tau_30_seed_2',
                          'CIFAR_label_DAC_cosine_tau_80_seed_2',
-                         'CIFAR_label_DAC_cosine_tau_200_seed_2']
+                         'CIFAR_label_DAC_cosine_tau_200_seed_2', 
+                         'CIFAR_label_DAC_cosine_tau_300_seed_2',
+                         'CIFAR_label_DAC_cosine_tau_500_seed_2']
 
 label_origin_expnames = ['CIFAR_label_DAC_cosine_origin_tau_1_seed_2',
                          'CIFAR_label_DAC_cosine_origin_tau_10_seed_2',
                          'CIFAR_label_DAC_cosine_origin_tau_30_seed_2',
                          'CIFAR_label_DAC_origin_tau_30_seed_2', # same???
                          'CIFAR_label_DAC_origin_tau_80_seed_2',
-                         'CIFAR_label_DAC_origin_tau_200_seed_2']
+                         'CIFAR_label_DAC_origin_tau_200_seed_2', 
+                         'CIFAR_label_DAC_cosine_origin_tau_300_seed_2',
+                         'CIFAR_label_DAC_cosine_origin_tau_500_seed_2']
 
 fivecluster_invloss_expnames = ['CIFAR_5_clusters_DAC_invloss_tau_1_seed_3',
                                 'CIFAR_5_clusters_DAC_invloss_tau_5_seed_3',
@@ -41,13 +45,17 @@ fivecluster_l2_expnames = ['CIFAR_5_clusters_DAC_l2_tau_1_seed_3',
 fivecluster_cosine_expnames = ['CIFAR_5_clusters_DAC_cosine_tau_10_seed_3',
                                'CIFAR_5_clusters_DAC_cosine_tau_30_seed_3',
                                'CIFAR_5_clusters_DAC_cosine_tau_80_seed_3',
-                               'CIFAR_5_clusters_DAC_cosine_tau_200_seed_3']
+                               'CIFAR_5_clusters_DAC_cosine_tau_200_seed_3',
+                               'CIFAR_5_clusters_DAC_cosine_tau_300_seed_3',
+                               'CIFAR_5_clusters_DAC_cosine_tau_500_seed_3']
 
 fivecluster_origin_expnames = ['CIFAR_5_clusters_DAC_cosine_origin_tau_1_seed_3',
                                'CIFAR_5_clusters_DAC_cosine_origin_tau_10_seed_3',
                                'CIFAR_5_clusters_DAC_cosine_origin_tau_30_seed_3',
                                'CIFAR_5_clusters_DAC_cosine_origin_tau_80_seed_3',
-                               'CIFAR_5_clusters_DAC_cosine_origin_tau_200_seed_3']
+                               'CIFAR_5_clusters_DAC_cosine_origin_tau_200_seed_3',
+                               'CIFAR_5_clusters_DAC_cosine_origin_tau_300_seed_3',
+                               'CIFAR_5_clusters_DAC_cosine_origin_tau_500_seed_3']
 
 label_priorweight_invloss_expnames = ['CIFAR_label_DAC_priorweight_invloss_tau_5_seed_2',
                                       'CIFAR_label_DAC_priorweight_invloss_tau_10_seed_2',
@@ -107,10 +115,12 @@ def collect_experiments_and_save(expnames, results):
             # check if runtime exists
             if 'runtime' not in metadata:
                 print(exp, ' runtime not found')
+                continue
                 #raise FileNotFoundError(exp + ' runtime not found')
             # check if path exists
         except:
             print(exp, ' metadata not found')
+            continue
             #raise FileNotFoundError(exp + ' metadata not found')
 
         try:
