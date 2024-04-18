@@ -2,13 +2,13 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class fashion_CNN(nn.Module):
-    def __init__(self, num_classes):
+    def __init__(self, nbr_classes):
         super(fashion_CNN, self).__init__()
         self.conv1 = nn.Conv2d(1, 16, 3) #in-ch, out-ch, kernel_size, 28x28
         self.pool = nn.MaxPool2d(2, 2)
         self.conv2 = nn.Conv2d(16, 32, 3) 
         self.fc1 = nn.Linear(32 * 5 * 5, 64)
-        self.output = nn.Linear(64, num_classes)
+        self.output = nn.Linear(64, nbr_classes)
         self.activation = nn.LogSoftmax()
 
     def forward(self, x):
