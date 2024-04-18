@@ -16,6 +16,7 @@ from utils.visualization_utils import *
 from utils.initialization_utils import set_seed
 
 from models.cifar_models import simple_CNN
+from models.fashion_models import fashion_CNN
 
 import sys
 sys.setrecursionlimit(200)
@@ -68,6 +69,9 @@ if __name__ == '__main__':
     elif args.dataset == 'PACS':
         args.nbr_classes = 7
         args.nbr_channels = 3
+    elif args.dataset == 'fashion-mnist':
+        args.nbr_classes = 10
+        args.nbr_channels = 1
 
     # load dataset and transform
     if args.dataset == 'cifar10':
@@ -150,6 +154,8 @@ if __name__ == '__main__':
             raise ValueError('PACS dataset requires number of clients to be divisible by 4')
         client_train_datasets, val_sets, test_sets = load_pacs('./PACS/', args.batch_size, args.nbr_clients // 4, augment=True)
 
+    elif args.dataset == 'fashion-mnist':
+        pass
 
     # load model (same initialization for all clients)
     if args.dataset == 'cifar10': # custom cnn
@@ -158,6 +164,8 @@ if __name__ == '__main__':
         # client_model_init = torchvision.models.resnet18(weights=ResNet18_Weights.DEFAULT) # change here for pretrained
         client_model_init = torchvision.models.resnet18(weights=None) # change here for Not pretrained
         client_model_init.fc = torch.nn.Linear(client_model_init.fc.in_features, args.nbr_classes)
+    elif args.dataset == 'fashion-mnist':
+        client_model_init = fashion_CNN(nbr_classes=args.nbr_classes)
 
     # create clients
     clients = []
@@ -208,6 +216,9 @@ if __name__ == '__main__':
                             dataset = 'PACS',
                             shift=args.shift)
             clients.append(client)
+
+    elif args.dataset == 'fashion-mnist':
+        pass
 
     if args.client_information_exchange == 'some_delusion': #ONLY for some_delusion (Ignore)
         delusional_client_idxs = get_delusional_clients(clients, args.nbr_deluded_clients) 
