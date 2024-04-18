@@ -142,6 +142,25 @@ def sample_cifargroups_5clusters(dataset, num_users, n_data_train, n_data_val, r
         
     return dict_users, dict_users_val
 
+def sample_labels_iid(dataset, num_users, n_data_train, n_data_val):
+    """
+    Sample I.I.D. (labels) client data from MNIST/CIFAR10/FASHION-MNIST datasets
+    :param dataset:
+    :param num_users:
+    :return: dict of image index
+    """
+    #num_items = int(len(dataset)/num_users)
+    dict_users, all_idxs = {}, [i for i in range(len(dataset))]
+    dict_users_val = {}
+    for i in range(num_users):
+        dict_users[i] = set(np.random.choice(all_idxs, int(n_data_train), replace=False))
+        all_idxs = list(set(all_idxs) - dict_users[i])
+        
+        dict_users_val[i] = set(np.random.choice(all_idxs, int(n_data_val), replace=False))
+        all_idxs = list(set(all_idxs) - dict_users_val[i])
+        
+    return dict_users, dict_users_val
+
 def uniform_split(dataset, num_users, n_data_train, n_data_val):
     dict_users = {i: np.array([], dtype='int64') for i in range(num_users)}
     dict_users_val = {i: np.array([], dtype='int64') for i in range(num_users)}

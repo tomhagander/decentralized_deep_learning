@@ -57,37 +57,43 @@ fivecluster_origin_expnames = ['CIFAR_5_clusters_DAC_cosine_origin_tau_1_seed_3'
                                'CIFAR_5_clusters_DAC_cosine_origin_tau_300_seed_3',
                                'CIFAR_5_clusters_DAC_cosine_origin_tau_500_seed_3']
 
-label_priorweight_invloss_expnames = ['CIFAR_label_DAC_priorweight_invloss_tau_5_seed_2',
+label_priorweight_invloss_expnames = ['CIFAR_label_DAC_priorweight_invloss_tau_1_seed_2',
+                                      'CIFAR_label_DAC_priorweight_invloss_tau_5_seed_2',
                                       'CIFAR_label_DAC_priorweight_invloss_tau_10_seed_2',
                                       'CIFAR_label_DAC_priorweight_invloss_tau_30_seed_2']
 
-label_priorweight_l2_expnames = ['CIFAR_label_DAC_priorweight_l2_tau_30_seed_2',
+label_priorweight_l2_expnames = ['CIFAR_label_DAC_priorweight_l2_tau_10_seed_2',
+                                 'CIFAR_label_DAC_priorweight_l2_tau_30_seed_2',
                                     'CIFAR_label_DAC_priorweight_l2_tau_80_seed_2',
                                     'CIFAR_label_DAC_priorweight_l2_tau_200_seed_2']
 
-label_priorweight_cosine_expnames = ['CIFAR_label_DAC_priorweight_cosine_tau_30_seed_2',
-                                     'CIFAR_label_DAC_priorweight_cosine_tau_80_seed_2',
-                                     'CIFAR_label_DAC_priorweight_cosine_tau_200_seed_2']
+label_priorweight_cosine_expnames = ['CIFAR_label_DAC_priorweight_cosine_tau_80_seed_2',
+                                     'CIFAR_label_DAC_priorweight_cosine_tau_200_seed_2',
+                                     'CIFAR_label_DAC_priorweight_cosine_tau_300_seed_2',]
 
-label_priorweight_origin_expnames = ['CIFAR_label_DAC_priorweight_cosine_origin_tau_30_seed_2',
-                                     'CIFAR_label_DAC_priorweight_cosine_origin_tau_80_seed_2',
-                                     'CIFAR_label_DAC_priorweight_cosine_origin_tau_200_seed_2']
+label_priorweight_origin_expnames = ['CIFAR_label_DAC_priorweight_cosine_origin_tau_80_seed_2',
+                                     'CIFAR_label_DAC_priorweight_cosine_origin_tau_200_seed_2',
+                                     'CIFAR_label_DAC_priorweight_cosine_origin_tau_300_seed_2',]
 
-fivecluster_priorweight_invloss_expnames = ['CIFAR_5_clusters_DAC_priorweight_invloss_tau_5_seed_3',
+fivecluster_priorweight_invloss_expnames = ['CIFAR_5_clusters_DAC_priorweight_invloss_tau_1_seed_3',
+                                            'CIFAR_5_clusters_DAC_priorweight_invloss_tau_5_seed_3',
                                         'CIFAR_5_clusters_DAC_priorweight_invloss_tau_10_seed_3',
                                         'CIFAR_5_clusters_DAC_priorweight_invloss_tau_30_seed_3']
 
-fivecluster_priorweight_l2_expnames = ['CIFAR_5_clusters_DAC_priorweight_l2_tau_30_seed_3',
+fivecluster_priorweight_l2_expnames = ['CIFAR_5_clusters_DAC_priorweight_l2_tau_10_seed_3',
+                                       'CIFAR_5_clusters_DAC_priorweight_l2_tau_30_seed_3',
                                     'CIFAR_5_clusters_DAC_priorweight_l2_tau_80_seed_3',
                                     'CIFAR_5_clusters_DAC_priorweight_l2_tau_200_seed_3']
 
 fivecluster_priorweight_cosine_expnames = ['CIFAR_5_clusters_DAC_priorweight_cosine_tau_30_seed_3',
                                         'CIFAR_5_clusters_DAC_priorweight_cosine_tau_80_seed_3',
-                                        'CIFAR_5_clusters_DAC_priorweight_cosine_tau_200_seed_3']
+                                        'CIFAR_5_clusters_DAC_priorweight_cosine_tau_200_seed_3',
+                                        'CIFAR_5_clusters_DAC_priorweight_cosine_tau_300_seed_3']
 
 fivecluster_priorweight_origin_expnames = ['CIFAR_5_clusters_DAC_priorweight_cosine_origin_tau_30_seed_3',
                                         'CIFAR_5_clusters_DAC_priorweight_cosine_origin_tau_80_seed_3',
-                                        'CIFAR_5_clusters_DAC_priorweight_cosine_origin_tau_200_seed_3']
+                                        'CIFAR_5_clusters_DAC_priorweight_cosine_origin_tau_200_seed_3',
+                                        'CIFAR_5_clusters_DAC_priorweight_cosine_origin_tau_300_seed_3']
 
 
 def collect_experiments_and_save(expnames, results):
