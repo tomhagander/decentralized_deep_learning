@@ -503,26 +503,38 @@ commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_c
 # commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0 --tau 500.0 --client_information_exchange DAC --experiment_name CIFAR_5_clusters_DAC_priorweight_cosine_origin_tau_500_seed_3 --CIFAR_ratio 0.2 --measure_all_similarities True --aggregation_weighting priors'.format(lr))
 
 # MNIST TAUTUNING
-lr = 1e-4 # TBD
+lr = 0.0003 # TBD
+no_comm_lr = 0.00005
+timebomb_seconds = 60*60*10 # 6 hours
+import time
+print('Sleeping for {} seconds'.format(timebomb_seconds))
+time.sleep(timebomb_seconds)
+
+'''
+core 10
 # invloss trainingweight tau 5, 10, 30
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau 5.0 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_invloss_tau_5_seed_1 --measure_all_similarities True'.format(lr))
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau 10.0 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_invloss_tau_10_seed_1 --measure_all_similarities True'.format(lr))
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau 30.0 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_invloss_tau_30_seed_1 --measure_all_similarities True'.format(lr))
 
+core 11 
 # l2 tau 10, 30, 80
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0.0 --tau 10.0 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_l2_tau_10_seed_1 --measure_all_similarities True'.format(lr))
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0.0 --tau 30.0 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_l2_tau_30_seed_1 --measure_all_similarities True'.format(lr))
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0.0 --tau 80.0 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_l2_tau_80_seed_1 --measure_all_similarities True'.format(lr))
 
+# core 12 
 # cosine tau 100, 200, 300
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau 100.0 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_tau_100_seed_1 --measure_all_similarities True'.format(lr))
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau 200.0 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_tau_200_seed_1 --measure_all_similarities True'.format(lr))
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau 300.0 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_tau_300_seed_1 --measure_all_similarities True'.format(lr))
 
+# core 13
 # origin tau 100, 200, 300
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0.0 --tau 100.0 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_origin_tau_100_seed_1 --measure_all_similarities True'.format(lr))
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0.0 --tau 200.0 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_origin_tau_200_seed_1 --measure_all_similarities True'.format(lr))
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0.0 --tau 300.0 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_origin_tau_300_seed_1 --measure_all_similarities True'.format(lr))
+
 
 # invloss priorweight tau 5, 10, 30
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau 5.0 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_priorweight_invloss_tau_5_seed_1 --aggregation_weighting priors --measure_all_similarities True'.format(lr))
@@ -544,6 +556,13 @@ commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0.0 --tau 200.0 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_priorweight_cosine_origin_tau_200_seed_1 --aggregation_weighting priors --measure_all_similarities True'.format(lr))
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0.0 --tau 300.0 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_priorweight_cosine_origin_tau_300_seed_1 --aggregation_weighting priors --measure_all_similarities True'.format(lr))
 
+'''
+
+# benchmarks random and no_comm and oracle
+# core 14
+commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau 30.0 --client_information_exchange oracle --experiment_name fashion_MNIST_random_seed_1 --delusion -1.0'.format(no_comm_lr))
+commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0.0 --tau 30.0 --client_information_exchange no_exchange --experiment_name fashion_MNIST_no_comm_seed_1 --delusion 0.0'.format(no_comm_lr))
+commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau 30.0 --client_information_exchange oracle --experiment_name fashion_MNIST_oracle_seed_1 --delusion 0.0'.format(no_comm_lr))
 
 
 for command in commands:
