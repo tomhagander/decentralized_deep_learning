@@ -97,6 +97,26 @@ fivecluster_priorweight_origin_expnames = ['CIFAR_5_clusters_DAC_priorweight_cos
                                         'CIFAR_5_clusters_DAC_priorweight_cosine_origin_tau_300_seed_3',
                                         'CIFAR_5_clusters_DAC_priorweight_cosine_origin_tau_500_seed_3']
 
+def get_average_best_val_acc(clients):
+    # for client in clients, get the best validation accuracy and add it to a list
+    best_val_accs = []
+    for client in clients:
+        best_val_acc = max(client.val_acc_list)
+        best_val_accs.append(best_val_acc)
+
+    average_best_val_acc = sum(best_val_accs) / len(best_val_accs)
+    return average_best_val_acc
+
+def get_best_round_val_acc(clients):
+    best_avg = 0
+    for i in range(300):
+        round_val_accs = []
+        for client in clients:
+            round_val_accs.append(client.val_acc_list[i])
+        avg = sum(round_val_accs) / len(round_val_accs)
+        if avg > best_avg:
+            best_avg = avg
+    return best_avg
 
 def collect_experiments_and_save(expnames, results):
 
@@ -135,13 +155,9 @@ def collect_experiments_and_save(expnames, results):
             with open(path + 'clients.pkl', 'rb') as f:
 
                 clients = pickle.load(f)
-                        # for client in clients, get the best validation accuracy and add it to a list
-                best_val_accs = []
-                for client in clients:
-                    best_val_acc = max(client.val_acc_list)
-                    best_val_accs.append(best_val_acc)
 
-                average_best_val_acc = sum(best_val_accs) / len(best_val_accs)
+                average_best_val_acc = get_average_best_val_acc(clients)
+                #average_best_val_acc = get_best_round_val_acc(clients)
                 print(exp, average_best_val_acc)
 
                 # delete clients to free up memory
