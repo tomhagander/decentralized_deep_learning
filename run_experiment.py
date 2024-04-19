@@ -14,7 +14,7 @@ from utils.training_utils import train_clients_locally
 from utils.training_utils import *
 from utils.visualization_utils import *
 from utils.initialization_utils import set_seed
-from utils.toy_regression_utils import generate_regression_multi, LinearRegression, ToyClient
+from utils.toy_regression_utils import generate_regression_multi, LinearRegression
 
 from models.cifar_models import simple_CNN
 from models.fashion_models import fashion_CNN
