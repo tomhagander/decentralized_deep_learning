@@ -14,6 +14,7 @@ from utils.training_utils import train_clients_locally
 from utils.training_utils import *
 from utils.visualization_utils import *
 from utils.initialization_utils import set_seed
+from utils.toy_regression_utils import generate_regression_multi, LinearRegression, ToyClient
 
 from models.cifar_models import simple_CNN
 from models.fashion_models import fashion_CNN
@@ -173,6 +174,55 @@ if __name__ == '__main__':
         trainsets = split_dataset(train_subset, args.nbr_clients)
         valsets = split_dataset(val_subset, args.nbr_clients)
 
+    elif args.dataset == 'toy_problem':
+        # 3 clusters, make three thetas
+        theta_1 = np.random.uniform(-10, 10, 10)
+        theta_2 = np.random.uniform(-10, 10, 10)
+        theta_3 = np.random.uniform(-10, 10, 10)
+        sigma = 3
+
+        trainsets = []
+        trainloaders = []
+        for client in range(int(args.nbr_clients/3)):
+            X, Y = generate_regression_multi(theta_1, args.n_data_train, sigma)
+            X = torch.from_numpy(X).float()
+            Y = torch.from_numpy(Y).float().reshape(-1,1)
+            dataset = torch.utils.data.TensorDataset(X, Y)
+            trainsets.append(dataset)
+            loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=args.batch_size, shuffle=True)
+            trainloaders.append(loader)
+        for client in range(int(args.nbr_clients/3), int(2*args.nbr_clients/3)):
+            X, Y = generate_regression_multi(theta_2, args.n_data_train, sigma)
+            X = torch.from_numpy(X).float()
+            Y = torch.from_numpy(Y).float().reshape(-1,1)
+            dataset = torch.utils.data.TensorDataset(X, Y)
+            trainsets.append(dataset)
+            loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=args.batch_size, shuffle=True)
+            trainloaders.append(loader)
+        for client in range(int(2*args.nbr_clients/3), int(args.nbr_clients)):
+            X, Y = generate_regression_multi(theta_3, args.n_data_train, sigma)
+            X = torch.from_numpy(X).float()
+            Y = torch.from_numpy(Y).float().reshape(-1,1)
+            dataset = torch.utils.data.TensorDataset(X, Y)
+            trainsets.append(dataset)
+            loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=args.batch_size, shuffle=True)
+            trainloaders.append(loader)
+
+        # one valset per cluster
+        valsets = []
+        valloaders = []
+        for theta in [theta_1, theta_2, theta_3]:
+            X, Y = generate_regression_multi(theta, args.n_data_val, sigma)
+            X = torch.from_numpy(X).float()
+            Y = torch.from_numpy(Y).float().reshape(-1,1)
+            dataset = torch.utils.data.TensorDataset(X, Y)
+            valsets.append(dataset)
+            loader = torch.utils.data.DataLoader(dataset=dataset, batch_size=args.batch_size, shuffle=True)
+            valloaders.append(loader)
+
+
+        
+
     # load model (same initialization for all clients)
     if args.dataset == 'cifar10': # custom cnn
         client_model_init = simple_CNN(nbr_classes=args.nbr_classes)
@@ -182,6 +232,8 @@ if __name__ == '__main__':
         client_model_init.fc = torch.nn.Linear(client_model_init.fc.in_features, args.nbr_classes)
     elif args.dataset == 'fashion_mnist':
         client_model_init = fashion_CNN(nbr_classes=args.nbr_classes)
+    elif args.dataset == 'toy_problem':
+        client_model_init = LinearRegression(10, 1)
 
     # create clients
     clients = []
@@ -250,6 +302,27 @@ if __name__ == '__main__':
                             stopping_rounds=args.stopping_rounds,
                             ratio = 0.25,
                             dataset = 'fashion_mnist',
+                            shift=args.shift)
+            clients.append(client)
+
+    elif args.dataset == 'toy_problem':
+        for i in range(args.nbr_clients):
+            print('creating client {}'.format(i))
+            group = i // (args.nbr_clients // 3)
+            client = Client(train_set=trainsets[i], 
+                            val_set=valsets[group], 
+                            idxs_train=None, 
+                            idxs_val=None, 
+                            criterion=torch.nn.MSELoss(), 
+                            lr=args.lr, 
+                            device=device, 
+                            batch_size=args.batch_size, 
+                            num_users=args.nbr_clients, 
+                            model=client_model_init,
+                            idx=i,
+                            stopping_rounds=args.stopping_rounds,
+                            ratio = 1/3,
+                            dataset = 'toy_problem',
                             shift=args.shift)
             clients.append(client)
 
