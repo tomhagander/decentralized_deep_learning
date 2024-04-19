@@ -154,6 +154,19 @@ class Client(object):
             self.ldr_val = DataLoader(self.val_set, batch_size = 8, pin_memory=False, shuffle=False)
             self.ldr_train = DataLoader(self.train_set, batch_size=batch_size, shuffle=True, pin_memory=False, drop_last=False)
 
+        elif dataset == 'toy_problem':
+            if idx < int(num_users/3):
+                self.group = 0
+            elif idx < int(2*num_users/3):
+                self.group = 1
+            else:
+                self.group = 2
+
+            self.train_set = train_set
+            self.val_set = val_set
+            self.ldr_val = DataLoader(val_set, batch_size = 8, shuffle=True)
+            self.ldr_train = DataLoader(train_set, batch_size=batch_size, shuffle=True)
+
         
         # copy model and send to device
         self.local_model = copy.deepcopy(model)
@@ -260,6 +273,46 @@ class Client(object):
         # self.local_model.to('cpu') # change 1
             
         return self.best_model, epoch_loss[-1], self.best_val_loss, self.best_val_acc
+    
+    def toy_train(self, n_epochs):
+        optimizer = torch.optim.SGD(self.local_model.parameters(), lr=self.lr)
+        self.local_model.train()
+        train_loss = []
+        for iter in range(n_epochs):
+            epoch_loss = 0
+            epoch_acc = 0
+            for batch_idx, (x, y) in enumerate(self.ldr_train):
+                x, y = x.to(self.device), y.to(self.device)
+                optimizer.zero_grad()
+                outputs = self.local_model(x)
+                loss = self.criterion(outputs, y)
+                loss.backward()
+                optimizer.step()
+                epoch_loss += loss.item()
+                epoch_acc += (outputs.argmax(1) == y).sum().item()
+            train_loss.append(epoch_loss/len(self.ldr_train))
+        
+        # validate
+        val_loss, val_acc = self.toy_validate(self.local_model, train_set = False)
+
+        # could be minus one
+        return self.local_model, train_loss
+    
+    def toy_validate(self, model, train_set):
+        if(train_set):
+            ldr = self.ldr_train
+        else:
+            ldr = self.ldr_val
+        model.eval()
+        test_loss = 0
+        with torch.no_grad():
+            for x, y in ldr:
+                x, y = x.to(self.device), y.to(self.device)
+                outputs = model(x)
+                test_loss += self.criterion(outputs, y).item()
+
+        return test_loss/len(ldr)
+
     
     def validate(self,model,train_set):
         if(train_set):

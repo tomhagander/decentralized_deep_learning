@@ -53,13 +53,17 @@ def find_tau(similarities, entropy):
 
 # trains all clients locally, one by one, for the set number of local epochs
 def train_clients_locally(clients, nbr_local_epochs, verbose=False):
+    dataset = clients[0].dataset
     if verbose:
         print('Starting local training')
     for client in clients:
         if not client.early_stopping.is_stopped():
             if verbose:
                 print('Training client {}'.format(client.idx))
-            client.train(nbr_local_epochs)
+            if dataset == 'toy_problem': # only for toy problem
+                client.toy_train(nbr_local_epochs)
+            else:
+                client.train(nbr_local_epochs)
         else:
             if verbose:
                 print('Client {} stopped early'.format(client.idx))
@@ -117,7 +121,7 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
             for j in neighbor_indices_sampled:
                 # validate on neighbor model, get loss and accuracy
                 # if neighbor is early stopped, take best model instead
-                if parameters['dataset'] == 'fashion_mnist':
+                if parameters['dataset'] == 'fashion_mnist' or parameters['dataset'] == 'toy_problem':
                     if clients[j].early_stopping.is_stopped():
                         neighbor_model = clients[j].best_model
                     else:
