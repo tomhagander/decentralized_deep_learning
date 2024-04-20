@@ -243,7 +243,7 @@ if __name__ == '__main__':
             client = Client(train_set=train_dataset, 
                             idxs_train=dict_users[i], 
                             idxs_val=dict_users_val[i], 
-                            criterion=torch.nn.CrossEntropyLoss(), # change to NLLL
+                            criterion=torch.nn.NLLLoss(), # change to NLLL
                             lr=args.lr, 
                             device=device, 
                             batch_size=args.batch_size, 
