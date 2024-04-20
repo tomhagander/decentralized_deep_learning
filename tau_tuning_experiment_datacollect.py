@@ -49,7 +49,10 @@ fivecluster_cosine_expnames = ['CIFAR_5_clusters_DAC_cosine_tau_10_seed_3',
                                'CIFAR_5_clusters_DAC_cosine_tau_300_seed_3',
                                'CIFAR_5_clusters_DAC_cosine_tau_500_seed_3',
                                'CIFAR_5_clusters_DAC_cosine_tau_700_seed_3',
-                               'CIFAR_5_clusters_DAC_cosine_tau_1000_seed_3']
+                               'CIFAR_5_clusters_DAC_cosine_tau_1000_seed_3', 
+                               'CIFAR_5_clusters_DAC_cosine_tau_2000_seed_3', 
+                               'CIFAR_5_clusters_DAC_cosine_tau_5000_seed_3', 
+                               'CIFAR_5_clusters_DAC_cosine_tau_10000_seed_3']
 
 fivecluster_origin_expnames = ['CIFAR_5_clusters_DAC_cosine_origin_tau_1_seed_3',
                                'CIFAR_5_clusters_DAC_cosine_origin_tau_10_seed_3',
