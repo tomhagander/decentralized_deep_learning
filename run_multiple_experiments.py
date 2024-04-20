@@ -595,7 +595,7 @@ lr = 0.0003 # TBD
 # commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0.0 --tau 30.0 --client_information_exchange no_exchange --experiment_name fashion_MNIST_no_comm_seed_1 --delusion 0.0'.format(no_comm_lr))
 # commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau 30.0 --client_information_exchange oracle --experiment_name fashion_MNIST_oracle_seed_1 --delusion 0.0'.format(no_comm_lr))
 
-'''
+
 
 ###### CIFAR LABELSHIFT TRAININGWEIGHT BEST TAU REPRODUCTION ########
 label_invloss_tauopt = 10
@@ -607,13 +607,15 @@ label_origin_tauopt = 200
 seeds = [1, 2, 3]
 lr = 0.001
 
-# invloss
+# invloss - running on edvinbox core1
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_invloss_tau_{}_seed_{}_fixed --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_invloss_tauopt, label_invloss_tauopt, seed))
 
-# l2
+# l2 - running on edvinbox core1
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_l2_tau_{}_seed_{}_fixed --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_l2_tauopt, label_l2_tauopt, seed))
+
+'''
 
 # cosine
 for seed in seeds:
@@ -771,7 +773,7 @@ for seed in seeds:
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 10 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_priorweight_cosine_origin_tau_{}_seed_{}_10epochs --CIFAR_ratio 0.4 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr, label_priorweight_origin_tauopt, label_priorweight_origin_tauopt, seed))
 
-'''
+
     
 ###### BENCHMARK FASHON MNIST ######## - running on targetbox core1
 no_comm_lr = 0.00005 # check this with existing run to determine viability
@@ -794,6 +796,7 @@ commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr
 seed = 2
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0.0 --tau 30.0 --client_information_exchange oracle --experiment_name fashion_MNIST_oracle_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, no_comm_lr, seed))
 
+'''
 '''
 
 ###### FASHION MNIST TRAININGWEIGHT BEST TAU REPRODUCTION ########
@@ -849,7 +852,7 @@ for seed in seeds:
 
 '''
 
-
+'''
 ##### MISC EXTRA RUNS #####
 
 # for ???
@@ -910,6 +913,8 @@ lr = 0.0003
 # for mnist
 no_comm_lr = 0.00005 # check this with existing run to determine viability
 lr = 0.0003
+
+'''
 
 for command in commands:
     subprocess.run(command, shell=True)
