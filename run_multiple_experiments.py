@@ -695,7 +695,6 @@ for seed in seeds:
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name CIFAR_5_clusters_DAC_priorweight_l2_tau_{}_seed_{}_fixed --CIFAR_ratio 0.2 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr, clusters_priorweight_l2_tauopt, clusters_priorweight_l2_tauopt, seed))
 
-'''
 
 # cosine - running on edvinbox core7
 for seed in seeds:
@@ -705,7 +704,7 @@ for seed in seeds:
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name CIFAR_5_clusters_DAC_priorweight_cosine_origin_tau_{}_seed_{}_fixed --CIFAR_ratio 0.2 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr, clusters_priorweight_origin_tauopt, clusters_priorweight_origin_tauopt, seed))
 
-'''
+
 ###### CIFAR LABELSHIFT BEST TAU REPRODUCTION NUM EPOCHS 5 ########
 # take optimal taus from above
 
@@ -922,11 +921,25 @@ lr = 0.0003
 # commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 500 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_tau_500_seed_1 --measure_all_similarities True'.format(lr))
 # commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 2000 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_tau_2000_seed_1 --measure_all_similarities True'.format(lr))
 
+
+'''
 # for mnist
 no_comm_lr = 0.00005 # check this with existing run to determine viability
 lr = 0.0003
 
-'''
+### More MNIST tautuning ###
+# cosine origin tau 5000
+commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_origin --tau 5000 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_origin_tau_5000_seed_1 --measure_all_similarities True'.format(lr))
+# cosine origin tau 10000
+commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_origin --tau 10000 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_origin_tau_10000_seed_1 --measure_all_similarities True'.format(lr))
+
+
+# cosine tau 5000
+commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 5000 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_tau_5000_seed_1 --measure_all_similarities True'.format(lr))
+# cosine tau 10000
+commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 10000 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_tau_10000_seed_1 --measure_all_similarities True'.format(lr))
+
+
 
 print('Commands to be run: ')
 for command in commands:
