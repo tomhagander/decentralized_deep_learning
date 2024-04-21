@@ -685,6 +685,8 @@ clusters_priorweight_l2_tauopt = 10
 clusters_priorweight_cosine_tauopt = 200
 clusters_priorweight_origin_tauopt = 200
 
+'''
+
 # invloss - running on targetbox core4
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau {} --client_information_exchange DAC --experiment_name CIFAR_5_clusters_DAC_priorweight_invloss_tau_{}_seed_{}_fixed --CIFAR_ratio 0.2 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr, clusters_priorweight_invloss_tauopt, clusters_priorweight_invloss_tauopt, seed))
@@ -695,14 +697,15 @@ for seed in seeds:
 
 '''
 
-# cosine
+# cosine - running on edvinbox core7
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name CIFAR_5_clusters_DAC_priorweight_cosine_tau_{}_seed_{}_fixed --CIFAR_ratio 0.2 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr, clusters_priorweight_cosine_tauopt, clusters_priorweight_cosine_tauopt, seed))
 
-# cosine origin
+# cosine origin - running on edvinbox core7
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name CIFAR_5_clusters_DAC_priorweight_cosine_origin_tau_{}_seed_{}_fixed --CIFAR_ratio 0.2 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr, clusters_priorweight_origin_tauopt, clusters_priorweight_origin_tauopt, seed))
 
+'''
 ###### CIFAR LABELSHIFT BEST TAU REPRODUCTION NUM EPOCHS 5 ########
 # take optimal taus from above
 
