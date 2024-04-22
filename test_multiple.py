@@ -114,7 +114,42 @@ fashion_mnist_priorweight_origin_expnames = ['fashion_MNIST_DAC_priorweight_cosi
                                                     'fashion_MNIST_DAC_priorweight_cosine_origin_tau_300_seed_3',]
 
 
+## Benchmarks
+cifar_label_benchmark_no_comm = ['',
+                          '',
+                          '',]
 
+cifar_label_benchmark_oracle = ['',
+                            '',
+                            '',]
+
+cifar_label_benchmark_random = ['', 
+                            '',
+                            '',]
+
+cifar_5_clusters_benchmark_no_comm = ['', 
+                               '',
+                               '',]
+
+cifar_5_clusters_benchmark_oracle = ['',
+                            '',
+                            '',]
+
+cifar_5_clusters_benchmark_random = ['',
+                            '',
+                            '',]
+
+fashion_mnist_benchmark_no_comm = ['fashion_MNIST_no_comm_seed_1', 
+                            'fashion_MNIST_no_comm_seed_2',
+                            'fashion_MNIST_no_comm_seed_3',]
+
+fashion_mnist_benchmark_oracle = ['',
+                            '',
+                            '',]
+
+fashion_mnist_benchmark_random = ['', 
+                            '',
+                            '',]
 
 
 
