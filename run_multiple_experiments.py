@@ -925,8 +925,8 @@ lr = 0.0003
 
 '''
 # for mnist
-no_comm_lr = 0.00005 # check this with existing run to determine viability
-lr = 0.0003
+#no_comm_lr = 0.00005 # check this with existing run to determine viability
+#lr = 0.0003
 
 ### More MNIST tautuning ###
 # cosine origin tau 5000 - running on edvinbox core3
@@ -945,68 +945,70 @@ lr = 0.0003
 lr_no_comm = 0.0001
 lr = 0.001
 
-# cifar label no comm seed 1
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30.0 --client_information_exchange no_exchange --experiment_name CIFAR_label_no_comm_seed_1_fixed --delusion 0.0 --measure_all_similarities True'.format(lr_no_comm))
-# cifar label no comm seed 2
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30.0 --client_information_exchange no_exchange --experiment_name CIFAR_label_no_comm_seed_2_fixed --delusion 0.0 --measure_all_similarities True'.format(lr_no_comm))
-# cifar label no comm seed 3
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange no_exchange --experiment_name CIFAR_label_no_comm_seed_3_fixed --delusion 0.0 --measure_all_similarities True'.format(lr_no_comm))
+# cifar label no comm seed 1 - running on edvinbox core4_tb
+#commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30.0 --client_information_exchange no_exchange --experiment_name CIFAR_label_no_comm_seed_1_fixed --delusion 0.0 --measure_all_similarities True'.format(lr_no_comm))
+# cifar label no comm seed 2 - running on edvinbox core4_tb
+#commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30.0 --client_information_exchange no_exchange --experiment_name CIFAR_label_no_comm_seed_2_fixed --delusion 0.0 --measure_all_similarities True'.format(lr_no_comm))
+# cifar label no comm seed 3 - running on edvinbox core4_tb
+#commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange no_exchange --experiment_name CIFAR_label_no_comm_seed_3_fixed --delusion 0.0 --measure_all_similarities True'.format(lr_no_comm))
 
-# cifar label oracle seed 1
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_label_oracle_seed_1_fixed --delusion 0.0 --measure_all_similarities False'.format(lr))
-# cifar label oracle seed 2
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_label_oracle_seed_2_fixed --delusion 0.0 --measure_all_similarities False'.format(lr))
-# cifar label oracle seed 3
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_label_oracle_seed_3_fixed --delusion 0.0 --measure_all_similarities False'.format(lr))
+# cifar label oracle seed 1 - running on edvinbox core1_tb
+#commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_label_oracle_seed_1_fixed --delusion 0.0 --measure_all_similarities False'.format(lr))
+# cifar label oracle seed 2 - running on edvinbox core1_tb
+#commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_label_oracle_seed_2_fixed --delusion 0.0 --measure_all_similarities False'.format(lr))
+# cifar label oracle seed 3 - running on edvinbox core1_tb
+#commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_label_oracle_seed_3_fixed --delusion 0.0 --measure_all_similarities False'.format(lr))
 
-# cifar label random seed 1
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_label_random_seed_1_fixed --delusion -1.0 --measure_all_similarities False'.format(lr))
-# cifar label random seed 2
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_label_random_seed_2_fixed --delusion -1.0 --measure_all_similarities False'.format(lr))
-# cifar label random seed 3
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_label_random_seed_3_fixed --delusion -1.0 --measure_all_similarities False'.format(lr))
+# cifar label random seed 1 - running on edvinbox core3_tb
+#commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_label_random_seed_1_fixed --delusion -1.0 --measure_all_similarities False'.format(lr))
+# cifar label random seed 2 - running on edvinbox core3_tb
+#commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_label_random_seed_2_fixed --delusion -1.0 --measure_all_similarities False'.format(lr))
+# cifar label random seed 3 - running on edvinbox core3_tb
+#commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_label_random_seed_3_fixed --delusion -1.0 --measure_all_similarities False'.format(lr))
 
-# cifar 5 clusters no comm seed 1
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30.0 --client_information_exchange no_exchange --experiment_name CIFAR_5_clusters_no_comm_seed_1_fixed --delusion 0.0 --measure_all_similarities True'.format(lr_no_comm))
-# cifar 5 clusters no comm seed 2
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30.0 --client_information_exchange no_exchange --experiment_name CIFAR_5_clusters_no_comm_seed_2_fixed --delusion 0.0 --measure_all_similarities True'.format(lr_no_comm))
-# cifar 5 clusters no comm seed 3
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange no_exchange --experiment_name CIFAR_5_clusters_no_comm_seed_3_fixed --delusion 0.0 --measure_all_similarities True'.format(lr_no_comm))
+# cifar 5 clusters no comm seed 1 - running on edvinbox core4_tb
+#commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30.0 --client_information_exchange no_exchange --experiment_name CIFAR_5_clusters_no_comm_seed_1_fixed --delusion 0.0 --measure_all_similarities True'.format(lr_no_comm))
+# cifar 5 clusters no comm seed 2 - running on edvinbox core4_tb
+#commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30.0 --client_information_exchange no_exchange --experiment_name CIFAR_5_clusters_no_comm_seed_2_fixed --delusion 0.0 --measure_all_similarities True'.format(lr_no_comm))
+# cifar 5 clusters no comm seed 3 - running on edvinbox core4_tb
+#commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange no_exchange --experiment_name CIFAR_5_clusters_no_comm_seed_3_fixed --delusion 0.0 --measure_all_similarities True'.format(lr_no_comm))
 
-# cifar 5 clusters oracle seed 1
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_5_clusters_oracle_seed_1_fixed --delusion 0.0 --measure_all_similarities False'.format(lr))
-# cifar 5 clusters oracle seed 2
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_5_clusters_oracle_seed_2_fixed --delusion 0.0 --measure_all_similarities False'.format(lr))
-# cifar 5 clusters oracle seed 3
-commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_5_clusters_oracle_seed_3_fixed --delusion 0.0 --measure_all_similarities False'.format(lr))
+# cifar 5 clusters oracle seed 1 - running on edvinbox core7
+#commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_5_clusters_oracle_seed_1_fixed --delusion 0.0 --measure_all_similarities False'.format(lr))
+# cifar 5 clusters oracle seed 2 - running on edvinbox core7
+#commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_5_clusters_oracle_seed_2_fixed --delusion 0.0 --measure_all_similarities False'.format(lr))
+# cifar 5 clusters oracle seed 3 - running on edvinbox core7
+#commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_5_clusters_oracle_seed_3_fixed --delusion 0.0 --measure_all_similarities False'.format(lr))
 
-# cifar 5 clusters random seed 1
+# cifar 5 clusters random seed 1 - running on edvinbox core8
 commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_5_clusters_random_seed_1_fixed --delusion -1.0 --measure_all_similarities False'.format(lr))
-# cifar 5 clusters random seed 2
+# cifar 5 clusters random seed 2 - running on edvinbox core8
 commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_5_clusters_random_seed_2_fixed --delusion -1.0 --measure_all_similarities False'.format(lr))
-# cifar 5 clusters random seed 3
+# cifar 5 clusters random seed 3 - running on edvinbox core8
 commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 30.0 --client_information_exchange oracle --experiment_name CIFAR_5_clusters_random_seed_3_fixed --delusion -1.0 --measure_all_similarities False'.format(lr))
 
 # for mnist
-lr = 0.0003
+#lr = 0.0003
 
-seeds = [1,2,3]
+#seeds = [1,2,3]
 # Oracle fashion_MNIST
-for seed in seeds:
-    commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --tau 30 --client_information_exchange oracle --experiment_name fashion_MNIST_oracle_seed_{}_fixed --delusion 0.0 --measure_all_similarities False'.format(seed, lr, seed))
+#for seed in seeds:
+#    commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --tau 30 --client_information_exchange oracle --experiment_name fashion_MNIST_oracle_seed_{}_fixed --delusion 0.0 --measure_all_similarities False'.format(seed, lr, seed))
 
 # Random fashion_MNIST
-for seed in seeds:
-    commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --tau 30 --client_information_exchange oracle --experiment_name fashion_MNIST_random_seed_{}_fixed --delusion -1.0 --measure_all_similarities False'.format(seed, lr, seed))
+#for seed in seeds:
+#    commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --tau 30 --client_information_exchange oracle --experiment_name fashion_MNIST_random_seed_{}_fixed --delusion -1.0 --measure_all_similarities False'.format(seed, lr, seed))
 
-# timebomb sleep for 1 hour
-sleeptime = 0
-#sleeptime = 60*60*1
-time.sleep(sleeptime)
 
 print('Commands to be run: ')
 for command in commands:
     print(command)
+
+# timebomb sleep for 1 hour
+sleeptime = 0
+sleeptime = 60*60*0
+print('Sleeping for {} seconds'.format(sleeptime))
+time.sleep(sleeptime)
 
 for command in commands:
     subprocess.run(command, shell=True)

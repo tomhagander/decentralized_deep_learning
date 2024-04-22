@@ -115,41 +115,41 @@ fashion_mnist_priorweight_origin_expnames = ['fashion_MNIST_DAC_priorweight_cosi
 
 
 ## Benchmarks
-cifar_label_benchmark_no_comm = ['',
-                          '',
-                          '',]
+cifar_label_benchmark_no_comm = ['CIFAR_label_no_comm_seed_1_fixed',
+                          'CIFAR_label_no_comm_seed_2_fixed',
+                          'CIFAR_label_no_comm_seed_3_fixed',]
 
-cifar_label_benchmark_oracle = ['',
-                            '',
-                            '',]
+cifar_label_benchmark_oracle = ['CIFAR_label_oracle_seed_1_fixed',
+                            'CIFAR_label_oracle_seed_2_fixed',
+                            'CIFAR_label_oracle_seed_3_fixed',]
 
-cifar_label_benchmark_random = ['', 
-                            '',
-                            '',]
+cifar_label_benchmark_random = ['CIFAR_label_random_seed_1_fixed', 
+                            'CIFAR_label_random_seed_2_fixed',
+                            'CIFAR_label_random_seed_3_fixed',]
 
-cifar_5_clusters_benchmark_no_comm = ['', 
-                               '',
-                               '',]
+cifar_5_clusters_benchmark_no_comm = ['CIFAR_5_clusters_no_comm_seed_1_fixed', 
+                               'CIFAR_5_clusters_no_comm_seed_2_fixed',
+                               'CIFAR_5_clusters_no_comm_seed_3_fixed',]
 
-cifar_5_clusters_benchmark_oracle = ['',
-                            '',
-                            '',]
+cifar_5_clusters_benchmark_oracle = ['CIFAR_5_clusters_oracle_seed_1_fixed',
+                            'CIFAR_5_clusters_oracle_seed_2_fixed',
+                            'CIFAR_5_clusters_oracle_seed_3_fixed',]
 
-cifar_5_clusters_benchmark_random = ['',
-                            '',
-                            '',]
+cifar_5_clusters_benchmark_random = ['CIFAR_5_clusters_random_seed_1_fixed',
+                            'CIFAR_5_clusters_random_seed_2_fixed',
+                            'CIFAR_5_clusters_random_seed_3_fixed',]
 
 fashion_mnist_benchmark_no_comm = ['fashion_MNIST_no_comm_seed_1', 
                             'fashion_MNIST_no_comm_seed_2',
                             'fashion_MNIST_no_comm_seed_3',]
 
-fashion_mnist_benchmark_oracle = ['',
-                            '',
-                            '',]
+fashion_mnist_benchmark_oracle = ['fashion_MNIST_oracle_tuning_lr_0.0003_seed_1',
+                            'fashion_MNIST_oracle_seed_2_fixed',
+                            'fashion_MNIST_oracle_seed_3_fixed',]
 
-fashion_mnist_benchmark_random = ['', 
-                            '',
-                            '',]
+fashion_mnist_benchmark_random = ['fashion_MNIST_random_seed_1_fixed', 
+                            'fashion_MNIST_random_seed_2_fixed',
+                            'fashion_MNIST_random_seed_3_fixed',]
 
 
 
@@ -178,7 +178,16 @@ all_expnames = [cifar_label_trainingweight_invloss_expnames,
                 fashion_mnist_trainingweight_origin_expnames,
                 fashion_mnist_priorweight_invloss_expnames,
                 fashion_mnist_priorweight_l2_expnames,
-                fashion_mnist_priorweight_cosine_expnames,]
+                fashion_mnist_priorweight_cosine_expnames,
+                cifar_label_benchmark_no_comm,
+                cifar_label_benchmark_oracle,
+                cifar_label_benchmark_random,
+                cifar_5_clusters_benchmark_no_comm,
+                cifar_5_clusters_benchmark_oracle,
+                cifar_5_clusters_benchmark_random,
+                fashion_mnist_benchmark_no_comm,
+                fashion_mnist_benchmark_oracle,
+                fashion_mnist_benchmark_random,]
 
 
 if __name__ == '__main__':
