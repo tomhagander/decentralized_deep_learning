@@ -1002,11 +1002,6 @@ seeds = [2,3]
 # for seed in seeds:
 #     commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --tau 30 --client_information_exchange oracle --experiment_name fashion_MNIST_random_seed_{}_fixed --delusion -1.0 --measure_all_similarities False'.format(seed, lr, seed))
 
-# timebomb sleep for 1 hour
-sleeptime = 0
-#sleeptime = 60*60*9
-time.sleep(sleeptime)
-
 print('Commands to be run: ')
 for command in commands:
     print(command)
