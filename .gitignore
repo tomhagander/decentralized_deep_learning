@@ -8,3 +8,4 @@ PACS/*
 metadata.txt
 FashionMNIST/
 analyze_tautuning.ipynb
+analyze_testaccs_paper.ipynb

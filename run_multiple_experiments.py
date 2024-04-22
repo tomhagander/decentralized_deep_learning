@@ -808,62 +808,64 @@ seed = 2
 commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0.0 --tau 30.0 --client_information_exchange oracle --experiment_name fashion_MNIST_oracle_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, no_comm_lr, seed))
 
 '''
-'''
 
 ###### FASHION MNIST TRAININGWEIGHT BEST TAU REPRODUCTION ########
-mnist_invloss_tauopt = 0 # not final determine before run
-mnist_l2_tauopt = 0 # not final determine before run
-mnist_cosine_tauopt = 0 # not final determine before run
-mnist_origin_tauopt = 0 # not final determine before run
+mnist_invloss_tauopt = 10
+mnist_l2_tauopt = 10
+mnist_cosine_tauopt = 2000
+mnist_origin_tauopt = 2000
 
 seeds = [2, 3]
 # lrs from above
-
-# invloss
+no_comm_lr = 0.00005 # check this with existing run to determine viability
+lr = 0.0003
+'''
+# invloss - running on edvinbox core6
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau {} --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_invloss_tau_{}_seed_{} --measure_all_similarities True'.format(seed, lr, mnist_invloss_tauopt, mnist_invloss_tauopt, seed))
 
-# l2
+# l2 - running on edvinbox core6
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_l2_tau_{}_seed_{} --measure_all_similarities True'.format(seed, lr, mnist_l2_tauopt, mnist_l2_tauopt, seed))
 
-# cosine
+
+# cosine - running on edvinbox core3
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_tau_{}_seed_{} --measure_all_similarities True'.format(seed, lr, mnist_cosine_tauopt, mnist_cosine_tauopt, seed))
-
-# cosine origin
+'''
+# cosine origin - running on edvinbox core4
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_origin_tau_{}_seed_{} --measure_all_similarities True'.format(seed, lr, mnist_origin_tauopt, mnist_origin_tauopt, seed))
-
-
+'''
 ###### FASHION MNIST PRIORWEIGHT BEST TAU REPRODUCTION ########
-mnist_priorweight_invloss_tauopt = 0 # not final determine before run
-mnist_priorweight_l2_tauopt = 0 # not final determine before run
-mnist_priorweight_cosine_tauopt = 0 # not final determine before run
-mnist_priorweight_origin_tauopt = 0 # not final determine before run
+mnist_priorweight_invloss_tauopt = 5 
+mnist_priorweight_l2_tauopt = 10
+mnist_priorweight_cosine_tauopt = 300
+mnist_priorweight_origin_tauopt = 300
 
 seeds = [2, 3]
 # lrs from above
+no_comm_lr = 0.00005 # check this with existing run to determine viability
+lr = 0.0003
 
-# invloss
+# invloss - running on edvinbox core5
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau {} --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_priorweight_invloss_tau_{}_seed_{} --aggregation_weighting priors --measure_all_similarities True'.format(seed, lr, mnist_priorweight_invloss_tauopt, mnist_priorweight_invloss_tauopt, seed))
 
-# l2
-for seed in seeds:
+# l2 - running on edvinbox core5
+for seed in seeds: 
     commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_priorweight_l2_tau_{}_seed_{} --aggregation_weighting priors --measure_all_similarities True'.format(seed, lr, mnist_priorweight_l2_tauopt, mnist_priorweight_l2_tauopt, seed))
 
-# cosine
+# cosine - running on edvinbox core5
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_priorweight_cosine_tau_{}_seed_{} --aggregation_weighting priors --measure_all_similarities True'.format(seed, lr, mnist_priorweight_cosine_tauopt, mnist_priorweight_cosine_tauopt, seed))
 
-# cosine origin
+
+# cosine origin - running on edvinbox core6
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_priorweight_cosine_origin_tau_{}_seed_{} --aggregation_weighting priors --measure_all_similarities True'.format(seed, lr, mnist_priorweight_origin_tauopt, mnist_priorweight_origin_tauopt, seed))
 
-'''
 
-'''
 ##### MISC EXTRA RUNS #####
 
 # for ???
@@ -928,16 +930,16 @@ no_comm_lr = 0.00005 # check this with existing run to determine viability
 lr = 0.0003
 
 ### More MNIST tautuning ###
-# cosine origin tau 5000
-commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_origin --tau 5000 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_origin_tau_5000_seed_1 --measure_all_similarities True'.format(lr))
-# cosine origin tau 10000
-commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_origin --tau 10000 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_origin_tau_10000_seed_1 --measure_all_similarities True'.format(lr))
+# cosine origin tau 5000 - running on edvinbox core3
+#commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_origin --tau 5000 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_origin_tau_5000_seed_1 --measure_all_similarities True'.format(lr))
+# cosine origin tau 10000 - running on edvinbox core3
+#commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_origin --tau 10000 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_origin_tau_10000_seed_1 --measure_all_similarities True'.format(lr))
 
 
-# cosine tau 5000
-commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 5000 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_tau_5000_seed_1 --measure_all_similarities True'.format(lr))
-# cosine tau 10000
-commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 10000 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_tau_10000_seed_1 --measure_all_similarities True'.format(lr))
+# cosine tau 5000 - running on edvinbox core4
+#commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 5000 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_tau_5000_seed_1 --measure_all_similarities True'.format(lr))
+# cosine tau 10000 - running on edvinbox core4
+#commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 10000 --client_information_exchange DAC --experiment_name fashion_MNIST_DAC_cosine_tau_10000_seed_1 --measure_all_similarities True'.format(lr))
 
 
 

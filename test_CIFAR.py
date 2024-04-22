@@ -57,12 +57,12 @@ if __name__ == '__main__':
         
         with open('save/'+args.experiment+'/CIFAR_A_within.pkl', 'wb') as f:
             pickle.dump(A_within, f)
-        
-        with open('save/'+args.experiment+'/CIFAR_V_on_A.pkl', 'wb') as f:
-            pickle.dump(V_on_A, f)
-        
-        with open('save/'+args.experiment+'/CIFAR_A_on_V.pkl', 'wb') as f:
-            pickle.dump(A_on_V, f)
+        if not quick:
+            with open('save/'+args.experiment+'/CIFAR_V_on_A.pkl', 'wb') as f:
+                pickle.dump(V_on_A, f)
+            
+            with open('save/'+args.experiment+'/CIFAR_A_on_V.pkl', 'wb') as f:
+                pickle.dump(A_on_V, f)
         
     elif metadata['shift'] == '5_clusters':
         if verbose:
@@ -76,7 +76,7 @@ if __name__ == '__main__':
         if verbose:
             print('Clients loaded')
 
-        acc_matrix = test_5_clusters(clients)
+        acc_matrix = test_5_clusters(clients, quick=quick, verbose = verbose)
 
         # dump to pickle file
         with open('save/'+args.experiment+'/CIFAR_acc_matrix.pkl', 'wb') as f:
