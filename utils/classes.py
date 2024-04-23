@@ -298,6 +298,7 @@ class Client(object):
                 #epoch_acc += (outputs.argmax(1) == y).sum().item()
             train_loss.append(epoch_loss/len(self.ldr_train))
         
+        self.train_loss_list.append(train_loss[-1])
         # validate
         val_loss = self.toy_validate(self.local_model, train_set = False)
         self.val_loss_list.append(val_loss)
