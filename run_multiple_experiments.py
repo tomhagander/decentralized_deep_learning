@@ -772,11 +772,11 @@ for seed in seeds:
 # l2 - running on edvinbox core3
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 10 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_l2_tau_{}_seed_{}_10epochs --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_l2_tauopt, label_l2_tauopt, seed))
-'''
+
 # cosine seed 1 and 2 - running on edvinbox core9
 for seed in [1,2]:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 10 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_cosine_tau_{}_seed_{}_10epochs --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_cosine_tauopt, label_cosine_tauopt, seed))
-'''
+
 #cosine seed 3
 seed = 3
 commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 10 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_cosine_tau_{}_seed_{}_10epochs --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_cosine_tauopt, label_cosine_tauopt, seed))
@@ -1029,13 +1029,16 @@ seeds = [2,3]
 # for seed in seeds:
 #     commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --tau 30 --client_information_exchange oracle --experiment_name fashion_MNIST_random_seed_{}_fixed --delusion -1.0 --measure_all_similarities False'.format(seed, lr, seed))
 
+# testing
+commands.append('python3 test_multiple.py')
+
 print('Commands to be run: ')
 for command in commands:
     print(command)
 
 # timebomb sleep for 1 hour
 sleeptime = 0
-#sleeptime = 60*60*0
+sleeptime = 60*60*14
 print('Sleeping for {} seconds'.format(sleeptime))
 time.sleep(sleeptime)
 
