@@ -153,6 +153,8 @@ fashion_mnist_benchmark_random = ['fashion_MNIST_random_seed_1_fixed',
 
 
 
+
+
 ##### TESTING #####
 
 all_expnames = [cifar_label_trainingweight_invloss_expnames, 
