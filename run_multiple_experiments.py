@@ -777,14 +777,17 @@ for seed in seeds:
 for seed in [1,2]:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 10 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_cosine_tau_{}_seed_{}_10epochs --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_cosine_tauopt, label_cosine_tauopt, seed))
 
-#cosine seed 3
+#cosine seed 3 - running on edvinbox core2
 seed = 3
 commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 10 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_cosine_tau_{}_seed_{}_10epochs --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_cosine_tauopt, label_cosine_tauopt, seed))
 
-# cosine origin
-for seed in seeds:
+# cosine origin seed 1 - running on edvinbox core2
+for seed in [1]:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 10 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_cosine_origin_tau_{}_seed_{}_10epochs --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_origin_tauopt, label_origin_tauopt, seed))
 
+# cosine origin seeds 2 and 3 - running on edvinbox core4
+for seed in [2,3]:
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 10 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_cosine_origin_tau_{}_seed_{}_10epochs --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_origin_tauopt, label_origin_tauopt, seed))
 
 ###### CIFAR LABELSHIFT PRIORWEIGHT BEST TAU REPRODUCTION NUM EPOCHS 10 ########
 label_priorweight_invloss_tauopt = 5
@@ -1040,7 +1043,7 @@ lr = 7.5e-05
 # invloss
 for tau in taus:
     commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_invloss_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, lr, tau, tau, seed))
-'''
+
 # l2
 for tau in taus:
     commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_l2_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, lr, tau, tau, seed))
@@ -1088,6 +1091,10 @@ for seed in seeds:
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30 --client_information_exchange no_exchange --experiment_name TOY_no_comm_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, no_comm_lr, seed))
 
+'''
+
+# testing
+commands.append('python3 test_multiple.py')
 
 print('Commands to be run: ')
 for command in commands:
@@ -1095,7 +1102,7 @@ for command in commands:
 
 # timebomb sleep for 1 hour
 sleeptime = 0
-#sleeptime = 60*60*0
+sleeptime = 60*60*14
 print('Sleeping for {} seconds'.format(sleeptime))
 time.sleep(sleeptime)
 
