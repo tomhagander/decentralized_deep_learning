@@ -298,6 +298,7 @@ class Client(object):
                 #epoch_acc += (outputs.argmax(1) == y).sum().item()
             train_loss.append(epoch_loss/len(self.ldr_train))
         
+        self.train_loss_list.append(train_loss[-1])
         # validate
         val_loss = self.toy_validate(self.local_model, train_set = False)
         self.val_loss_list.append(val_loss)
@@ -406,6 +407,9 @@ class Client(object):
                     return np.zeros(len(all_clients))
         elif self.dataset == 'fashion_mnist':
             if self.idx != 0 and self.idx != 70 and self.idx != 90 and self.idx != 95:
+                return np.zeros(len(all_clients))
+        elif self.dataset == 'toy_problem':
+            if self.idx != 0 and self.idx != 40 and self.idx != 80:
                 return np.zeros(len(all_clients))
             
         print('Measuring similarities of client {}'.format(self.idx))

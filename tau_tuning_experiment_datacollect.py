@@ -116,6 +116,16 @@ def get_average_best_val_acc(clients):
     average_best_val_acc = sum(best_val_accs) / len(best_val_accs)
     return average_best_val_acc
 
+def get_average_best_loss(clients):
+    # for client in clients, get the lowest validation accuracy and add it to a list
+    best_losses = []
+    for client in clients:
+        best_loss = min(client.val_loss_list)
+        best_losses.append(best_loss)
+
+    average_best_loss = sum(best_losses) / len(best_losses)
+    return average_best_loss
+
 def get_best_round_val_acc(clients):
     best_avg = 0
     for i in range(300):
@@ -127,7 +137,7 @@ def get_best_round_val_acc(clients):
             best_avg = avg
     return best_avg
 
-def collect_experiments_and_save(expnames, results):
+def collect_experiments_and_save(expnames, results, toy=False):
 
     for exp in expnames:
         path = 'save/' + exp + '/'
@@ -165,7 +175,10 @@ def collect_experiments_and_save(expnames, results):
 
                 clients = pickle.load(f)
 
-                average_best_val_acc = get_average_best_val_acc(clients)
+                if toy:
+                    average_best_val_acc = get_average_best_loss(clients)
+                else:
+                    average_best_val_acc = get_average_best_val_acc(clients)
                 #average_best_val_acc = get_best_round_val_acc(clients)
                 print(exp, average_best_val_acc)
 
@@ -187,7 +200,7 @@ def collect_experiments_and_save(expnames, results):
 
     return results
 
-def load_run_and_save(collection_of_expnames, resultsfile):
+def load_run_and_save(collection_of_expnames, resultsfile, toy=False):
 
     # load label_trainingweight_results from .pkl if it exists
     try:
@@ -197,7 +210,7 @@ def load_run_and_save(collection_of_expnames, resultsfile):
         results = [[], [], [], []]
 
     for i, expnames in enumerate(collection_of_expnames):
-        results[i] = collect_experiments_and_save(expnames, results[i])
+        results[i] = collect_experiments_and_save(expnames, results[i], toy=toy)
         print(expnames)
         print(results[i])
 
@@ -205,12 +218,14 @@ def load_run_and_save(collection_of_expnames, resultsfile):
     with open(resultsfile, 'wb') as f:
         pickle.dump(results, f)
 
-label_trainingweight_expnames_collection = [label_invloss_names, label_l2_expnames, label_cosine_expnames, label_origin_expnames]
-fivecluster_trainingweight_expnames_collection = [fivecluster_invloss_expnames, fivecluster_l2_expnames, fivecluster_cosine_expnames, fivecluster_origin_expnames]
-label_priorweight_expnames_collection = [label_priorweight_invloss_expnames, label_priorweight_l2_expnames, label_priorweight_cosine_expnames, label_priorweight_origin_expnames]
-fivecluster_priorweight_expnames_collection = [fivecluster_priorweight_invloss_expnames, fivecluster_priorweight_l2_expnames, fivecluster_priorweight_cosine_expnames, fivecluster_priorweight_origin_expnames]
+if __name__ == '__main__':
 
-load_run_and_save(fivecluster_trainingweight_expnames_collection, 'fivecluster_trainingweight_results.pkl')
-load_run_and_save(label_trainingweight_expnames_collection, 'label_trainingweight_results.pkl')
-load_run_and_save(label_priorweight_expnames_collection, 'label_priorweight_results.pkl')
-load_run_and_save(fivecluster_priorweight_expnames_collection, 'fivecluster_priorweight_results.pkl')
+    label_trainingweight_expnames_collection = [label_invloss_names, label_l2_expnames, label_cosine_expnames, label_origin_expnames]
+    fivecluster_trainingweight_expnames_collection = [fivecluster_invloss_expnames, fivecluster_l2_expnames, fivecluster_cosine_expnames, fivecluster_origin_expnames]
+    label_priorweight_expnames_collection = [label_priorweight_invloss_expnames, label_priorweight_l2_expnames, label_priorweight_cosine_expnames, label_priorweight_origin_expnames]
+    fivecluster_priorweight_expnames_collection = [fivecluster_priorweight_invloss_expnames, fivecluster_priorweight_l2_expnames, fivecluster_priorweight_cosine_expnames, fivecluster_priorweight_origin_expnames]
+
+    load_run_and_save(fivecluster_trainingweight_expnames_collection, 'fivecluster_trainingweight_results.pkl')
+    load_run_and_save(label_trainingweight_expnames_collection, 'label_trainingweight_results.pkl')
+    load_run_and_save(label_priorweight_expnames_collection, 'label_priorweight_results.pkl')
+    load_run_and_save(fivecluster_priorweight_expnames_collection, 'fivecluster_priorweight_results.pkl')
