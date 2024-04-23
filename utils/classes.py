@@ -408,6 +408,9 @@ class Client(object):
         elif self.dataset == 'fashion_mnist':
             if self.idx != 0 and self.idx != 70 and self.idx != 90 and self.idx != 95:
                 return np.zeros(len(all_clients))
+        elif self.dataset == 'toy_problem':
+            if self.idx != 0 and self.idx != 40 and self.idx != 80:
+                return np.zeros(len(all_clients))
             
         print('Measuring similarities of client {}'.format(self.idx))
         similarities = np.zeros(len(all_clients))
