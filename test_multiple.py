@@ -151,7 +151,37 @@ fashion_mnist_benchmark_random = ['fashion_MNIST_random_seed_1_fixed',
                             'fashion_MNIST_random_seed_2_fixed',
                             'fashion_MNIST_random_seed_3_fixed',]
 
+cifar_label_trainingweight_invloss_5epochs_expnames = ['CIFAR_label_DAC_invloss_tau_10_seed_1_5epochs',
+                                                        'CIFAR_label_DAC_invloss_tau_10_seed_2_5epochs',
+                                                        'CIFAR_label_DAC_invloss_tau_10_seed_3_5epochs',]
 
+cifar_label_trainingweight_l2_5epochs_expnames = ['CIFAR_label_DAC_l2_tau_30_seed_1_5epochs',
+                                                  'CIFAR_label_DAC_l2_tau_30_seed_2_5epochs',
+                                                  'CIFAR_label_DAC_l2_tau_30_seed_3_5epochs',]
+
+cifar_label_trainingweight_cosine_5epochs_expnames = ['CIFAR_label_DAC_cosine_tau_300_seed_1_5epochs',
+                                                      'CIFAR_label_DAC_cosine_tau_300_seed_2_5epochs',
+                                                      'CIFAR_label_DAC_cosine_tau_300_seed_3_5epochs',]
+
+cifar_label_trainingweight_origin_5epochs_expnames = ['CIFAR_label_DAC_cosine_origin_tau_200_seed_1_5epochs',
+                                                        'CIFAR_label_DAC_cosine_origin_tau_200_seed_2_5epochs',
+                                                        'CIFAR_label_DAC_cosine_origin_tau_200_seed_3_5epochs',]
+
+cifar_label_trainingweight_invloss_10epochs_expnames = ['CIFAR_label_DAC_invloss_tau_10_seed_1_10epochs',
+                                                        'CIFAR_label_DAC_invloss_tau_10_seed_2_10epochs',
+                                                        'CIFAR_label_DAC_invloss_tau_10_seed_3_10epochs',]
+
+cifar_label_trainingweight_l2_10epochs_expnames = ['CIFAR_label_DAC_l2_tau_30_seed_1_10epochs',
+                                                    'CIFAR_label_DAC_l2_tau_30_seed_2_10epochs',
+                                                    'CIFAR_label_DAC_l2_tau_30_seed_3_10epochs',]
+
+cifar_label_trainingweight_cosine_10epochs_expnames = ['CIFAR_label_DAC_cosine_tau_300_seed_1_10epochs',
+                                                        'CIFAR_label_DAC_cosine_tau_300_seed_2_10epochs',
+                                                        'CIFAR_label_DAC_cosine_tau_300_seed_3_10epochs',]
+
+cifar_label_trainingweight_origin_10epochs_expnames = ['CIFAR_label_DAC_cosine_origin_tau_200_seed_1_10epochs',
+                                                        'CIFAR_label_DAC_cosine_origin_tau_200_seed_2_10epochs',
+                                                        'CIFAR_label_DAC_cosine_origin_tau_200_seed_3_10epochs',]
 
 
 
@@ -189,7 +219,15 @@ all_expnames = [cifar_label_trainingweight_invloss_expnames,
                 cifar_5_clusters_benchmark_random,
                 fashion_mnist_benchmark_no_comm,
                 fashion_mnist_benchmark_oracle,
-                fashion_mnist_benchmark_random,]
+                fashion_mnist_benchmark_random,
+                cifar_label_trainingweight_invloss_5epochs_expnames,
+                cifar_label_trainingweight_l2_5epochs_expnames,
+                cifar_label_trainingweight_cosine_5epochs_expnames,
+                cifar_label_trainingweight_origin_5epochs_expnames,
+                cifar_label_trainingweight_invloss_10epochs_expnames,
+                cifar_label_trainingweight_l2_10epochs_expnames,
+                cifar_label_trainingweight_cosine_10epochs_expnames,
+                cifar_label_trainingweight_origin_10epochs_expnames,]
 
 
 if __name__ == '__main__':

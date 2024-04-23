@@ -52,5 +52,5 @@ toy_priorweight_origin_expnames = ['TOY_DAC_priorweight_cosine_origin_tau_1_seed
 toy_trainingweight_expnames_collection = [toy_invloss_expnames, toy_l2_expnames, toy_cosine_expnames, toy_origin_expnames]
 toy_priorweight_expnames_collection = [toy_priorweight_invloss_expnames, toy_priorweight_l2_expnames, toy_priorweight_cosine_expnames, toy_priorweight_origin_expnames]
 
-load_run_and_save(toy_trainingweight_expnames_collection, 'toy_trainingweight_results.pkl')
-load_run_and_save(toy_priorweight_expnames_collection, 'toy_priorweight_results.pkl')
+load_run_and_save(toy_trainingweight_expnames_collection, 'toy_trainingweight_results.pkl', toy=True)
+load_run_and_save(toy_priorweight_expnames_collection, 'toy_priorweight_results.pkl', toy=True)
