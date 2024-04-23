@@ -401,7 +401,10 @@ if __name__ == '__main__':
         
         # validate post exchange and save to each clients val_losses_post_exchange and val_accs_post_exchange
         for client in clients:
-            val_loss, val_acc = client.validate(client.local_model, train_set = False)
+            if args.dataset == 'toy_problem':
+                val_loss = client.toy_validate(client.local_model, train_set = False)
+            else:
+                val_loss, val_acc = client.validate(client.local_model, train_set = False)
 
             if args.mergatron == 'activate':
                 last_acc = client.val_acc_list[-1]
@@ -413,21 +416,32 @@ if __name__ == '__main__':
                     mergatron_stops[round] += 1
 
             client.val_losses_post_exchange.append(val_loss)
-            client.val_accs_post_exchange.append(val_acc)
+            if args.dataset != 'toy_problem':
+                client.val_accs_post_exchange.append(val_acc)
         
         # print client validation accuracy and loss
-        val_accs = [client.val_accs_post_exchange[-1] for client in clients]
+        if args.dataset != 'toy_problem':
+            val_accs = [client.val_accs_post_exchange[-1] for client in clients]
         val_losses = [client.val_losses_post_exchange[-1] for client in clients]
-        print('Round {} post exchange. Average val acc: {:.3f}, average val loss: {:.3f}'.format(round, np.mean(val_accs), np.mean(val_losses)))
+
+        if args.dataset != 'toy_problem':
+            print('Round {} post exchange. Average val acc: {:.3f}, average val loss: {:.3f}'.format(round, np.mean(val_accs), np.mean(val_losses)))
+        else:
+            print('Round {} post exchange. Average val loss: {:.3f}'.format(round, np.mean(val_losses)))
     
         print('Experiment name: ', args.experiment_name)
 
         # local training
         clients = train_clients_locally(clients, args.nbr_local_epochs, verbose=True)
         # print average client validation accuracy and loss§
-        val_accs = [client.val_acc_list[-1] for client in clients]
+        if args.dataset != 'toy_problem':
+            val_accs = [client.val_acc_list[-1] for client in clients]
         val_losses = [client.val_loss_list[-1] for client in clients]
-        print('Round {} post local. Average val acc: {:.3f}, average val loss: {:.3f}'.format(round, np.mean(val_accs), np.mean(val_losses)))
+
+        if args.dataset != 'toy_problem':
+            print('Round {} post local. Average val acc: {:.3f}, average val loss: {:.3f}'.format(round, np.mean(val_accs), np.mean(val_losses)))
+        else:
+            print('Round {} post local. Average val loss: {:.3f}'.format(round, np.mean(val_losses)))
 
         print('Experiment name: ', args.experiment_name)
 
