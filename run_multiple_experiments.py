@@ -704,7 +704,7 @@ for seed in seeds:
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift 5_clusters --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name CIFAR_5_clusters_DAC_priorweight_cosine_origin_tau_{}_seed_{}_fixed --CIFAR_ratio 0.2 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr, clusters_priorweight_origin_tauopt, clusters_priorweight_origin_tauopt, seed))
 
-'''
+
 ###### CIFAR LABELSHIFT BEST TAU REPRODUCTION NUM EPOCHS 5 ########
 label_invloss_tauopt = 10
 label_l2_tauopt = 30
@@ -713,23 +713,22 @@ label_origin_tauopt = 200
 
 seeds = [1, 2, 3]
 lr = 0.001
-'''
+
 # invloss - running on targetbox core2
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 5 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_invloss_tau_{}_seed_{}_5epochs --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_invloss_tauopt, label_invloss_tauopt, seed))
-'''
+
 # l2 - running on targetbox core4
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 5 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_l2_tau_{}_seed_{}_5epochs --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_l2_tauopt, label_l2_tauopt, seed))
-'''
-# cosine
+
+# cosine - running on edvinbox core7
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 5 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_cosine_tau_{}_seed_{}_5epochs --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_cosine_tauopt, label_cosine_tauopt, seed))
 
-# cosine origin
+# cosine origin - running on edvinbox core8
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 5 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_cosine_origin_tau_{}_seed_{}_5epochs --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_origin_tauopt, label_origin_tauopt, seed))
-
 
 ###### CIFAR LABELSHIFT PRIORWEIGHT BEST TAU REPRODUCTION NUM EPOCHS 5 ########
 label_priorweight_invloss_tauopt = 5
@@ -755,7 +754,7 @@ for seed in seeds:
 # cosine origin
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 5 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_priorweight_cosine_origin_tau_{}_seed_{}_5epochs --CIFAR_ratio 0.4 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr, label_priorweight_origin_tauopt, label_priorweight_origin_tauopt, seed))
-
+'''
 
 ###### CIFAR LABELSHIFT BEST TAU REPRODUCTION NUM EPOCHS 10 ########
 label_invloss_tauopt = 10
@@ -765,18 +764,22 @@ label_origin_tauopt = 200
 
 seeds = [1, 2, 3]
 lr = 0.001
-
-# invloss
+'''
+# invloss - running on edvinbox core1
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 10 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_invloss_tau_{}_seed_{}_10epochs --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_invloss_tauopt, label_invloss_tauopt, seed))
 
-# l2
+# l2 - running on edvinbox core3
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 10 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_l2_tau_{}_seed_{}_10epochs --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_l2_tauopt, label_l2_tauopt, seed))
-
-# cosine
-for seed in seeds:
+'''
+# cosine seed 1 and 2 - running on edvinbox core9
+for seed in [1,2]:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 10 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_cosine_tau_{}_seed_{}_10epochs --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_cosine_tauopt, label_cosine_tauopt, seed))
+'''
+#cosine seed 3
+seed = 3
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 10 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name CIFAR_label_DAC_cosine_tau_{}_seed_{}_10epochs --CIFAR_ratio 0.4 --measure_all_similarities True'.format(seed, lr, label_cosine_tauopt, label_cosine_tauopt, seed))
 
 # cosine origin
 for seed in seeds:

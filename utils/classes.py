@@ -195,10 +195,16 @@ class Client(object):
         self.exchanges_every_round = []
 
         # validate initial model
-        init_loss, init_acc = self.validate(self.local_model, train_set = False)
-        self.val_loss_list.append(init_loss)
-        self.val_acc_list.append(init_acc)
-        init_train_loss, init_train_acc = self.validate(self.local_model, train_set = True)
+        if dataset == 'toy_problem':
+            init_loss = self.toy_validate(self.local_model, train_set = False)
+            self.val_loss_list.append(init_loss)
+            init_train_loss = self.toy_validate(self.local_model, train_set = True)
+
+        else:
+            init_loss, init_acc = self.validate(self.local_model, train_set = False)
+            self.val_loss_list.append(init_loss)
+            self.val_acc_list.append(init_acc)
+            init_train_loss, init_train_acc = self.validate(self.local_model, train_set = True)
         self.train_loss_list.append(init_train_loss)
 
         # gradients (for cosine similarity)
@@ -289,11 +295,15 @@ class Client(object):
                 loss.backward()
                 optimizer.step()
                 epoch_loss += loss.item()
-                epoch_acc += (outputs.argmax(1) == y).sum().item()
+                #epoch_acc += (outputs.argmax(1) == y).sum().item()
             train_loss.append(epoch_loss/len(self.ldr_train))
         
         # validate
-        val_loss, val_acc = self.toy_validate(self.local_model, train_set = False)
+        val_loss = self.toy_validate(self.local_model, train_set = False)
+        self.val_loss_list.append(val_loss)
+
+        # early stopping
+        self.early_stopping(val_loss)
 
         # could be minus one
         return self.local_model, train_loss
