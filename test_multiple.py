@@ -183,6 +183,8 @@ cifar_label_trainingweight_origin_10epochs_expnames = ['CIFAR_label_DAC_cosine_o
                                                         'CIFAR_label_DAC_cosine_origin_tau_200_seed_2_10epochs',
                                                         'CIFAR_label_DAC_cosine_origin_tau_200_seed_3_10epochs',]
 
+# toy benchmarks
+
 
 
 ##### TESTING #####
