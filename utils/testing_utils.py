@@ -258,7 +258,7 @@ def test_on_toy(clients, quick = True, verbose = True):
     theta_3 = clients[80].theta
     sigma = 3
 
-    n = 10000
+    n = 1000
     dataloaders = []
     for theta in [theta_1, theta_2, theta_3]:
         X, Y = generate_regression_multi(theta, n, sigma)
@@ -268,14 +268,15 @@ def test_on_toy(clients, quick = True, verbose = True):
         dataloader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False)
         dataloaders.append(dataloader)
 
+    cluster1_losses = []
+    cluster2_losses = []
+    cluster3_losses = []
+
     for client in clients:
         if verbose:
             print('Testing client: {}'.format(client.idx))
             start_client = time.time()
         
-        cluster1_losses = []
-        cluster2_losses = []
-        cluster3_losses = []
         client.best_model.to(client.device)
         if client.group == 0:
             loss = test_toy_model(client.best_model, dataloaders[0])

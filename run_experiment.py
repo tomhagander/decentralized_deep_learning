@@ -309,6 +309,12 @@ if __name__ == '__main__':
         for i in range(args.nbr_clients):
             print('creating client {}'.format(i))
             group = i // (args.nbr_clients // 3)
+            if group == 0:
+                theta = theta_1
+            elif group == 1:
+                theta = theta_2
+            else:
+                theta = theta_3
             client = Client(train_set=trainsets[i], 
                             val_set=valsets[group], 
                             idxs_train=None, 
@@ -324,7 +330,7 @@ if __name__ == '__main__':
                             ratio = 1/3,
                             dataset = 'toy_problem',
                             shift=args.shift,
-                            theta='theta_{}'.format(group+1))
+                            theta=theta)
             clients.append(client)
 
     if args.client_information_exchange == 'some_delusion': #ONLY for some_delusion (Ignore)

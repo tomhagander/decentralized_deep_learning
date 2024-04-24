@@ -1094,7 +1094,7 @@ for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30 --client_information_exchange no_exchange --experiment_name TOY_no_comm_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, no_comm_lr, seed))
 
 
-'''
+
 ##### TOYPROBLEM REPRODUCTION #####
 toy_trainingweight_invloss_tauopt = 0 # not determined
 toy_trainingweight_l2_tauopt = 10
@@ -1108,7 +1108,7 @@ toy_priorweight_cosine_origin_tauopt = 100
 seeds = [2, 3, 4, 5]
 lr = 7.5e-05
 no_comm_lr = 7.5e-06
-'''
+
 # invloss
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_invloss_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, lr, toy_trainingweight_invloss_tauopt, toy_trainingweight_invloss_tauopt, seed))
