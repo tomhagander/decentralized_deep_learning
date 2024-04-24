@@ -45,6 +45,7 @@ if __name__ == '__main__':
         print('Clients loaded')
     
     test_losses = test_on_toy(clients, quick=quick, verbose = verbose)
+    print(test_losses)
 
     if verbose:
         print('Testing complete')

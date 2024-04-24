@@ -305,6 +305,11 @@ class Client(object):
         val_loss = self.toy_validate(self.local_model, train_set = False)
         self.val_loss_list.append(val_loss)
 
+        if(val_loss < self.best_val_loss):
+            self.count = 0
+            self.best_val_loss = val_loss
+            self.best_model.load_state_dict(self.local_model.state_dict())
+
         # early stopping
         self.early_stopping(val_loss)
 
