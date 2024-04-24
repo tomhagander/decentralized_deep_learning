@@ -10,3 +10,4 @@ FashionMNIST/
 analyze_tautuning.ipynb
 analyze_testaccs_paper.ipynb
 analyze_data.ipynb
+paper_vis.ipynb
