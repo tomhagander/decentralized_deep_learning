@@ -202,33 +202,45 @@ toy_trainingweight_invloss_expnames = ['TOY_DAC_invloss_tau_100000_seed_1',
                                         'TOY_DAC_invloss_tau_100000_seed_2',
                                         'TOY_DAC_invloss_tau_100000_seed_3',]
 
-toy_trainingweight_l2_expnames = ['TOY_DAC_l2_tau_100000_seed_1',
-                                    'TOY_DAC_l2_tau_100000_seed_2',
-                                    'TOY_DAC_l2_tau_100000_seed_3',]
+toy_trainingweight_l2_expnames = ['TOY_DAC_l2_tau_10_seed_1',
+                                    'TOY_DAC_l2_tau_10_seed_2',
+                                    'TOY_DAC_l2_tau_10_seed_3',
+                                    'TOY_DAC_l2_tau_10_seed_4',
+                                    'TOY_DAC_l2_tau_10_seed_5',]
 
-toy_trainingweight_cosine_expnames = ['TOY_DAC_cosine_tau_100000_seed_1',
-                                        'TOY_DAC_cosine_tau_100000_seed_2',
-                                        'TOY_DAC_cosine_tau_100000_seed_3',]
+toy_trainingweight_cosine_expnames = ['TOY_DAC_cosine_tau_100_seed_1',
+                                        'TOY_DAC_cosine_tau_100_seed_2',
+                                        'TOY_DAC_cosine_tau_100_seed_3',
+                                        'TOY_DAC_cosine_tau_100_seed_4',
+                                        'TOY_DAC_cosine_tau_100_seed_5',]
 
-toy_trainingweight_origin_expnames = ['TOY_DAC_cosine_origin_tau_100000_seed_1',
-                                        'TOY_DAC_cosine_origin_tau_100000_seed_2',
-                                        'TOY_DAC_cosine_origin_tau_100000_seed_3',]
+toy_trainingweight_origin_expnames = ['TOY_DAC_cosine_origin_tau_100_seed_1',
+                                        'TOY_DAC_cosine_origin_tau_100_seed_2',
+                                        'TOY_DAC_cosine_origin_tau_100_seed_3',
+                                        'TOY_DAC_cosine_origin_tau_100_seed_4',
+                                        'TOY_DAC_cosine_origin_tau_100_seed_5',]
 
 toy_priorweight_invloss_expnames = ['TOY_DAC_priorweight_invloss_tau_100000_seed_1',
                                     'TOY_DAC_priorweight_invloss_tau_100000_seed_2',
                                     'TOY_DAC_priorweight_invloss_tau_100000_seed_3',]
 
-toy_priorweight_l2_expnames = ['TOY_DAC_priorweight_l2_tau_100000_seed_1',
-                                'TOY_DAC_priorweight_l2_tau_100000_seed_2',
-                                'TOY_DAC_priorweight_l2_tau_100000_seed_3',]
+toy_priorweight_l2_expnames = ['TOY_DAC_priorweight_l2_tau_10_seed_1',
+                                'TOY_DAC_priorweight_l2_tau_10_seed_2',
+                                'TOY_DAC_priorweight_l2_tau_10_seed_3',
+                                'TOY_DAC_priorweight_l2_tau_10_seed_4',
+                                'TOY_DAC_priorweight_l2_tau_10_seed_5',]
 
-toy_priorweight_cosine_expnames = ['TOY_DAC_priorweight_cosine_tau_100000_seed_1',
-                                    'TOY_DAC_priorweight_cosine_tau_100000_seed_2',
-                                    'TOY_DAC_priorweight_cosine_tau_100000_seed_3',]
+toy_priorweight_cosine_expnames = ['TOY_DAC_priorweight_cosine_tau_100_seed_1',
+                                    'TOY_DAC_priorweight_cosine_tau_100_seed_2',
+                                    'TOY_DAC_priorweight_cosine_tau_100_seed_3',
+                                    'TOY_DAC_priorweight_cosine_tau_100_seed_4',
+                                    'TOY_DAC_priorweight_cosine_tau_100_seed_5',]
 
-toy_priorweight_origin_expnames = ['TOY_DAC_priorweight_cosine_origin_tau_100000_seed_1',
-                                    'TOY_DAC_priorweight_cosine_origin_tau_100000_seed_2',
-                                    'TOY_DAC_priorweight_cosine_origin_tau_100000_seed_3',]
+toy_priorweight_origin_expnames = ['TOY_DAC_priorweight_cosine_origin_tau_100_seed_1',
+                                    'TOY_DAC_priorweight_cosine_origin_tau_100_seed_2',
+                                    'TOY_DAC_priorweight_cosine_origin_tau_100_seed_3',
+                                    'TOY_DAC_priorweight_cosine_origin_tau_100_seed_4',
+                                    'TOY_DAC_priorweight_cosine_origin_tau_100_seed_5',]
 
 
 
