@@ -323,7 +323,8 @@ if __name__ == '__main__':
                             stopping_rounds=args.stopping_rounds,
                             ratio = 1/3,
                             dataset = 'toy_problem',
-                            shift=args.shift)
+                            shift=args.shift,
+                            theta='theta_{}'.format(group+1))
             clients.append(client)
 
     if args.client_information_exchange == 'some_delusion': #ONLY for some_delusion (Ignore)
