@@ -4,7 +4,9 @@ toy_invloss_expnames = ['TOY_DAC_invloss_tau_1_seed_1',
                         'TOY_DAC_invloss_tau_10_seed_1',
                         'TOY_DAC_invloss_tau_100_seed_1',
                         'TOY_DAC_invloss_tau_1000_seed_1',
-                        'TOY_DAC_invloss_tau_10000_seed_1',]
+                        'TOY_DAC_invloss_tau_10000_seed_1',
+                        'TOY_DAC_invloss_tau_100000_seed_1',
+                        'TOY_DAC_invloss_tau_1000000_seed_1',]
 
 toy_l2_expnames = ['TOY_DAC_l2_tau_1_seed_1',
                      'TOY_DAC_l2_tau_10_seed_1',
