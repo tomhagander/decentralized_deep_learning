@@ -67,7 +67,7 @@ class EarlyStopping:
 class Client(object):
     def __init__(self, train_set=None, val_set=None, idxs_train=None, idxs_val=None, criterion=None, lr=None, 
                  device=None, batch_size=None, num_users=None, model=None, idx=None, stopping_rounds=None, 
-                 ratio=None, dataset = None, shift = None):
+                 ratio=None, dataset = None, shift = None, theta=None):
         self.device = device
         self.criterion = criterion
         self.lr = lr
@@ -75,6 +75,8 @@ class Client(object):
 
         self.shift = shift
         self.dataset = dataset
+
+        self.theta = theta
 
         # if dataset is cifar
         if dataset == 'cifar10':

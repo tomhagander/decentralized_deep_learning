@@ -275,7 +275,18 @@ all_expnames = [cifar_label_trainingweight_invloss_expnames,
                 cifar_label_trainingweight_invloss_10epochs_expnames,
                 cifar_label_trainingweight_l2_10epochs_expnames,
                 cifar_label_trainingweight_cosine_10epochs_expnames,
-                cifar_label_trainingweight_origin_10epochs_expnames,]
+                cifar_label_trainingweight_origin_10epochs_expnames,
+                toy_benchmark_oracle,
+                toy_benchmark_random,
+                toy_benchmark_no_comm,
+                toy_trainingweight_invloss_expnames,
+                toy_trainingweight_l2_expnames,
+                toy_trainingweight_cosine_expnames,
+                toy_trainingweight_origin_expnames,
+                toy_priorweight_invloss_expnames,
+                toy_priorweight_l2_expnames,
+                toy_priorweight_cosine_expnames,
+                toy_priorweight_origin_expnames,]
 
 
 if __name__ == '__main__':
@@ -345,6 +356,18 @@ if __name__ == '__main__':
 
                 print('Testing experiment: {}'.format(expname))
                 subprocess.run('python3 test_fashion_MNIST.py --experiment {} --quick True'.format(expname), shell=True)
+                print('Experiment {} done'.format(expname))
+                print('')
+
+            elif metadata['dataset'] == 'toy_problem':
+
+                # check if experiment is already tested
+                if os.path.exists('save/{}/toy_test_losses.pkl'.format(expname)):
+                    print('Experiment {} already tested'.format(expname))
+                    continue
+            
+                print('Testing experiment: {}'.format(expname))
+                subprocess.run('python3 test_toy.py --experiment {} --quick True'.format(expname), shell=True)
                 print('Experiment {} done'.format(expname))
                 print('')
 
