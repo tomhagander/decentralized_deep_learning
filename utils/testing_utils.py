@@ -1,6 +1,7 @@
 import torch
 import numpy as np
-from toy_regression_utils import generate_regression_multi
+from utils.toy_regression_utils import generate_regression_multi
+import time
 
 def test_model(model, testloader):
     # Set the model to evaluation
@@ -38,6 +39,44 @@ def test_model(model, testloader):
     accuracy = 100 * total_correct / total_samples
 
     return accuracy
+
+def test_toy_model(model, testloader):
+    # Set the model to evaluation
+
+    # Set the device to GPU if available, otherwise use CPU
+    device = torch.device('cuda:{}'.format(0) if torch.cuda.is_available() else 'cpu')
+
+    # Set the model to evaluation mode
+    model.eval()
+
+    # Initialize variables for accuracy calculation
+    total_loss = 0
+    total_samples = 0
+
+    # Iterate over the testloader_vehicle
+    for data in testloader:
+        # Move images and labels to the device
+        X, Y = data
+        X = X.to(device)
+        Y = Y.to(device)
+    
+        # Forward pass
+        with torch.no_grad():
+            outputs = model(X)
+        
+        # Get the predicted labels
+        loss = torch.nn.MSELoss()(outputs, Y)
+        
+        # Update the total number of samples
+        total_samples += 1
+        
+        # Update the total number of correct predictions
+        total_loss += loss.item()
+
+    # Calculate the accuracy
+    loss = total_loss / total_samples
+
+    return loss
 
 
 
@@ -229,7 +268,29 @@ def test_on_toy(clients, quick = True, verbose = True):
         dataloader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False)
         dataloaders.append(dataloader)
 
-    # to be continued
+    for client in clients:
+        if verbose:
+            print('Testing client: {}'.format(client.idx))
+            start_client = time.time()
+        
+        cluster1_losses = []
+        cluster2_losses = []
+        cluster3_losses = []
+        client.best_model.to(client.device)
+        if client.group == 0:
+            loss = test_toy_model(client.best_model, dataloaders[0])
+            cluster1_losses.append(loss)
+        elif client.group == 1:
+            loss = test_toy_model(client.best_model, dataloaders[1])
+            cluster2_losses.append(loss)
+        elif client.group == 2:
+            loss = test_toy_model(client.best_model, dataloaders[2])
+            cluster3_losses.append(loss)
+        if verbose:
+            print('Client: {} Group: {} Loss: {:.2f}'.format(client.idx, client.group, loss))
+            print('Testing time: {:.2f} s'.format(time.time()-start_client))
+
+    return [np.array(cluster1_losses), np.array(cluster2_losses), np.array(cluster3_losses)]
 
 def test_on_fashion_MNIST(clients, quick = True, verbose = True):
     import torchvision.transforms as transforms
