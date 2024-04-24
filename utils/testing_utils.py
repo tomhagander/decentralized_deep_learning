@@ -1,5 +1,6 @@
 import torch
 import numpy as np
+from toy_regression_utils import generate_regression_multi
 
 def test_model(model, testloader):
     # Set the model to evaluation
@@ -211,6 +212,24 @@ def test_on_CIFAR(clients, quick, verbose):
         print('Testing time: {:.2f} minutes'.format((time.time()-start)/60))
     
     return zero_on_zero, one_on_one, zero_on_one, one_on_zero
+
+def test_on_toy(clients, quick = True, verbose = True):
+    theta_1 = clients[0].theta
+    theta_2 = clients[40].theta
+    theta_3 = clients[80].theta
+    sigma = 3
+
+    n = 10000
+    dataloaders = []
+    for theta in [theta_1, theta_2, theta_3]:
+        X, Y = generate_regression_multi(theta, n, sigma)
+        X = torch.from_numpy(X).float()
+        Y = torch.from_numpy(Y).float().reshape(-1,1)
+        dataset = torch.utils.data.TensorDataset(X,Y)
+        dataloader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False)
+        dataloaders.append(dataloader)
+
+    # to be continued
 
 def test_on_fashion_MNIST(clients, quick = True, verbose = True):
     import torchvision.transforms as transforms
