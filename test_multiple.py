@@ -183,6 +183,35 @@ cifar_label_trainingweight_origin_10epochs_expnames = ['CIFAR_label_DAC_cosine_o
                                                         'CIFAR_label_DAC_cosine_origin_tau_200_seed_2_10epochs',
                                                         'CIFAR_label_DAC_cosine_origin_tau_200_seed_3_10epochs',]
 
+cifar_label_priorweight_invloss_5epochs_expnames = ['CIFAR_label_DAC_priorweight_invloss_tau_5_seed_1_5epochs',
+                                                    'CIFAR_label_DAC_priorweight_invloss_tau_5_seed_2_5epochs',
+                                                    'CIFAR_label_DAC_priorweight_invloss_tau_5_seed_3_5epochs',]
+
+cifar_label_priorweight_l2_5epochs_expnames = ['CIFAR_label_DAC_priorweight_l2_tau_5_seed_1_5epochs',
+                                                'CIFAR_label_DAC_priorweight_l2_tau_5_seed_2_5epochs',
+                                                'CIFAR_label_DAC_priorweight_l2_tau_5_seed_3_5epochs',]
+
+cifar_label_priorweight_cosine_5epochs_expnames = ['CIFAR_label_DAC_priorweight_cosine_tau_200_seed_1_5epochs',
+                                                    'CIFAR_label_DAC_priorweight_cosine_tau_200_seed_2_5epochs',
+                                                    'CIFAR_label_DAC_priorweight_cosine_tau_200_seed_3_5epochs',]
+
+cifar_label_priorweight_origin_5epochs_expnames = ['CIFAR_label_DAC_priorweight_cosine_origin_tau_200_seed_1_5epochs',
+                                                    'CIFAR_label_DAC_priorweight_cosine_origin_tau_200_seed_2_5epochs',
+                                                    'CIFAR_label_DAC_priorweight_cosine_origin_tau_200_seed_3_5epochs',]
+
+cifar_label_priorweight_invloss_10epochs_expnames = ['CIFAR_label_DAC_priorweight_invloss_tau_5_seed_1_10epochs',
+                                                    'CIFAR_label_DAC_priorweight_invloss_tau_5_seed_2_10epochs',
+                                                    'CIFAR_label_DAC_priorweight_invloss_tau_5_seed_3_10epochs',]
+
+cifar_label_priorweight_l2_10epochs_expnames = ['CIFAR_label_DAC_priorweight_l2_tau_5_seed_1_10epochs',
+                                                'CIFAR_label_DAC_priorweight_l2_tau_5_seed_2_10epochs',
+                                                'CIFAR_label_DAC_priorweight_l2_tau_5_seed_3_10epochs',]
+
+cifar_label_priorweight_cosine_10epochs_expnames = ['CIFAR_label_DAC_priorweight_cosine_tau_200_seed_1_10epochs',
+                                                    'CIFAR_label_DAC_priorweight_cosine_tau_200_seed_2_10epochs',
+                                                    'CIFAR_label_DAC_priorweight_cosine_tau_200_seed_3_10epochs',]
+
+
 #----
 toy_benchmark_oracle = ['TOY_oracle_seed_1',
                         'TOY_oracle_seed_2',
@@ -198,49 +227,37 @@ toy_benchmark_no_comm = ['TOY_no_comm_seed_1',
 
 # taus not set from here on out. Might also want more runs here
 
-toy_trainingweight_invloss_expnames = ['TOY_DAC_invloss_tau_100000_seed_1',
-                                        'TOY_DAC_invloss_tau_100000_seed_2',
-                                        'TOY_DAC_invloss_tau_100000_seed_3',]
+seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+lr = 0.003
+toy_trainingweight_invloss_tauopt = 10000 # not determined
+toy_trainingweight_l2_tauopt = 19
+toy_trainingweight_cosine_tauopt = 140
+toy_trainingweight_cosine_origin_tauopt = 140
+toy_priorweight_invloss_tauopt = 10000 # not determined
+toy_priorweight_l2_tauopt = 19
+toy_priorweight_cosine_tauopt = 140
+toy_priorweight_cosine_origin_tauopt = 140
 
-toy_trainingweight_l2_expnames = ['TOY_DAC_l2_tau_10_seed_1',
-                                    'TOY_DAC_l2_tau_10_seed_2',
-                                    'TOY_DAC_l2_tau_10_seed_3',
-                                    'TOY_DAC_l2_tau_10_seed_4',
-                                    'TOY_DAC_l2_tau_10_seed_5',]
+toy_trainingweight_invloss_expnames = []
+toy_trainingweight_l2_expnames = []
+toy_trainingweight_cosine_expnames = []
+toy_trainingweight_origin_expnames = []
+toy_priorweight_invloss_expnames = []
+toy_priorweight_l2_expnames = []
+toy_priorweight_cosine_expnames = []
+toy_priorweight_origin_expnames = []
 
-toy_trainingweight_cosine_expnames = ['TOY_DAC_cosine_tau_100_seed_1',
-                                        'TOY_DAC_cosine_tau_100_seed_2',
-                                        'TOY_DAC_cosine_tau_100_seed_3',
-                                        'TOY_DAC_cosine_tau_100_seed_4',
-                                        'TOY_DAC_cosine_tau_100_seed_5',]
 
-toy_trainingweight_origin_expnames = ['TOY_DAC_cosine_origin_tau_100_seed_1',
-                                        'TOY_DAC_cosine_origin_tau_100_seed_2',
-                                        'TOY_DAC_cosine_origin_tau_100_seed_3',
-                                        'TOY_DAC_cosine_origin_tau_100_seed_4',
-                                        'TOY_DAC_cosine_origin_tau_100_seed_5',]
+for seed in seeds:
+    toy_trainingweight_invloss_expnames.append('TOY_DAC_invloss_tau_{}_seed_{}'.format(toy_trainingweight_invloss_tauopt, seed))
+    toy_trainingweight_l2_expnames.append('TOY_DAC_l2_tau_{}_seed_{}'.format(toy_trainingweight_l2_tauopt, seed))
+    toy_trainingweight_cosine_expnames.append('TOY_DAC_cosine_tau_{}_seed_{}'.format(toy_trainingweight_cosine_tauopt, seed))
+    toy_trainingweight_origin_expnames.append('TOY_DAC_cosine_origin_tau_{}_seed_{}'.format(toy_trainingweight_cosine_origin_tauopt, seed))
+    toy_priorweight_invloss_expnames.append('TOY_DAC_priorweight_invloss_tau_{}_seed_{}'.format(toy_priorweight_invloss_tauopt, seed))
+    toy_priorweight_l2_expnames.append('TOY_DAC_priorweight_l2_tau_{}_seed_{}'.format(toy_priorweight_l2_tauopt, seed))
+    toy_priorweight_cosine_expnames.append('TOY_DAC_priorweight_cosine_tau_{}_seed_{}'.format(toy_priorweight_cosine_tauopt, seed))
+    toy_priorweight_origin_expnames.append('TOY_DAC_priorweight_cosine_origin_tau_{}_seed_{}'.format(toy_priorweight_cosine_origin_tauopt, seed))
 
-toy_priorweight_invloss_expnames = ['TOY_DAC_priorweight_invloss_tau_100000_seed_1',
-                                    'TOY_DAC_priorweight_invloss_tau_100000_seed_2',
-                                    'TOY_DAC_priorweight_invloss_tau_100000_seed_3',]
-
-toy_priorweight_l2_expnames = ['TOY_DAC_priorweight_l2_tau_10_seed_1',
-                                'TOY_DAC_priorweight_l2_tau_10_seed_2',
-                                'TOY_DAC_priorweight_l2_tau_10_seed_3',
-                                'TOY_DAC_priorweight_l2_tau_10_seed_4',
-                                'TOY_DAC_priorweight_l2_tau_10_seed_5',]
-
-toy_priorweight_cosine_expnames = ['TOY_DAC_priorweight_cosine_tau_100_seed_1',
-                                    'TOY_DAC_priorweight_cosine_tau_100_seed_2',
-                                    'TOY_DAC_priorweight_cosine_tau_100_seed_3',
-                                    'TOY_DAC_priorweight_cosine_tau_100_seed_4',
-                                    'TOY_DAC_priorweight_cosine_tau_100_seed_5',]
-
-toy_priorweight_origin_expnames = ['TOY_DAC_priorweight_cosine_origin_tau_100_seed_1',
-                                    'TOY_DAC_priorweight_cosine_origin_tau_100_seed_2',
-                                    'TOY_DAC_priorweight_cosine_origin_tau_100_seed_3',
-                                    'TOY_DAC_priorweight_cosine_origin_tau_100_seed_4',
-                                    'TOY_DAC_priorweight_cosine_origin_tau_100_seed_5',]
 
 
 
@@ -288,6 +305,13 @@ all_expnames = [cifar_label_trainingweight_invloss_expnames,
                 cifar_label_trainingweight_l2_10epochs_expnames,
                 cifar_label_trainingweight_cosine_10epochs_expnames,
                 cifar_label_trainingweight_origin_10epochs_expnames,
+                cifar_label_priorweight_invloss_5epochs_expnames,
+                cifar_label_priorweight_l2_5epochs_expnames,
+                cifar_label_priorweight_cosine_5epochs_expnames,
+                cifar_label_priorweight_origin_5epochs_expnames,
+                cifar_label_priorweight_invloss_10epochs_expnames,
+                cifar_label_priorweight_l2_10epochs_expnames,
+                cifar_label_priorweight_cosine_10epochs_expnames,
                 toy_benchmark_oracle,
                 toy_benchmark_random,
                 toy_benchmark_no_comm,
