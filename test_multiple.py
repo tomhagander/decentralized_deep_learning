@@ -259,6 +259,25 @@ for seed in seeds:
     toy_priorweight_origin_expnames.append('TOY_DAC_priorweight_cosine_origin_tau_{}_seed_{}'.format(toy_priorweight_cosine_origin_tauopt, seed))
 
 
+#### Toy minmax ####
+toy_trainingweight_invloss_tauopt = 10
+toy_trainingweight_l2_tauopt = 10
+toy_trainingweight_cosine_tauopt = 100
+toy_trainingweight_cosine_origin_tauopt = 100
+
+seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+toy_minmax_invloss_expnames = []
+toy_minmax_l2_expnames = []
+toy_minmax_cosine_expnames = []
+toy_minmax_cosine_origin_expnames = []
+
+for seed in seeds:
+    toy_minmax_invloss_expnames.append('TOY_DAC_minmax_invloss_tau_{}_seed_{}'.format(toy_trainingweight_invloss_tauopt, seed))
+    toy_minmax_l2_expnames.append('TOY_DAC_minmax_l2_tau_{}_seed_{}'.format(toy_trainingweight_l2_tauopt, seed))
+    toy_minmax_cosine_expnames.append('TOY_DAC_minmax_cosine_tau_{}_seed_{}'.format(toy_trainingweight_cosine_tauopt, seed))
+    toy_minmax_cosine_origin_expnames.append('TOY_DAC_minmax_cosine_origin_tau_{}_seed_{}'.format(toy_trainingweight_cosine_origin_tauopt, seed))
+
 
 
 
