@@ -233,7 +233,10 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
                 # Apply the softmax transformation to non-zero entries
                 if non_zero_scores:  # Check if there are any non-zero scores
                     max_score = max(non_zero_scores)
-                    exp_scores = np.exp(np.array(non_zero_scores - max_score) * parameters['tau'])
+                    if parameters['minmax']:
+                        exp_scores = np.exp(np.array(non_zero_scores - min(non_zero_scores))/(max(non_zero_scores) - min(non_zero_scores)) * parameters['tau'])
+                    else:
+                        exp_scores = np.exp(np.array(non_zero_scores - max_score) * parameters['tau'])
                     
                     # Normalize
                     sum_exp_scores = np.sum(exp_scores)
