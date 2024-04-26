@@ -358,6 +358,7 @@ if __name__ == '__main__':
                       'mergatron': args.mergatron,
                       'aggregation_weighting': args.aggregation_weighting,
                       'dataset': args.dataset,
+                      'minmax': args.minmax,
                       }
             clients = client_information_exchange_DAC(clients, 
                                             parameters=parameters,

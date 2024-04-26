@@ -1038,39 +1038,44 @@ seeds = [2,3]
 import numpy as np
 seed = 1
 lrs = np.logspace(np.log10(0.008), np.log10(0.0003), num=4)
-#taus_trainingweight_invloss = np.logspace(np.log10(50000), np.log10(5000000), num=8)
-taus_trainingweight_invloss = np.logspace(np.log10(10), np.log10(10000), num=8)
+taus_trainingweight_invloss1 = np.logspace(np.log10(50000), np.log10(5000000), num=8)
+taus_trainingweight_invloss2 = np.logspace(np.log10(10), np.log10(10000), num=8)
+# concat the arrays
+taus_trainingweight_invloss = np.logspace(np.log10(1), np.log(9), num=8)#np.concatenate((taus_trainingweight_invloss1, taus_trainingweight_invloss2))
 taus_trainingweight_l2 = np.logspace(np.log10(2), np.log10(100), num=8)
 taus_trainingweight_cosine = np.logspace(np.log10(10), np.log10(1000), num=8)
 taus_trainingweight_cosine_origin = np.logspace(np.log10(10), np.log10(1000), num=8)
-#taus_priorweight_invloss = np.logspace(np.log10(50000), np.log10(5000000), num=8)
-taus_priorweight_invloss = np.logspace(np.log10(10), np.log10(10000), num=8)
+taus_priorweight_invloss1 = np.logspace(np.log10(50000), np.log10(5000000), num=8)
+taus_priorweight_invloss2 = np.logspace(np.log10(10), np.log10(10000), num=8)
+# concat the arrays
+taus_priorweight_invloss = np.concatenate((taus_priorweight_invloss1, taus_priorweight_invloss2))
 taus_priorweight_l2 = np.logspace(np.log10(2), np.log10(500), num=8)
 taus_priorweight_cosine = np.logspace(np.log10(50), np.log10(5000), num=8)
 taus_priorweight_cosine_origin = np.logspace(np.log10(50), np.log10(5000), num=8)
 # first two lrs on targetbox core1, next two on core2
+
 for lr in lrs:
 
     # invloss
     for tau in taus_trainingweight_invloss:
-        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_invloss_lr_{}_tau_{}_seed_{} --delusion 0.0'.format(seed, lr, tau, lr, tau, seed))
+        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_invloss_lr_{}_tau_{}_seed_{} --delusion 0.0 --minmax True'.format(seed, lr, tau, lr, tau, seed))
     '''
     # l2
     for tau in taus_trainingweight_l2:
-        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_l2_lr_{}_tau_{}_seed_{} --delusion 0.0'.format(seed, lr, tau, lr, tau, seed))
+        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_l2_lr_{}_tau_{}_seed_{} --delusion 0.0 --minmax True'.format(seed, lr, tau, lr, tau, seed))
 
     # cosine
     for tau in taus_trainingweight_cosine:
-        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_cosine_lr_{}_tau_{}_seed_{} --delusion 0.0'.format(seed, lr, tau, lr, tau, seed))
+        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_cosine_lr_{}_tau_{}_seed_{} --delusion 0.0 --minmax True'.format(seed, lr, tau, lr, tau, seed))
 
     # cosine origin
     for tau in taus_trainingweight_cosine_origin:
-        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_cosine_origin_lr_{}_tau_{}_seed_{} --delusion 0.0'.format(seed, lr, tau, lr, tau, seed))
-    '''
+        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_cosine_origin_lr_{}_tau_{}_seed_{} --delusion 0.0 --minmax True'.format(seed, lr, tau, lr, tau, seed))
+    
     # invloss
     for tau in taus_priorweight_invloss:
         commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_priorweight_invloss_prior_lr_{}_tau_{}_seed_{} --delusion 0.0 --aggregation_weighting priors'.format(seed, lr, tau, lr, tau, seed))
-    '''
+    
     # l2
     for tau in taus_priorweight_l2:
         commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_priorweight_l2_prior_lr_{}_tau_{}_seed_{} --delusion 0.0 --aggregation_weighting priors'.format(seed, lr, tau, lr, tau, seed))
@@ -1111,52 +1116,53 @@ for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30 --client_information_exchange no_exchange --experiment_name TOY_no_comm_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, no_comm_lr, seed))
 
 
-'''
+
 ##### TOYPROBLEM REPRODUCTION #####
-toy_trainingweight_invloss_tauopt = 10000 # not determined
+toy_trainingweight_invloss_tauopt = 10000
 toy_trainingweight_l2_tauopt = 19
 toy_trainingweight_cosine_tauopt = 140
 toy_trainingweight_cosine_origin_tauopt = 140
-toy_priorweight_invloss_tauopt = 10000 # not determined
+toy_priorweight_invloss_tauopt = 5000
 toy_priorweight_l2_tauopt = 19
 toy_priorweight_cosine_tauopt = 140
 toy_priorweight_cosine_origin_tauopt = 140
 
 seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 lr = 0.003
+lr_invloss_l2 = 0.008
 
 # invloss
 for seed in seeds:
-    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_invloss_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, lr, toy_trainingweight_invloss_tauopt, toy_trainingweight_invloss_tauopt, seed))
+    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_invloss_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, lr_invloss_l2, toy_trainingweight_invloss_tauopt, toy_trainingweight_invloss_tauopt, seed))
 
 # l2 - running on targetbox core1
 for seed in seeds:
-    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_l2_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, lr, toy_trainingweight_l2_tauopt, toy_trainingweight_l2_tauopt, seed))
+    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_l2_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, lr_invloss_l2, toy_trainingweight_l2_tauopt, toy_trainingweight_l2_tauopt, seed))
 
 # cosine - running on targetbox core2
 for seed in seeds:
-    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_cosine_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, lr, toy_trainingweight_cosine_tauopt, toy_trainingweight_cosine_tauopt, seed))
+    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_cosine_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, lr, toy_trainingweight_cosine_tauopt, toy_trainingweight_cosine_tauopt, seed))
 
 # cosine origin - running on targetbox core3
 for seed in seeds:
-    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_cosine_origin_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, lr, toy_trainingweight_cosine_origin_tauopt, toy_trainingweight_cosine_origin_tauopt, seed))
+    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_cosine_origin_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, lr, toy_trainingweight_cosine_origin_tauopt, toy_trainingweight_cosine_origin_tauopt, seed))
 
 # invloss priorweight
 for seed in seeds:
-    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_priorweight_invloss_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr, toy_priorweight_invloss_tauopt, toy_priorweight_invloss_tauopt, seed))
+    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_priorweight_invloss_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr_invloss_l2, toy_priorweight_invloss_tauopt, toy_priorweight_invloss_tauopt, seed))
 
 # l2 priorweight - running on targetbox core4
 for seed in seeds:
-    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_priorweight_l2_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr, toy_priorweight_l2_tauopt, toy_priorweight_l2_tauopt, seed))
+    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_priorweight_l2_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr, toy_priorweight_l2_tauopt, toy_priorweight_l2_tauopt, seed))
 
 # cosine priorweight
 for seed in seeds:
-    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_priorweight_cosine_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr, toy_priorweight_cosine_tauopt, toy_priorweight_cosine_tauopt, seed))
+    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_priorweight_cosine_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr, toy_priorweight_cosine_tauopt, toy_priorweight_cosine_tauopt, seed))
 
 # cosine origin priorweight
 for seed in seeds:
-    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_priorweight_cosine_origin_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr, toy_priorweight_cosine_origin_tauopt, toy_priorweight_cosine_origin_tauopt, seed))
-
+    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_priorweight_cosine_origin_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities True --aggregation_weighting priors'.format(seed, lr, toy_priorweight_cosine_origin_tauopt, toy_priorweight_cosine_origin_tauopt, seed))
+'''
 # testing
 #commands.append('python3 test_multiple.py')
 
@@ -1169,7 +1175,7 @@ print('Running {} commands'.format(len(commands)))
 
 # timebomb sleep for 1 hour
 sleeptime = 0
-sleeptime = 60*60*0.05
+sleeptime = 60*60*0.01
 print('Sleeping for {} seconds'.format(sleeptime))
 time.sleep(sleeptime)
 
