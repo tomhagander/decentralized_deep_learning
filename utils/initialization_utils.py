@@ -55,6 +55,9 @@ def sample_cifargroups(dataset, num_users, n_data_train, n_data_val, ratio):
 
     return dict_users, dict_users_val
 
+def sample_cifargroups_100(dataset, num_users, n_data_train, n_data_val, ratio):
+    pass 
+
 def sample_cifargroups_5clusters(dataset, num_users, n_data_train, n_data_val, ratio):
     # set random seed
 

@@ -9,7 +9,7 @@ import pickle
 
 from utils.classes import Client
 from utils.arg_parser import args_parser
-from utils.initialization_utils import sample_cifargroups, load_pacs, uniform_split, sample_labels_iid, sample_cifargroups_5clusters, split_dataset
+from utils.initialization_utils import sample_cifargroups, load_pacs, uniform_split, sample_labels_iid, sample_cifargroups_5clusters, split_dataset, sample_cifargroups_100
 from utils.training_utils import train_clients_locally
 from utils.training_utils import *
 from utils.visualization_utils import *
@@ -147,6 +147,17 @@ if __name__ == '__main__':
                             train_dataset.targets[dict_users[i][j]] = 6
         else:
             pass
+
+    elif args.dataset == 'cifar100':
+        transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))  # CIFAR-100 normalization
+        ])
+
+        trainset = torchvision.datasets.CIFAR100(root='./data', train=True, download=True, transform=transform)
+
+        if args.shift == 'label':
+            dict_users, dict_users_val = sample_cifargroups_100(trainset, args.nbr_clients, args.n_data_train, args.n_data_val, args.CIFAR_ratio)
 
 
     elif args.dataset == 'PACS':
