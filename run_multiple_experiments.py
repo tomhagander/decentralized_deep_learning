@@ -1201,6 +1201,14 @@ for seed in seeds:
 # testing
 commands.append('python3 test_multiple.py')
 
+# core6
+# commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr 5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0.0 --tau 30.0 --client_information_exchange no_exchange --experiment_name fashion_MNIST_no_comm_seed_2 --delusion 0.0 --NAEM_frequency 5 --T1 50 --nbr_deluded_clients 0 --mergatron chill --aggregation_weighting trainset_size --nbr_classes 10 --nbr_channels 3')
+
+# Core9
+# commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0.0 --tau 30.0 --client_information_exchange no_exchange --experiment_name fashion_MNIST_no_comm_seed_3 --delusion 0.0 --NAEM_frequency 5 --T1 50 --nbr_deluded_clients 0 --mergatron chill --aggregation_weighting trainset_size --nbr_classes 10 --nbr_channels 3')
+
+# commands.append('python3 test_multiple.py')
+
 print('Commands to be run: ')
 for command in commands:
     print(command)

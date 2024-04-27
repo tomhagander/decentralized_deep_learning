@@ -376,53 +376,56 @@ if __name__ == '__main__':
                 continue
 
             # split by dataset from now on
-            if metadata['dataset'] == 'cifar10':
+            if metadata['runtime'] == 42:
+                print('no_clients_flag')
+            else:
+                if metadata['dataset'] == 'cifar10':
 
-                if metadata['shift'] == 'label':
+                    if metadata['shift'] == 'label':
+
+                        # check if experiment is already tested
+                        if os.path.exists('save/{}/CIFAR_A_within.pkl'.format(expname)) and os.path.exists('save/{}/CIFAR_V_within.pkl'.format(expname)):
+                            print('Experiment {} already tested'.format(expname))
+                            continue
+
+                        print('Testing experiment: {}'.format(expname))
+                        subprocess.run('python3 test_CIFAR.py --experiment {} --quick True'.format(expname), shell=True)
+                        print('Experiment {} done'.format(expname))
+                        print('')
+
+                    elif metadata['shift'] == '5_clusters':
+
+                        # check if experiment is already tested
+                        if os.path.exists('save/{}/CIFAR_acc_matrix.pkl'.format(expname)):
+                            print('Experiment {} already tested'.format(expname))
+                            continue
+                            
+                        print('Testing experiment: {}'.format(expname))
+                        subprocess.run('python3 test_CIFAR.py --experiment {} --quick True'.format(expname), shell=True)
+                        print('Experiment {} done'.format(expname))
+                        print('')
+
+                elif metadata['dataset'] == 'fashion_mnist':
 
                     # check if experiment is already tested
-                    if os.path.exists('save/{}/CIFAR_A_within.pkl'.format(expname)) and os.path.exists('save/{}/CIFAR_V_within.pkl'.format(expname)):
+                    if os.path.exists('save/{}/fashion_MNIST_acc_matrix.pkl'.format(expname)):
                         print('Experiment {} already tested'.format(expname))
                         continue
 
                     print('Testing experiment: {}'.format(expname))
-                    subprocess.run('python3 test_CIFAR.py --experiment {} --quick True'.format(expname), shell=True)
+                    subprocess.run('python3 test_fashion_MNIST.py --experiment {} --quick True'.format(expname), shell=True)
                     print('Experiment {} done'.format(expname))
                     print('')
 
-                elif metadata['shift'] == '5_clusters':
+                elif metadata['dataset'] == 'toy_problem':
 
                     # check if experiment is already tested
-                    if os.path.exists('save/{}/CIFAR_acc_matrix.pkl'.format(expname)):
+                    if os.path.exists('save/{}/toy_test_losses.pkl'.format(expname)):
                         print('Experiment {} already tested'.format(expname))
                         continue
-                        
+                
                     print('Testing experiment: {}'.format(expname))
-                    subprocess.run('python3 test_CIFAR.py --experiment {} --quick True'.format(expname), shell=True)
+                    subprocess.run('python3 test_toy.py --experiment {} --quick True'.format(expname), shell=True)
                     print('Experiment {} done'.format(expname))
                     print('')
-
-            elif metadata['dataset'] == 'fashion_mnist':
-
-                # check if experiment is already tested
-                if os.path.exists('save/{}/fashion_MNIST_acc_matrix.pkl'.format(expname)):
-                    print('Experiment {} already tested'.format(expname))
-                    continue
-
-                print('Testing experiment: {}'.format(expname))
-                subprocess.run('python3 test_fashion_MNIST.py --experiment {} --quick True'.format(expname), shell=True)
-                print('Experiment {} done'.format(expname))
-                print('')
-
-            elif metadata['dataset'] == 'toy_problem':
-
-                # check if experiment is already tested
-                if os.path.exists('save/{}/toy_test_losses.pkl'.format(expname)):
-                    print('Experiment {} already tested'.format(expname))
-                    continue
-            
-                print('Testing experiment: {}'.format(expname))
-                subprocess.run('python3 test_toy.py --experiment {} --quick True'.format(expname), shell=True)
-                print('Experiment {} done'.format(expname))
-                print('')
 
