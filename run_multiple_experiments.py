@@ -1214,7 +1214,7 @@ invloss_taus = np.logspace(np.log10(1), np.log10(150), num=6)
 l2_taus = np.logspace(np.log10(1), np.log10(150), num=6)
 cosine_taus = np.logspace(np.log10(10), np.log10(300), num=6)
 cosine_origin_taus = np.logspace(np.log10(10), np.log10(300), num=6)
-
+'''
 # invloss - running on edvinbox core1
 for tau in invloss_taus:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_invloss_tau_{} --delusion 0.0 --measure_all_similarities True --model pretrained'.format(tau, tau))
@@ -1226,7 +1226,7 @@ for tau in l2_taus:
 # cosine - running on edvinbox core3
 for tau in cosine_taus:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_cosine_tau_{} --delusion 0.0 --measure_all_similarities True --model pretrained'.format(tau, tau))
-
+'''
 # cosine origin - running on edvinbox core4
 for tau in cosine_origin_taus:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_cosine_origin_tau_{} --delusion 0.0 --measure_all_similarities True --model pretrained'.format(tau, tau))
