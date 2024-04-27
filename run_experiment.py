@@ -76,7 +76,10 @@ if __name__ == '__main__':
     elif args.dataset == 'fashion_mnist':
         args.nbr_classes = 10
         args.nbr_channels = 1
-
+    elif args.dataset == 'cifar100': # Change 26/4/24
+        args.nbr_classes = 100
+        args.nbr_channels = 3
+    
     # load dataset and transform
     if args.dataset == 'cifar10':
         trans_cifar = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
@@ -525,7 +528,6 @@ if __name__ == '__main__':
         with open('save/'+results_folder+'/mergatron_stops.pkl', 'wb') as f:
             pickle.dump(mergatron_stops, f)
             f.close()
-
 
 
     # if cifar100, delete the models of all clients and dump again
