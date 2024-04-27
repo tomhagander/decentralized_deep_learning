@@ -33,6 +33,8 @@ def args_parser():
     parser.add_argument('--mergatron', type=str, default='chill', help='type activate to activate mergatron')
     parser.add_argument('--aggregation_weighting', type=str, default='trainset_size', help='The method of weighting aggregated models')
     parser.add_argument('--minmax', type=bool, default=False, help='If True, minmax scale the similarities')
+    parser.add_argument('--model', type=str, default='pretrained', help='Wether to use pretrained or not')
+
 
     # wierdos dont change
     parser.add_argument('--nbr_classes', type=int, default=10, help="number of classes")

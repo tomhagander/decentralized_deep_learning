@@ -118,6 +118,24 @@ class Client(object):
                 self.ldr_val = DataLoader(self.val_set, batch_size = 8, pin_memory=False, shuffle=False)
             
             self.ldr_train = DataLoader(self.train_set, batch_size=batch_size, shuffle=True, pin_memory=False, drop_last=False)
+
+        elif dataset == 'cifar100':
+            if shift == 'label':
+                if idx < int(num_users*0.5):
+                    self.group = 0
+                elif idx < int(num_users*0.75):
+                    self.group = 1
+                else:
+                    self.group = 2
+                
+            rot_deg = 0
+            rot_transform = transforms.RandomRotation(degrees=(rot_deg,rot_deg))
+            self.train_set = DatasetSplit(train_set,idxs_train,rot_transform)
+            self.val_set = DatasetSplit(train_set,idxs_val,rot_transform)
+            self.ldr_val = DataLoader(self.val_set, batch_size = 8, pin_memory=False, shuffle=False)
+            
+            self.ldr_train = DataLoader(self.train_set, batch_size=batch_size, shuffle=True, pin_memory=False, drop_last=False)
+
         elif dataset == 'PACS':
             if(idx<int(num_users*ratio)):
                 self.group = 0
@@ -172,7 +190,8 @@ class Client(object):
         
         # copy model and send to device
         self.local_model = copy.deepcopy(model)
-        self.local_model.to(self.device) # change 2
+        if dataset != 'cifar100':
+            self.local_model.to(self.device) # change 2
 
         # Early stopping
         self.early_stopping = EarlyStopping(patience=stopping_rounds, min_delta=0)
@@ -242,7 +261,8 @@ class Client(object):
         # save last weights
         self.last_weights = copy.deepcopy(self.local_model.state_dict())
 
-        #self.local_model.to(self.device) # change 1
+        if self.dataset == 'cifar100':
+            self.local_model.to(self.device) # change 1
 
         self.local_model.train()
         optimizer = torch.optim.Adam(self.local_model.parameters(),lr=self.lr)
@@ -277,8 +297,9 @@ class Client(object):
         # early stopping
         self.early_stopping(val_loss)
         
-        #del optimizer # change 1
-        # self.local_model.to('cpu') # change 1
+        if self.dataset == 'cifar100':
+            del optimizer
+            self.local_model.to('cpu')
             
         return self.best_model, epoch_loss[-1], self.best_val_loss, self.best_val_acc
     
@@ -337,7 +358,9 @@ class Client(object):
             ldr = self.ldr_train
         else:
             ldr = self.ldr_val
-            
+        
+        if self.dataset == 'cifar100':
+            model.to(self.device)
         # model.to(self.device) # change 1
         
         correct = 0
@@ -359,6 +382,8 @@ class Client(object):
             val_acc = 100 * correct / total
             val_loss = sum(batch_loss)/len(batch_loss)
 
+        if self.dataset == 'cifar100':
+            model.to('cpu')
         # model.to('cpu') # change 1
         return val_loss, val_acc
     
@@ -418,6 +443,10 @@ class Client(object):
         elif self.dataset == 'toy_problem':
             if self.idx != 0 and self.idx != 40 and self.idx != 80:
                 return np.zeros(len(all_clients))
+        elif self.dataset == 'cifar100':
+            if self.shift == 'label':
+                if self.idx != 0 and self.idx != 50 and self.idx != 75:
+                    return np.zeros(len(all_clients))
             
         print('Measuring similarities of client {}'.format(self.idx))
         similarities = np.zeros(len(all_clients))
