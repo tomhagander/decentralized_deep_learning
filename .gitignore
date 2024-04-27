@@ -2,6 +2,8 @@
 save/*
 cifar-10-batches-py/*
 cifar-10-python.tar.gz
+cifar-100-python.tar.gz
+cifar-100-python/
 clients.pkl
 Homework3-PACS/
 PACS/*
@@ -11,3 +13,4 @@ analyze_tautuning.ipynb
 analyze_testaccs_paper.ipynb
 analyze_data.ipynb
 paper_vis.ipynb
+data/
