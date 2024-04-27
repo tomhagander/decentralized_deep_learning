@@ -56,7 +56,69 @@ def sample_cifargroups(dataset, num_users, n_data_train, n_data_val, ratio):
     return dict_users, dict_users_val
 
 def sample_cifargroups_100(dataset, num_users, n_data_train, n_data_val, ratio):
-    pass 
+
+    cluster1 = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 75, 76, 77, 78, 79, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 80, 81, 82, 83, 84])
+    cluster2 = np.array([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 85, 86, 87, 88, 89, 50, 51, 52, 53, 54])
+    cluster3 = np.array([25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 45, 46, 47, 48, 49])
+
+    print('Length of cluster1:', len(cluster1))
+    print('Length of cluster2:', len(cluster2))
+    print('Length of cluster3:', len(cluster3))
+    
+
+    # Initialize dictionaries
+    dict_users = {i: np.array([], dtype='int64') for i in range(num_users)}
+    dict_users_val = {i: np.array([], dtype='int64') for i in range(num_users)}
+
+    idxs = np.arange(len(dataset))
+    labels = np.array(dataset.targets)
+
+    # Sort indices by labels
+    idxs_labels = np.vstack((idxs, labels))
+    idxs_labels = idxs_labels[:, idxs_labels[1, :].argsort()]
+    idxs = idxs_labels[0, :]
+    idxs = idxs.astype(int)
+
+    # Initialize index arrays for each cluster
+    idxs1, idxs2, idxs3 = np.array([], dtype=int), np.array([], dtype=int), np.array([], dtype=int)
+
+    # Populate index arrays based on cluster definitions
+    for x in cluster1:
+        idxs1 = np.append(idxs1, idxs[x == labels[idxs]])
+    for x in cluster2:
+        idxs2 = np.append(idxs2, idxs[x == labels[idxs]])
+    for x in cluster3:
+        idxs3 = np.append(idxs3, idxs[x == labels[idxs]])
+
+    # Assign data indices to users
+    for i in range(num_users):
+        if i < int(num_users * 0.5):
+            cluster_choice = 1
+        elif i < int(num_users * 0.75):
+            cluster_choice = 2
+        else:
+            cluster_choice = 3
+
+        if cluster_choice == 1:
+            selected_idxs = np.random.choice(idxs1, n_data_train + n_data_val, replace=False)
+        elif cluster_choice == 2:
+            selected_idxs = np.random.choice(idxs2, n_data_train + n_data_val, replace=False)
+        else:
+            selected_idxs = np.random.choice(idxs3, n_data_train + n_data_val, replace=False)
+        
+        dict_users[i] = selected_idxs[:n_data_train]
+        dict_users_val[i] = selected_idxs[n_data_train:n_data_train + n_data_val]
+
+        # Update remaining indices to prevent reselection
+        if cluster_choice == 1:
+            idxs1 = np.setdiff1d(idxs1, selected_idxs)
+        elif cluster_choice == 2:
+            idxs2 = np.setdiff1d(idxs2, selected_idxs)
+        else:
+            idxs3 = np.setdiff1d(idxs3, selected_idxs)
+
+    return dict_users, dict_users_val
+
 
 def sample_cifargroups_5clusters(dataset, num_users, n_data_train, n_data_val, ratio):
     # set random seed

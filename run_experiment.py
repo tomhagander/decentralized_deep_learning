@@ -67,6 +67,9 @@ if __name__ == '__main__':
     if args.dataset == 'cifar10':
         args.nbr_classes = 10
         args.nbr_channels = 3
+    elif args.dataset == 'cifar100':
+        args.nbr_classes = 100
+        args.nbr_channels = 3
     elif args.dataset == 'PACS':
         args.nbr_classes = 7
         args.nbr_channels = 3
@@ -245,6 +248,12 @@ if __name__ == '__main__':
         client_model_init = fashion_CNN(nbr_classes=args.nbr_classes)
     elif args.dataset == 'toy_problem':
         client_model_init = LinearRegression(10, 1)
+    elif args.dataset == 'cifar100': 
+        if args.model == 'pretrained':
+            client_model_init = torchvision.models.resnet18(weights=ResNet18_Weights.DEFAULT) # change here for pretrained
+        else:
+            client_model_init = torchvision.models.resnet18(weights=None) # change here for Not pretrained
+        client_model_init.fc = torch.nn.Linear(client_model_init.fc.in_features, args.nbr_classes)
 
     # create clients
     clients = []
@@ -343,6 +352,26 @@ if __name__ == '__main__':
                             shift=args.shift,
                             theta=theta)
             clients.append(client)
+    elif args.dataset == 'cifar100':
+        for i in range(args.nbr_clients):
+            print('creating client {}'.format(i))
+            client = Client(train_set=trainset, 
+                            idxs_train=dict_users[i], 
+                            idxs_val=dict_users_val[i], 
+                            criterion=torch.nn.CrossEntropyLoss(), 
+                            lr=args.lr, 
+                            device=device, 
+                            batch_size=args.batch_size, 
+                            num_users=args.nbr_clients, 
+                            model=client_model_init,
+                            idx=i,
+                            stopping_rounds=args.stopping_rounds,
+                            ratio = args.CIFAR_ratio,
+                            dataset = 'cifar100',
+                            shift=args.shift)
+            clients.append(client)
+
+        
 
     if args.client_information_exchange == 'some_delusion': #ONLY for some_delusion (Ignore)
         delusional_client_idxs = get_delusional_clients(clients, args.nbr_deluded_clients) 
@@ -498,4 +527,15 @@ if __name__ == '__main__':
             f.close()
 
 
-    
+
+    # if cifar100, delete the models of all clients and dump again
+    if args.dataset == 'cifar100':
+        import subprocess
+        testcmd = 'python3 test_CIFAR100.py --experiment ' + results_folder + ' --quick True'
+        subprocess.run(testcmd, shell=True)
+        for client in clients:
+            del client.local_model
+            del client.best_model
+        with open('save/'+results_folder+'/clients.pkl', 'wb') as f:
+            pickle.dump(clients, f)
+            f.close()

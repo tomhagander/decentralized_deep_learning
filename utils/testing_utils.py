@@ -176,7 +176,76 @@ def test_5_clusters(clients, quick, verbose):
         print('Testing time: {:.2f} minutes'.format((time.time()-start)/60))
     return acc_matrix
 
+def test_on_CIFAR100(clients, quick, verbose):
+    import torchvision.transforms as transforms
+    from utils.classes import DatasetSplit
+    from torch.utils.data import DataLoader
+    import numpy as np
+    from torchvision.datasets import CIFAR100
+    import time
+    start = time.time()
 
+    # --------------------------
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761))
+    ])
+
+    # Load the CIFAR-100 test set
+    testset = CIFAR100(root='.', train=False, download=True, transform=transform)
+
+    cluster1 = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 75, 76, 77, 78, 79, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 80, 81, 82, 83, 84])
+    cluster2 = np.array([10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 85, 86, 87, 88, 89, 50, 51, 52, 53, 54])
+    cluster3 = np.array([25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 45, 46, 47, 48, 49])
+
+    idxs1 = [i for i in range(len(testset)) if testset[i][1] in cluster1]
+    idxs2 = [i for i in range(len(testset)) if testset[i][1] in cluster2]
+    idxs3 = [i for i in range(len(testset)) if testset[i][1] in cluster3]
+
+    # set rot deg to 0 because only label shift is implemented
+    rot_deg = 0
+    rot_transform = transforms.RandomRotation(degrees=(rot_deg,rot_deg))
+
+    cluster1_set = DatasetSplit(testset,idxs1,rot_transform)
+    testloader_cluster1 = DataLoader(cluster1_set, batch_size=1, shuffle=False)
+
+    cluster2_set = DatasetSplit(testset,idxs2,rot_transform)
+    testloader_cluster2 = DataLoader(cluster2_set, batch_size=1, shuffle=False)
+
+    cluster3_set = DatasetSplit(testset,idxs3,rot_transform)
+    testloader_cluster3 = DataLoader(cluster3_set, batch_size=1, shuffle=False)
+    # --------------------------
+
+    if verbose:
+        print('CIFAR-100, label shift testset loaded')
+        if quick:
+            print('Quick test: only testing on the same group')
+
+    accs = np.zeros(len(clients))
+    for client in clients:
+        if verbose:
+            print('Testing client: {}'.format(client.idx))
+            start_client = time.time()
+        client.best_model.to(client.device)
+        if quick:
+            if client.group == 0:
+                acc = test_model(client.best_model, testloader_cluster1)
+            elif client.group == 1:
+                acc = test_model(client.best_model, testloader_cluster2)
+            elif client.group == 2:
+                acc = test_model(client.best_model, testloader_cluster3)
+        else:
+            acc1 = test_model(client.best_model, testloader_cluster1)
+            acc2 = test_model(client.best_model, testloader_cluster2)
+            acc3 = test_model(client.best_model, testloader_cluster3)
+            acc = [acc1, acc2, acc3]
+        accs[client.idx] = acc
+        # send back to cpu
+        client.best_model.to('cpu')
+        if verbose:
+            print('Testing time: {:.2f} s'.format(time.time()-start_client))
+
+    return accs
 
 def test_on_CIFAR(clients, quick, verbose):
     import torchvision.transforms as transforms
