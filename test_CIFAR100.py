@@ -13,6 +13,10 @@ if __name__ == '__main__':
     quick = args.quick
     verbose = args.verbose
 
+    #start timer
+    import time
+    start_time = time.time()
+
     metadata_path = 'save/' + args.experiment + '/metadata.txt'
     # load metadata to dictionary
     # Initialize an empty dictionary to store the file content
@@ -49,6 +53,7 @@ if __name__ == '__main__':
 
     if verbose:
         print('Testing complete')
+        print('Time taken: {} seconds'.format(time.time() - start_time))
 
     #save acc_matrix to pickle file called CIFAR_acc_matrix.pkl in save/experiment_name
 
