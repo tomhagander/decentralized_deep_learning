@@ -1179,7 +1179,7 @@ toy_priorweight_cosine_origin_tauopt = 140
 seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 lr = 0.003
 lr_invloss_l2 = 0.008
-
+'''
 # invloss
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_invloss_tau_{}_seed_{} --delusion 0.0 --minmax True'.format(seed, lr_invloss_l2, toy_trainingweight_invloss_tauopt, toy_trainingweight_invloss_tauopt, seed))
@@ -1206,6 +1206,30 @@ commands.append('python3 test_multiple.py')
 
 # Core9
 # commands.append('python3 run_experiment.py --gpu 0 --dataset fashion_mnist --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 500 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 4 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0.0 --tau 30.0 --client_information_exchange no_exchange --experiment_name fashion_MNIST_no_comm_seed_3 --delusion 0.0 --NAEM_frequency 5 --T1 50 --nbr_deluded_clients 0 --mergatron chill --aggregation_weighting trainset_size --nbr_classes 10 --nbr_channels 3')
+'''
+
+
+##### CIFAR100 TAUTUNING (Pretrained) #####
+invloss_taus = np.logspace(np.log10(1), np.log10(150), num=6)
+l2_taus = np.logspace(np.log10(1), np.log10(150), num=6)
+cosine_taus = np.logspace(np.log10(10), np.log10(300), num=6)
+cosine_origin_taus = np.logspace(np.log10(10), np.log10(300), num=6)
+
+# invloss - running on edvinbox core1
+for tau in invloss_taus:
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_invloss_tau_{} --delusion 0.0 --measure_all_similarities True --model pretrained'.format(tau, tau))
+
+# l2 - running on edvinbox core2
+for tau in l2_taus:
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_l2_tau_{} --delusion 0.0 --measure_all_similarities True --model pretrained'.format(tau, tau))
+
+# cosine - running on edvinbox core3
+for tau in cosine_taus:
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_cosine_tau_{} --delusion 0.0 --measure_all_similarities True --model pretrained'.format(tau, tau))
+
+# cosine origin - running on edvinbox core4
+for tau in cosine_origin_taus:
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_cosine_origin_tau_{} --delusion 0.0 --measure_all_similarities True --model pretrained'.format(tau, tau))
 
 # commands.append('python3 test_multiple.py')
 
