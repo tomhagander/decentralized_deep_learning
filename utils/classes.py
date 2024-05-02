@@ -232,7 +232,7 @@ class Client(object):
         self.grad_a = None
         self.grad_b = None
         self.initial_weights = copy.deepcopy(self.local_model.state_dict())
-        self.last_weights = copy.deepcopy(self.local_model.state_dict())
+        self.last_weights = None #copy.deepcopy(self.local_model.state_dict())
 
         # more stuff for cosine similarity
         self.N = []
@@ -259,7 +259,7 @@ class Client(object):
         
     def train(self,n_epochs):
         # save last weights
-        self.last_weights = copy.deepcopy(self.local_model.state_dict())
+        self.last_weights = None #copy.deepcopy(self.local_model.state_dict())
 
         if self.dataset == 'cifar100':
             self.local_model.to(self.device) # change 1
