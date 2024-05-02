@@ -146,16 +146,17 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
             if parameters['similarity_metric'] == 'inverse_training_loss':
                 ij_similarities = [1/(train_losses_ij[i] + inv_epsilon) for i in range(len(train_losses_ij))]
             elif parameters['similarity_metric'] == 'cosine_similarity':
-                i_grad_a = clients[i].get_grad_a()
+                #i_grad_a = clients[i].get_grad_a() # not used, dont expect to change back but keep for now
                 i_grad_b = clients[i].get_grad_b()
                 ij_similarities = []
                 for idx, j in enumerate(neighbor_indices_sampled):
-                    j_grad_a = clients[j].get_grad_a()
+                    #j_grad_a = clients[j].get_grad_a()
                     j_grad_b = clients[j].get_grad_b()
                     # calculate cosine similarity using torches cosine similarity function
-                    cosine_similarity_a = torch.nn.functional.cosine_similarity(torch.tensor(i_grad_a), torch.tensor(j_grad_a), dim=0)
+                    #cosine_similarity_a = torch.nn.functional.cosine_similarity(torch.tensor(i_grad_a), torch.tensor(j_grad_a), dim=0)
                     cosine_similarity_b = torch.nn.functional.cosine_similarity(torch.tensor(i_grad_b), torch.tensor(j_grad_b), dim=0)
-                    ij_similarities.append(parameters['cosine_alpha']*cosine_similarity_a + (1 - parameters['cosine_alpha'])*cosine_similarity_b)
+                    ij_similarities.append(cosine_similarity_b)
+                    #ij_similarities.append(parameters['cosine_alpha']*cosine_similarity_a + (1 - parameters['cosine_alpha'])*cosine_similarity_b)
 
             elif parameters['similarity_metric'] == 'cosine_origin':
                 i_grad_origin = clients[i].get_grad_origin()

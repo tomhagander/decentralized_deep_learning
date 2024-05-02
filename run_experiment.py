@@ -538,6 +538,8 @@ if __name__ == '__main__':
         for client in clients:
             del client.local_model
             del client.best_model
+            del client.initial_weights
+            del client.last_weights
         with open('save/'+results_folder+'/clients.pkl', 'wb') as f:
             pickle.dump(clients, f)
             f.close()
