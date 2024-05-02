@@ -12,5 +12,7 @@ FashionMNIST/
 analyze_tautuning.ipynb
 analyze_testaccs_paper.ipynb
 analyze_data.ipynb
+analyze_time_to_convergence.ipynb
 paper_vis.ipynb
 data/
+figs/
