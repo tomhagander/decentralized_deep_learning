@@ -463,7 +463,7 @@ class Client(object):
                 return np.zeros(len(all_clients))
         elif self.dataset == 'cifar100':
             if self.shift == 'label':
-                if self.idx != 0 and self.idx != 50 and self.idx != 75:
+                if self.idx != 0 and self.idx != 30 and self.idx != 50:
                     return np.zeros(len(all_clients))
             
         print('Measuring similarities of client {}'.format(self.idx))
@@ -474,16 +474,16 @@ class Client(object):
                     similarities[client.idx] = self.true_similarities[-1][client.idx]
                 elif similarity_metric == 'cosine_similarity':
                     # measure cosine similarity between all clients
-                    self_grad_a = self.get_grad_a()
+                    #self_grad_a = self.get_grad_a() # a type similarity not used now to speed up
                     self_grad_b = self.get_grad_b()
-                    client_grad_a = client.get_grad_a()
+                    #client_grad_a = client.get_grad_a()
                     client_grad_b = client.get_grad_b()
                     # get cosine similarity from torch function cosine_similarity
-                    cosine_similarity_a = torch.nn.functional.cosine_similarity(torch.tensor(self_grad_a), torch.tensor(client_grad_a), dim=0)
+                    #cosine_similarity_a = torch.nn.functional.cosine_similarity(torch.tensor(self_grad_a), torch.tensor(client_grad_a), dim=0)
                     cosine_similarity_b = torch.nn.functional.cosine_similarity(torch.tensor(self_grad_b), torch.tensor(client_grad_b), dim=0)
                     # calculate cosine similarity
-                    cosine_similarity = alpha*cosine_similarity_a + (1-alpha)*cosine_similarity_b
-                    similarities[client.idx] = cosine_similarity
+                    #cosine_similarity = alpha*cosine_similarity_a + (1-alpha)*cosine_similarity_b
+                    similarities[client.idx] = cosine_similarity_b
                 elif similarity_metric == 'inverse_training_loss':
                     # take clients model and validate it on own training set
                     client_model = copy.deepcopy(client.local_model)
