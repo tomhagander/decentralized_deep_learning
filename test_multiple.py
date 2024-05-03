@@ -49,7 +49,7 @@ cifar_5_clusters_trainingweight_l2_expnames = ['CIFAR_5_clusters_DAC_l2_tau_30_s
                                         'CIFAR_5_clusters_DAC_l2_tau_30_seed_2_fixed',
                                         'CIFAR_5_clusters_DAC_l2_tau_30_seed_3_fixed',]
 
-cifar_5_clusters_trainingweight_cosine_expnames = ['CIFAR_5_clusters_DAC_cosine_tau_1000_seed_1_fixed',
+cifar_5_clusters_trainingweight_cosine_expnames = ['CIFAR_5_clusters_DAC_cosine_tau_1000_seed_1_fixed_again',
                                                     'CIFAR_5_clusters_DAC_cosine_tau_1000_seed_2_fixed',
                                                     'CIFAR_5_clusters_DAC_cosine_tau_1000_seed_3_fixed',]
 
