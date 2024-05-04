@@ -39,7 +39,7 @@ if __name__ == '__main__':
     print('Starting ', args.experiment_name)
     # set random seed
     set_seed(args.seed)
-
+    
     # Set the device to use
     if args.gpu == -1:
         device = torch.device('cpu')
@@ -449,6 +449,12 @@ if __name__ == '__main__':
         for client in clients:
             client.measure_all_similarities(clients, args.similarity_metric)
     
+
+    # measure all similarities if flag is set
+    if args.measure_all_similarities:
+        for client in clients:
+            client.measure_all_similarities(clients, args.similarity_metric)
+    
     for round in range(args.nbr_rounds):
         # information exchange
 
@@ -459,6 +465,51 @@ if __name__ == '__main__':
                       'prior_update_rule': args.prior_update_rule,
                       'similarity_metric': args.similarity_metric,
                       'tau': args.tau,
+                      'cosine_alpha': args.cosine_alpha,
+                      'mergatron': args.mergatron,
+                      'aggregation_weighting': args.aggregation_weighting,
+                      'dataset': args.dataset,
+                      'minmax': args.minmax,
+                      }
+            clients = client_information_exchange_DAC(clients, 
+                                            parameters=parameters,
+                                            verbose=True,
+                                            round=round)
+        elif args.client_information_exchange == 'oracle':
+            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
+                          'mergatron': args.mergatron,
+                          }
+            clients = client_information_exchange_oracle(clients, 
+                                            parameters=parameters,
+                                            verbose=True,
+                                            round=round,
+                                            delusion=args.delusion)
+        elif args.client_information_exchange == 'PANM':
+            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
+                      'similarity_metric': args.similarity_metric,
+                      'NAEM_frequency': args.NAEM_frequency,
+                      'T1': args.T1,
+                      'cosine_alpha': args.cosine_alpha,
+                      }
+            clients = client_information_exchange_PANM(clients, 
+                                                       parameters=parameters, 
+                                                       verbose = True, 
+                                                       round = round)
+        elif args.client_information_exchange == 'no_exchange':
+            pass
+        elif args.client_information_exchange == 'some_delusion':
+
+            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
+                          'start_delusion': 15,
+                          'delusional_client_idxs': delusional_client_idxs}
+            clients = client_information_exchange_some_delusion(clients, 
+                                                                parameters=parameters, 
+                                                                verbose = True, 
+                                                                round = round)
+            
+        elif args.client_information_exchange == 'look_hard_once':
+            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
+                      'similarity_metric': args.similarity_metric,
                       'cosine_alpha': args.cosine_alpha,
                       'mergatron': args.mergatron,
                       'aggregation_weighting': args.aggregation_weighting,
