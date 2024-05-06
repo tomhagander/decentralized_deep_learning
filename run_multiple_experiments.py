@@ -1075,19 +1075,19 @@ for lr in lrs:
     
     # invloss
     for tau in taus_priorweight_invloss:
-        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_priorweight_invloss_prior_lr_{}_tau_{}_seed_{} --delusion 0.0 --aggregation_weighting priors'.format(seed, lr, tau, lr, tau, seed))
+        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_priorweight_invloss_prior_lr_{}_tau_{}_seed_{} --delusion 0.0 --aggregation_weighting priors --minmax True'.format(seed, lr, tau, lr, tau, seed))
     
     # l2
     for tau in taus_priorweight_l2:
-        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_priorweight_l2_prior_lr_{}_tau_{}_seed_{} --delusion 0.0 --aggregation_weighting priors'.format(seed, lr, tau, lr, tau, seed))
+        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_priorweight_l2_prior_lr_{}_tau_{}_seed_{} --delusion 0.0 --aggregation_weighting priors --minmax True'.format(seed, lr, tau, lr, tau, seed))
 
     # cosine
     for tau in taus_priorweight_cosine:
-        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_priorweight_cosine_lr_{}_tau_{}_seed_{} --delusion 0.0 --aggregation_weighting priors'.format(seed, lr, tau, lr, tau, seed))
+        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_priorweight_cosine_lr_{}_tau_{}_seed_{} --delusion 0.0 --aggregation_weighting priors --minmax True'.format(seed, lr, tau, lr, tau, seed))
 
     # cosine origin
     for tau in taus_priorweight_cosine_origin:
-        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_priorweight_cosine_origin_lr_{}_tau_{}_seed_{} --delusion 0.0 --aggregation_weighting priors'.format(seed, lr, tau, lr, tau, seed))
+        commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_priorweight_cosine_origin_lr_{}_tau_{}_seed_{} --delusion 0.0 --aggregation_weighting priors --minmax True'.format(seed, lr, tau, lr, tau, seed))
 
     # benchmarks
     # oracle
