@@ -4,6 +4,8 @@ cifar-10-batches-py/*
 cifar-10-python.tar.gz
 cifar-100-python.tar.gz
 cifar-100-python/
+cifar-100-python.tar.gz
+cifar-100-python/
 clients.pkl
 Homework3-PACS/
 PACS/*
@@ -16,3 +18,4 @@ analyze_time_to_convergence.ipynb
 paper_vis.ipynb
 data/
 figs/
+MNIST/

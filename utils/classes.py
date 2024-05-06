@@ -174,6 +174,21 @@ class Client(object):
             self.ldr_val = DataLoader(self.val_set, batch_size = 8, pin_memory=False, shuffle=False)
             self.ldr_train = DataLoader(self.train_set, batch_size=batch_size, shuffle=True, pin_memory=False, drop_last=False)
 
+        elif dataset == 'double':
+            if idx<int(num_users*0.5):
+                self.group = 0
+            else:
+                self.group = 1
+
+            rot_transform = transforms.RandomRotation(degrees=(0,0))
+            all_idxs = np.arange(len(train_set))
+            self.train_set = DatasetSplit(train_set,all_idxs,rot_transform)
+            all_idxs = np.arange(len(val_set))
+            self.val_set = DatasetSplit(val_set,all_idxs,rot_transform)
+            
+            self.ldr_val = DataLoader(self.val_set, batch_size = 8, pin_memory=False, shuffle=False)
+            self.ldr_train = DataLoader(self.train_set, batch_size=batch_size, shuffle=True, pin_memory=False, drop_last=False)
+
         elif dataset == 'toy_problem':
             if idx < int(num_users/3):
                 self.group = 0
@@ -440,6 +455,9 @@ class Client(object):
         elif self.dataset == 'fashion_mnist':
             if self.idx != 0 and self.idx != 70 and self.idx != 90 and self.idx != 95:
                 return np.zeros(len(all_clients))
+        elif self.dataset == 'double':
+            if self.idx != 0 and self.idx != 50:
+                return np.zeros(len(all_clients))
         elif self.dataset == 'toy_problem':
             if self.idx != 0 and self.idx != 40 and self.idx != 80:
                 return np.zeros(len(all_clients))
@@ -494,3 +512,18 @@ class Client(object):
             self.true_similarities.append(similarities)
             
         return similarities
+
+
+# Custom dataset to shift labels
+class LabelShiftedDataset(Dataset):
+    def __init__(self, dataset, label_shift=10):
+        self.dataset = dataset
+        self.label_shift = label_shift
+
+    def __len__(self):
+        return len(self.dataset)
+
+    def __getitem__(self, idx):
+        image, label = self.dataset[idx]
+        label += self.label_shift
+        return image, label

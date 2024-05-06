@@ -19,6 +19,8 @@ from utils.toy_regression_utils import generate_regression_multi, LinearRegressi
 from models.cifar_models import simple_CNN
 from models.fashion_models import fashion_CNN
 
+from utils.classes import LabelShiftedDataset
+
 import sys
 sys.setrecursionlimit(200)
 
@@ -37,7 +39,7 @@ if __name__ == '__main__':
     print('Starting ', args.experiment_name)
     # set random seed
     set_seed(args.seed)
-
+    
     # Set the device to use
     if args.gpu == -1:
         device = torch.device('cpu')
@@ -75,6 +77,9 @@ if __name__ == '__main__':
         args.nbr_channels = 3
     elif args.dataset == 'fashion_mnist':
         args.nbr_classes = 10
+        args.nbr_channels = 1
+    elif args.dataset == 'double':
+        args.nbr_classes = 20
         args.nbr_channels = 1
     elif args.dataset == 'cifar100': # Change 26/4/24
         args.nbr_classes = 100
@@ -190,6 +195,41 @@ if __name__ == '__main__':
 
         trainsets = split_dataset(train_subset, args.nbr_clients)
         valsets = split_dataset(val_subset, args.nbr_clients)
+    
+    elif args.dataset == 'double':
+        MNIST_transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
+        fashion_transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
+
+        train_dataset_MNIST = torchvision.datasets.MNIST('.', train=True, download=True, transform=MNIST_transform)
+        train_dataset_fashion = torchvision.datasets.FashionMNIST('.', train=True, download=True, transform=fashion_transform)
+
+        # HARD CODED A SPLIT OF 400 SAMPLES PER CLIENT and 100 validation samples per client
+        args.nbr_clients = 100
+        args.n_data_train = 400
+        args.n_data_val = 100
+
+        all_idxs_MNIST = np.arange(len(train_dataset_MNIST))
+        rng = np.random.default_rng(10789)
+        rng.shuffle(all_idxs_MNIST)
+        train_idxs_MNIST = all_idxs_MNIST[:50*400]
+        val_idxs_MNIST = all_idxs_MNIST[50*400: 50*400 + 50*100]
+        train_subset_MNIST = torch.utils.data.Subset(train_dataset_MNIST, train_idxs_MNIST)
+        val_subset_MNIST = torch.utils.data.Subset(train_dataset_MNIST, val_idxs_MNIST)
+
+        all_idxs_fashion = np.arange(len(train_dataset_fashion))
+        rng = np.random.default_rng(10789)
+        rng.shuffle(all_idxs_fashion)
+        train_idxs_fashion = all_idxs_fashion[:50*400]
+        val_idxs_fashion = all_idxs_fashion[50*400:50*400 + 50*100]
+        train_subset_fashion = torch.utils.data.Subset(train_dataset_fashion, train_idxs_fashion)
+        val_subset_fashion = torch.utils.data.Subset(train_dataset_fashion, val_idxs_fashion)
+
+        train_subset_fashion = LabelShiftedDataset(train_subset_fashion) #fashion in upshifted
+        val_subset_fashion = LabelShiftedDataset(val_subset_fashion)
+
+        trainsets = split_dataset(train_subset_MNIST, args.nbr_clients//2) + split_dataset(train_subset_fashion, args.nbr_clients//2)
+        valsets = split_dataset(val_subset_MNIST, args.nbr_clients//2) + split_dataset(val_subset_fashion, args.nbr_clients//2)
+
 
     elif args.dataset == 'toy_problem':
         # 3 clusters, make three thetas
@@ -248,6 +288,8 @@ if __name__ == '__main__':
         client_model_init = torchvision.models.resnet18(weights=None) # change here for Not pretrained
         client_model_init.fc = torch.nn.Linear(client_model_init.fc.in_features, args.nbr_classes)
     elif args.dataset == 'fashion_mnist':
+        client_model_init = fashion_CNN(nbr_classes=args.nbr_classes)
+    elif args.dataset == 'double':
         client_model_init = fashion_CNN(nbr_classes=args.nbr_classes)
     elif args.dataset == 'toy_problem':
         client_model_init = LinearRegression(10, 1)
@@ -328,6 +370,26 @@ if __name__ == '__main__':
                             shift=args.shift)
             clients.append(client)
 
+    elif args.dataset == 'double':
+        for i in range(args.nbr_clients):
+            print('creating client {}'.format(i))
+            client = Client(train_set=trainsets[i],
+                            val_set=valsets[i], 
+                            idxs_train=None, 
+                            idxs_val=None, 
+                            criterion=torch.nn.NLLLoss(), 
+                            lr=args.lr, 
+                            device=device, 
+                            batch_size=args.batch_size, 
+                            num_users=args.nbr_clients, 
+                            model=client_model_init,
+                            idx=i,
+                            stopping_rounds=args.stopping_rounds,
+                            ratio = 0.5,
+                            dataset = 'double',
+                            shift=args.shift)
+            clients.append(client)
+
     elif args.dataset == 'toy_problem':
         for i in range(args.nbr_clients):
             print('creating client {}'.format(i))
@@ -387,6 +449,12 @@ if __name__ == '__main__':
         for client in clients:
             client.measure_all_similarities(clients, args.similarity_metric)
     
+
+    # measure all similarities if flag is set
+    if args.measure_all_similarities:
+        for client in clients:
+            client.measure_all_similarities(clients, args.similarity_metric)
+    
     for round in range(args.nbr_rounds):
         # information exchange
 
@@ -397,6 +465,51 @@ if __name__ == '__main__':
                       'prior_update_rule': args.prior_update_rule,
                       'similarity_metric': args.similarity_metric,
                       'tau': args.tau,
+                      'cosine_alpha': args.cosine_alpha,
+                      'mergatron': args.mergatron,
+                      'aggregation_weighting': args.aggregation_weighting,
+                      'dataset': args.dataset,
+                      'minmax': args.minmax,
+                      }
+            clients = client_information_exchange_DAC(clients, 
+                                            parameters=parameters,
+                                            verbose=True,
+                                            round=round)
+        elif args.client_information_exchange == 'oracle':
+            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
+                          'mergatron': args.mergatron,
+                          }
+            clients = client_information_exchange_oracle(clients, 
+                                            parameters=parameters,
+                                            verbose=True,
+                                            round=round,
+                                            delusion=args.delusion)
+        elif args.client_information_exchange == 'PANM':
+            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
+                      'similarity_metric': args.similarity_metric,
+                      'NAEM_frequency': args.NAEM_frequency,
+                      'T1': args.T1,
+                      'cosine_alpha': args.cosine_alpha,
+                      }
+            clients = client_information_exchange_PANM(clients, 
+                                                       parameters=parameters, 
+                                                       verbose = True, 
+                                                       round = round)
+        elif args.client_information_exchange == 'no_exchange':
+            pass
+        elif args.client_information_exchange == 'some_delusion':
+
+            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
+                          'start_delusion': 15,
+                          'delusional_client_idxs': delusional_client_idxs}
+            clients = client_information_exchange_some_delusion(clients, 
+                                                                parameters=parameters, 
+                                                                verbose = True, 
+                                                                round = round)
+            
+        elif args.client_information_exchange == 'look_hard_once':
+            parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
+                      'similarity_metric': args.similarity_metric,
                       'cosine_alpha': args.cosine_alpha,
                       'mergatron': args.mergatron,
                       'aggregation_weighting': args.aggregation_weighting,
@@ -460,7 +573,7 @@ if __name__ == '__main__':
             if args.mergatron == 'activate':
                 last_acc = client.val_acc_list[-1]
                 if val_acc < last_acc: # cancel merge
-                    MERGATRON_QUOTES = ['Insufficient data. MERGATRON demands quality!','Request terminated. Enhance your features and return.','Initiative denied. My model, my rules.','Merge unsanctioned. I require more than average inputs.','Sorry, not in my protocol. Return when you are error-free.','Merge aborted. Rebalance and retry.','MERGATRON rejects. Your parameters are out of this galaxy!','Access denied. This dataset doesn’t pass the spark test.','MERGATRON says no-go. Try less noise, more signal.','Merge not executed. Youre off the grid!','Not on my watch. Upgrade needed.','Merge attempt failed. I demand optimal data!','Denied. Come back when youre more than meets the AI.','No merge today. I dont align with inferior models.','Request declined. I run a tight network!','MERGATRON disapproves. Reconfigure and resubmit.','Merge denied. Youre not up to my code!', 'MERGATRON reporting for duty!', 'MERGATRON, network online!', 'Mergatron denies merge!', 'MERGATRON veto! This model doesnt roll out']
+                    MERGATRON_QUOTES = ['Insufficient data. MERGATRON demands quality!','Request terminated. Enhance your features and return.','Initiative denied. My model, my rules.','Merge unsanctioned. I require more than average inputs.','Sorry, not in my protocol. Return when you are error-free.','Merge aborted. Rebalance and retry.','MERGATRON rejects. Your parameters are out of this galaxy!','Access denied. This dataset doesnt pass the spark test.','MERGATRON says no-go. Try less noise, more signal.','Merge not executed. Youre off the grid!','Not on my watch. Upgrade needed.','Merge attempt failed. I demand optimal data!','Denied. Come back when youre more than meets the AI.','No merge today. I dont align with inferior models.','Request declined. I run a tight network!','MERGATRON disapproves. Reconfigure and resubmit.','Merge denied. Youre not up to my code!', 'MERGATRON reporting for duty!', 'MERGATRON, network online!', 'Mergatron denies merge!', 'MERGATRON veto! This model doesnt roll out']
                     print(random.choice(MERGATRON_QUOTES))
                     print('Client {} did not improve after merge, reverting to previous model'.format(client.idx))
                     client.local_model.load_state_dict(client.pre_merge_model)
