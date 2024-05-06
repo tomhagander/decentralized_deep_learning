@@ -278,6 +278,71 @@ for seed in seeds:
     toy_minmax_cosine_expnames.append('TOY_DAC_minmax_cosine_tau_{}_seed_{}'.format(toy_trainingweight_cosine_tauopt, seed))
     toy_minmax_cosine_origin_expnames.append('TOY_DAC_minmax_cosine_origin_tau_{}_seed_{}'.format(toy_trainingweight_cosine_origin_tauopt, seed))
 
+# priorweight
+toy_priorweight_invloss_tauopt = 10 # not set
+toy_priorweight_l2_tauopt = 10 # not set
+toy_priorweight_cosine_tauopt = 100 # not set
+toy_priorweight_cosine_origin_tauopt = 100 # not set
+
+toy_minmax_priorweight_invloss_expnames = []
+toy_minmax_priorweight_l2_expnames = []
+toy_minmax_priorweight_cosine_expnames = []
+toy_minmax_priorweight_cosine_origin_expnames = []
+
+for seed in seeds:
+    toy_minmax_priorweight_invloss_expnames.append('TOY_DAC_minmax_priorweight_invloss_tau_{}_seed_{}'.format(toy_priorweight_invloss_tauopt, seed))
+    toy_minmax_priorweight_l2_expnames.append('TOY_DAC_minmax_priorweight_l2_tau_{}_seed_{}'.format(toy_priorweight_l2_tauopt, seed))
+    toy_minmax_priorweight_cosine_expnames.append('TOY_DAC_minmax_priorweight_cosine_tau_{}_seed_{}'.format(toy_priorweight_cosine_tauopt, seed))
+    toy_minmax_priorweight_cosine_origin_expnames.append('TOY_DAC_minmax_priorweight_cosine_origin_tau_{}_seed_{}'.format(toy_priorweight_cosine_origin_tauopt, seed))
+
+
+##### HUNDRED #####
+# benchmarks
+hundred_pretrained_no_comm_expnames = ['HUNDRED_pretrained_no_comm_seed_1',
+                                'HUNDRED_pretrained_no_comm_seed_2',
+                                'HUNDRED_pretrained_no_comm_seed_3',]
+
+hundred_pretrained_oracle_expnames = ['HUNDRED_pretrained_oracle_seed_1',
+                                'HUNDRED_pretrained_oracle_seed_2',
+                                'HUNDRED_pretrained_oracle_seed_3',]
+
+hundred_pretrained_random_expnames = ['HUNDRED_pretrained_random_seed_1',
+                                'HUNDRED_pretrained_random_seed_2',
+                                'HUNDRED_pretrained_random_seed_3',]
+
+hundred_nonpretrained_non_comm_expnames = ['HUNDRED_nonpretrained_no_comm_seed_1',
+                                'HUNDRED_nonpretrained_no_comm_seed_2',
+                                'HUNDRED_nonpretrained_no_comm_seed_3',]
+
+hundred_nonpretrained_oracle_expnames = ['HUNDRED_nonpretrained_oracle_seed_1',
+                                'HUNDRED_nonpretrained_oracle_seed_2',
+                                'HUNDRED_nonpretrained_oracle_seed_3',]
+
+hundred_nonpretrained_random_expnames = ['HUNDRED_nonpretrained_random_seed_1',
+                                'HUNDRED_nonpretrained_random_seed_2',
+                                'HUNDRED_nonpretrained_random_seed_3',]
+
+# runs
+hundred_pretrained_invloss_tauopt = 1 # not determined
+hundred_pretrained_l2_tauopt = 1 # not determined
+hundred_pretrained_cosine_tauopt = 1 # not determined
+hundred_pretrained_cosine_origin_tauopt = 1 # not determined
+hundred_nonpretrained_invloss_tauopt = 1 # not determined
+hundred_nonpretrained_l2_tauopt = 1 # not determined
+hundred_nonpretrained_cosine_tauopt = 1 # not determined
+hundred_nonpretrained_cosine_origin_tauopt = 1 # not determined
+
+seeds = [1,2,3]
+hundred_pretrained_invloss_expnames = ['HUNDRED_pretrained_invloss_tau_{}_seed_{}'.format(hundred_pretrained_invloss_tauopt, seed) for seed in seeds]
+hundred_pretrained_l2_expnames = ['HUNDRED_pretrained_l2_tau_{}_seed_{}'.format(hundred_pretrained_l2_tauopt, seed) for seed in seeds]
+hundred_pretrained_cosine_expnames = ['HUNDRED_pretrained_cosine_tau_{}_seed_{}'.format(hundred_pretrained_cosine_tauopt, seed) for seed in seeds]
+hundred_pretrained_cosine_origin_expnames = ['HUNDRED_pretrained_cosine_origin_tau_{}_seed_{}'.format(hundred_pretrained_cosine_origin_tauopt, seed) for seed in seeds]
+hundred_nonpretrained_invloss_expnames = ['HUNDRED_nonpretrained_invloss_tau_{}_seed_{}'.format(hundred_nonpretrained_invloss_tauopt, seed) for seed in seeds]
+hundred_nonpretrained_l2_expnames = ['HUNDRED_nonpretrained_l2_tau_{}_seed_{}'.format(hundred_nonpretrained_l2_tauopt, seed) for seed in seeds]
+hundred_nonpretrained_cosine_expnames = ['HUNDRED_nonpretrained_cosine_tau_{}_seed_{}'.format(hundred_nonpretrained_cosine_tauopt, seed) for seed in seeds]
+hundred_nonpretrained_cosine_origin_expnames = ['HUNDRED_nonpretrained_cosine_origin_tau_{}_seed_{}'.format(hundred_nonpretrained_cosine_origin_tauopt, seed) for seed in seeds]
+
+
 
 
 
@@ -341,7 +406,29 @@ all_expnames = [cifar_label_trainingweight_invloss_expnames,
                 toy_priorweight_invloss_expnames,
                 toy_priorweight_l2_expnames,
                 toy_priorweight_cosine_expnames,
-                toy_priorweight_origin_expnames,]
+                toy_priorweight_origin_expnames,
+                toy_minmax_invloss_expnames,
+                toy_minmax_l2_expnames,
+                toy_minmax_cosine_expnames,
+                toy_minmax_cosine_origin_expnames,
+                toy_minmax_priorweight_invloss_expnames,
+                toy_minmax_priorweight_l2_expnames,
+                toy_minmax_priorweight_cosine_expnames,
+                toy_minmax_priorweight_cosine_origin_expnames,
+                hundred_pretrained_no_comm_expnames,
+                hundred_pretrained_oracle_expnames,
+                hundred_pretrained_random_expnames,
+                hundred_nonpretrained_non_comm_expnames,
+                hundred_nonpretrained_oracle_expnames,
+                hundred_nonpretrained_random_expnames,
+                hundred_pretrained_invloss_expnames,
+                hundred_pretrained_l2_expnames,
+                hundred_pretrained_cosine_expnames,
+                hundred_pretrained_cosine_origin_expnames,
+                hundred_nonpretrained_invloss_expnames,
+                hundred_nonpretrained_l2_expnames,
+                hundred_nonpretrained_cosine_expnames,
+                hundred_nonpretrained_cosine_origin_expnames,]
 
 
 if __name__ == '__main__':
@@ -429,3 +516,16 @@ if __name__ == '__main__':
                     print('Experiment {} done'.format(expname))
                     print('')
 
+                elif metadata['dataset'] == 'cifar100':
+                    print('CIFAR100 already tested')
+
+                elif metadata['dataset'] == 'double':
+                    # check if experiment is already tested
+                    if os.path.exists('save/{}/double_MNIST_acc_matrix.pkl'.format(expname)):
+                        print('Experiment {} already tested'.format(expname))
+                        continue
+
+                    print('Testing experiment: {}'.format(expname))
+                    subprocess.run('python3 test_double_MNIST.py --experiment {} --quick True'.format(expname), shell=True)
+                    print('Experiment {} done'.format(expname))
+                    print('')
