@@ -362,6 +362,49 @@ def test_on_toy(clients, quick = True, verbose = True):
 
     return [np.array(cluster1_losses), np.array(cluster2_losses), np.array(cluster3_losses)]
 
+def test_on_double_MNIST(clients, quick = True, verbose = True):
+    import torchvision.transforms as transforms
+    from utils.classes import DatasetSplit
+    from torch.utils.data import DataLoader
+    import numpy as np
+    from torchvision.datasets import MNIST
+    from torchvision.datasets import FashionMNIST
+    import time
+
+    start = time.time()
+
+    MNIST_transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
+    fashion_transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
+
+    test_dataset_MNIST = MNIST('.', train=False, download=False, transform=MNIST_transform)
+    test_dataset_fashion = FashionMNIST('.', train=False, download=False, transform=fashion_transform)
+
+    all_idxs_MNIST = np.arange(len(test_dataset_MNIST))
+    all_idxs_fashion = np.arange(len(test_dataset_fashion))
+
+    acc_matrix = []
+
+    from utils.classes import LabelShiftedDataset
+    test_dataset_fashion = LabelShiftedDataset(test_dataset_fashion)
+
+    ldr_MNIST = DataLoader(test_dataset_MNIST, batch_size = 1, pin_memory=False, shuffle=False)
+    ldr_fashion = DataLoader(test_dataset_fashion, batch_size = 1, pin_memory=False, shuffle=False)
+
+    for client in clients:
+        if verbose:
+            print('Testing client: {}'.format(client.idx))
+            start_client = time.time()
+        #client.best_model.to('cpu')
+        client.best_model.to(client.device)
+        if client.group == 0:
+            acc = test_model(client.best_model, ldr_MNIST)
+        elif client.group == 1:
+            acc = test_model(client.best_model, ldr_fashion)
+        acc_matrix.append(acc)
+        if verbose:
+            print('Client: {} Group: {} Acc: {:.2f}'.format(client.idx, client.group, acc))
+            print('Testing time: {:.2f} s'.format(time.time()-start_client))
+
 def test_on_fashion_MNIST(clients, quick = True, verbose = True):
     import torchvision.transforms as transforms
     from utils.classes import DatasetSplit

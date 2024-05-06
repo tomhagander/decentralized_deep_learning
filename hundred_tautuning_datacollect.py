@@ -6,10 +6,10 @@ hundred_pretrained_l2_expnames = []
 hundred_pretrained_cosine_expnames = []
 hundred_pretrained_cosine_origin_expnames = []
 
-invloss_taus = np.logspace(np.log10(1), np.log10(150), num=6)
-l2_taus = np.logspace(np.log10(1), np.log10(150), num=5)
-cosine_taus = np.logspace(np.log10(10), np.log10(300), num=6)
-cosine_origin_taus = np.logspace(np.log10(10), np.log10(300), num=5)
+invloss_taus = np.logspace(np.log10(1), np.log10(150), num=4)
+l2_taus = np.logspace(np.log10(1), np.log10(150), num=4)
+cosine_taus = np.logspace(np.log10(10), np.log10(300), num=4)
+cosine_origin_taus = np.logspace(np.log10(10), np.log10(300), num=4)
 
 for tau in invloss_taus:
     hundred_pretrained_invloss_expnames.append('HUNDRED_pretrained_invloss_tau_{}'.format(tau))
