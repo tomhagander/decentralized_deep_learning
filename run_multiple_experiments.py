@@ -1222,7 +1222,7 @@ for tau in invloss_taus:
 # l2 - running on edvinbox one
 for tau in l2_taus:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_l2_tau_{} --delusion 0.0 --measure_all_similarities True --model pretrained'.format(tau, tau))
-'''
+
 # cosine - running on edvinbox two
 for tau in cosine_taus:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_cosine_tau_{} --delusion 0.0 --measure_all_similarities True --model pretrained'.format(tau, tau))
@@ -1231,9 +1231,30 @@ for tau in cosine_taus:
 for tau in cosine_origin_taus:
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_cosine_origin_tau_{} --delusion 0.0 --measure_all_similarities True --model pretrained'.format(tau, tau))
 
-# commands.append('python3 test_multiple.py')
+
+
+#NONPRETRAINED
+
+# invloss nonpretrained- running on edvinbox one
+for tau in invloss_taus:
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --model nonpretrained --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau {} --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_invloss_tau_{} --delusion 0.0 --measure_all_similarities True'.format(tau, tau))
+
+# l2 nonpretrained- running on edvinbox one
+for tau in l2_taus:
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --model nonpretrained --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_l2_tau_{} --delusion 0.0 --measure_all_similarities True'.format(tau, tau))
+'''
+# cosine nonpretrained- running on edvinbox two
+for tau in cosine_taus:
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_cosine_tau_{} --delusion 0.0 --measure_all_similarities True --model nonpretrained'.format(tau, tau))
+
+# cosine origin nonpretrained- running on edvinbox two
+for tau in cosine_origin_taus:
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_cosine_origin_tau_{} --delusion 0.0 --measure_all_similarities True --model nonpretrained'.format(tau, tau))
 
 '''
+# commands.append('python3 test_multiple.py')
+
+
 ##### CIFAR100 lr-tuning (nonpretrained) #####
 lrs = np.logspace(np.log10(7.5e-05), np.log10(1e-03), num=5)
 
