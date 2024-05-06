@@ -19,7 +19,10 @@ def get_ttc(expname):
     
     stops = []
     for client in clients:
-        stops.append(len(client.val_acc_list))
+        if expname.startswith('TOY'):
+            stops.append(len(client.val_loss_list))
+        else:
+            stops.append(len(client.val_acc_list))
     return np.mean(stops), np.sum(stops)
 
 def get_test_accuracy(expname):
