@@ -548,7 +548,7 @@ def NAEM(clients, B, i, parameters, verbose=False):
         gamma_ij.append([j,1]) # [client index, gamma_ij]
 
     # for cosine
-    i_grad_a = clients[i].get_grad_a()
+    #i_grad_a = clients[i].get_grad_a()
     i_grad_b = clients[i].get_grad_b()
 
     # calculate similarity scores
@@ -558,10 +558,11 @@ def NAEM(clients, B, i, parameters, verbose=False):
             train_loss_ij, train_acc_ij = clients[i].validate(clients[j].local_model, train_set=True)
             unsampled_neighbors.append((j,1/train_loss_ij + inv_epsilon))
         elif parameters['similarity_metric'] == 'cosine_similarity':
-            j_grad_a = clients[j].get_grad_a()
+            #j_grad_a = clients[j].get_grad_a()
             j_grad_b = clients[j].get_grad_b()
-            similarity = parameters['cosine_alpha']*np.dot(i_grad_a,j_grad_a)/(np.linalg.norm(i_grad_a)*np.linalg.norm(j_grad_a))
-            + (1 - parameters['cosine_alpha'])*np.dot(i_grad_b,j_grad_b)/(np.linalg.norm(i_grad_b)*np.linalg.norm(j_grad_b))
+            #similarity = parameters['cosine_alpha']*np.dot(i_grad_a,j_grad_a)/(np.linalg.norm(i_grad_a)*np.linalg.norm(j_grad_a))
+            #+ (1 - parameters['cosine_alpha'])*np.dot(i_grad_b,j_grad_b)/(np.linalg.norm(i_grad_b)*np.linalg.norm(j_grad_b))
+            similarity = torch.nn.functional.cosine_similarity(torch.tensor(i_grad_b), torch.tensor(j_grad_b), dim=0)
             clients[i].N.append((j,similarity))
         
     # sample from bag
@@ -685,7 +686,7 @@ def client_information_exchange_PANM(clients, parameters, verbose=False, round=0
                 neighbor_indices_sampled = NSMC(clients, clients[i].N, i, parameters['nbr_neighbors_sampled'])
                 
                 # for cosine
-                i_grad_a = clients[i].get_grad_a()
+                #i_grad_a = clients[i].get_grad_a()
                 i_grad_b = clients[i].get_grad_b()
 
                 # calculate similarity scores
@@ -696,13 +697,34 @@ def client_information_exchange_PANM(clients, parameters, verbose=False, round=0
                         clients[i].N.append((j,1/(train_loss_ij + inv_epsilon)))
                         clients[i].similarity_scores[j] = 1/(train_loss_ij + inv_epsilon)
                     elif parameters['similarity_metric'] == 'cosine_similarity':
-                        j_grad_a = clients[j].get_grad_a()
-                        j_grad_b = clients[j].get_grad_b()
-                        cosine_similarity_a = torch.nn.functional.cosine_similarity(torch.tensor(i_grad_a), torch.tensor(j_grad_a), dim=0)
-                        cosine_similarity_b = torch.nn.functional.cosine_similarity(torch.tensor(i_grad_b), torch.tensor(j_grad_b), dim=0)
-                        similarity = parameters['cosine_alpha']*cosine_similarity_a + (1 - parameters['cosine_alpha'])*cosine_similarity_b
-                        clients[i].N.append((j,similarity))
-                        clients[i].similarity_scores[j] = similarity
+                        #i_grad_a = clients[i].get_grad_a() # not used, dont expect to change back but keep for now
+                        i_grad_b = clients[i].get_grad_b()
+                        ij_similarities = []
+                        for idx, j in enumerate(neighbor_indices_sampled):
+                            #j_grad_a = clients[j].get_grad_a()
+                            j_grad_b = clients[j].get_grad_b()
+                            # calculate cosine similarity using torches cosine similarity function
+                            #cosine_similarity_a = torch.nn.functional.cosine_similarity(torch.tensor(i_grad_a), torch.tensor(j_grad_a), dim=0)
+                            cosine_similarity_b = torch.nn.functional.cosine_similarity(torch.tensor(i_grad_b), torch.tensor(j_grad_b), dim=0)
+                            ij_similarities.append(cosine_similarity_b)
+                            #ij_similarities.append(parameters['cosine_alpha']*cosine_similarity_a + (1 - parameters['cosine_alpha'])*cosine_similarity_b)
+                    
+                    elif parameters['similarity_metric'] == 'cosine_origin':
+                        i_grad_origin = clients[i].get_grad_origin()
+                        ij_similarities = []
+                        for idx, j in enumerate(neighbor_indices_sampled):
+                            j_grad_origin = clients[j].get_grad_origin()
+                            # calculate cosine similarity using torches cosine similarity function
+                            cosine_similarity = torch.nn.functional.cosine_similarity(torch.tensor(i_grad_origin), torch.tensor(j_grad_origin), dim=0)
+                            ij_similarities.append(cosine_similarity)
+
+                    elif parameters['similarity_metric'] == 'l2':
+                        i_grad_origin = clients[i].get_grad_origin()
+                        ij_similarities = []
+                        for idx, j in enumerate(neighbor_indices_sampled):
+                            j_grad_origin = clients[j].get_grad_origin()
+                            l2_distance = np.linalg.norm(i_grad_origin - j_grad_origin)
+                            ij_similarities.append(1/(l2_distance + inv_epsilon))
 
                 # find top-k neighbors
                 clients[i].N.sort(key=lambda x: x[1], reverse=True)

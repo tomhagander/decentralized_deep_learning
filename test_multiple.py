@@ -265,7 +265,7 @@ toy_trainingweight_l2_tauopt = 10
 toy_trainingweight_cosine_tauopt = 100
 toy_trainingweight_cosine_origin_tauopt = 100
 
-seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+seeds = [1, 3, 4, 7]
 
 toy_minmax_invloss_expnames = []
 toy_minmax_l2_expnames = []
@@ -279,10 +279,10 @@ for seed in seeds:
     toy_minmax_cosine_origin_expnames.append('TOY_DAC_minmax_cosine_origin_tau_{}_seed_{}'.format(toy_trainingweight_cosine_origin_tauopt, seed))
 
 # priorweight
-toy_priorweight_invloss_tauopt = 10 # not set
-toy_priorweight_l2_tauopt = 10 # not set
-toy_priorweight_cosine_tauopt = 100 # not set
-toy_priorweight_cosine_origin_tauopt = 100 # not set
+toy_priorweight_invloss_tauopt = 10 
+toy_priorweight_l2_tauopt = 10
+toy_priorweight_cosine_tauopt = 100
+toy_priorweight_cosine_origin_tauopt = 100
 
 toy_minmax_priorweight_invloss_expnames = []
 toy_minmax_priorweight_l2_expnames = []
@@ -310,7 +310,7 @@ hundred_pretrained_random_expnames = ['HUNDRED_pretrained_random_seed_1',
                                 'HUNDRED_pretrained_random_seed_2',
                                 'HUNDRED_pretrained_random_seed_3',]
 
-hundred_nonpretrained_non_comm_expnames = ['HUNDRED_nonpretrained_no_comm_seed_1',
+hundred_nonpretrained_no_comm_expnames = ['HUNDRED_nonpretrained_no_comm_seed_1',
                                 'HUNDRED_nonpretrained_no_comm_seed_2',
                                 'HUNDRED_nonpretrained_no_comm_seed_3',]
 
@@ -436,7 +436,7 @@ all_expnames = [cifar_label_trainingweight_invloss_expnames,
                 hundred_pretrained_no_comm_expnames,
                 hundred_pretrained_oracle_expnames,
                 hundred_pretrained_random_expnames,
-                hundred_nonpretrained_non_comm_expnames,
+                hundred_nonpretrained_no_comm_expnames,
                 hundred_nonpretrained_oracle_expnames,
                 hundred_nonpretrained_random_expnames,
                 hundred_pretrained_invloss_expnames,
