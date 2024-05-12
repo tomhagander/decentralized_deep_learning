@@ -19,3 +19,5 @@ paper_vis.ipynb
 data/
 figs/
 MNIST/
+tau_tuning_plots/
+heatmap_figs/

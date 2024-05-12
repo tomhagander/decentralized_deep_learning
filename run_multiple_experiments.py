@@ -1346,7 +1346,7 @@ for seed in seeds:
 ##### HUNDRED REPRODUCTION ##### - wait for tautuning and reproduction
 # pretrained
 seeds = [2, 3]
-hundred_pretrained_invloss_tauopt = 1 # not determined
+hundred_pretrained_invloss_tauopt = 1 # not determined<
 hundred_pretrained_l2_tauopt = 1 # not determined
 hundred_pretrained_cosine_tauopt = 1 # not determined
 hundred_pretrained_cosine_origin_tauopt = 1 # not determined
@@ -1380,6 +1380,140 @@ for seed in seeds:
 
 '''
 
+
+############ DOUBLE BENCHMARKS ############
+
+###### CORE1
+# ### ORACLE DOUBLE ###
+# for seed in [1,2,3]:
+#      commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric invloss --tau 30 --client_information_exchange oracle --experiment_name DOUBLE_oracle_seed_{} --delusion 0.0 --measure_all_similarities False --mergatron chill'.format(seed, seed))
+# # ### NO COMM DOUBLE ###
+# commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.00005 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric invloss --tau 30 --client_information_exchange no_exchange --experiment_name DOUBLE_no_comm_seed_1 --delusion 0.0 --measure_all_similarities True --mergatron chill')
+# commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 2 --batch_size 8 --nbr_local_epochs 1 --lr 0.00005 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine --tau 30 --client_information_exchange no_exchange --experiment_name DOUBLE_no_comm_seed_2 --delusion 0.0 --measure_all_similarities True --mergatron chill')
+
+####### CORE3
+# ### RANDOM DOUBLE ###
+# for seed in [1,2,3]:
+#     commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric invloss --tau 30 --client_information_exchange oracle --experiment_name DOUBLE_random_seed_{} --delusion -1.0 --measure_all_similarities False --mergatron chill'.format(seed, seed))
+
+# # ### NO COMM DOUBLE ###
+# commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 3 --batch_size 8 --nbr_local_epochs 1 --lr 0.00005 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau 30 --client_information_exchange no_exchange --experiment_name DOUBLE_no_comm_seed_3 --delusion 0.0 --measure_all_similarities True --mergatron chill')
+
+
+###########################################
+
+
+######### DOUBLE EXTRA TAUTUNING #########
+lr = 0.001
+seed = 1
+
+# core1
+# invloss FedAvg
+# tau = 1
+# commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_invloss_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill'.format(seed,lr,tau,seed,tau))
+
+# # l2 FedAvg
+# for tau in [50,100]:
+#     commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_l2_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill'.format(seed,lr,tau,seed,tau))
+
+########
+
+#core1
+# invloss FedSim
+# tau = 0.5
+# commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_priorweight_invloss_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill --aggregation_weighting priors'.format(seed,lr,tau,seed,tau))
+
+# # l2 FedSim
+# for tau in [50,100]:
+#     commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_priorweight_l2_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill --aggregation_weighting priors'.format(seed,lr,tau,seed,tau))
+
+#core2
+# cosine FedSim
+# for tau in [50]:
+#     commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_priorweight_cosine_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill --aggregation_weighting priors'.format(seed,lr,tau,seed,tau))
+
+# # # cosine origin FedSim
+# for tau in [50]:
+#     commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_priorweight_cosine_origin_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill --aggregation_weighting priors'.format(seed,lr,tau,seed,tau))
+
+
+# ###########################################
+
+# ####### FIXED TAU DOUBLE ########
+# cosine_fedavg_tau = 2000
+# origin_fedavg_tau = 2000
+# l2_fedavg_tau = 30
+# invloss_fedavg_tau = 1
+
+# cosine_fedsim_tau = 100
+# origin_fedsim_tau = 300
+# # l2_fedsim_tau = 30
+# invloss_fedsim_tau = 1
+
+# lr = 0.001
+
+# seeds = [2,3]
+
+### FedAvg
+# for seed in seeds:
+#     commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_cosine_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill'.format(seed,lr,cosine_fedavg_tau,seed,cosine_fedavg_tau))
+
+# for seed in seeds:
+#     commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_cosine_origin_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill'.format(seed,lr,origin_fedavg_tau,seed,origin_fedavg_tau))
+
+# # l2 #core1
+# for seed in seeds:
+#     commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_l2_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill'.format(seed,lr,l2_fedavg_tau,seed,l2_fedavg_tau))
+
+# #invloss #core1
+# for seed in seeds:
+#     commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_invloss_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill'.format(seed,lr,invloss_fedavg_tau,seed,invloss_fedavg_tau))
+
+
+### FedSim 
+# #core2
+# for seed in seeds:
+#     commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_priorweight_l2_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill --aggregation_weighting priors'.format(seed,lr,l2_fedsim_tau,seed,l2_fedsim_tau))
+
+# Core 3
+# invloss
+# for seed in seeds:
+#     commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_priorweight_invloss_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill --aggregation_weighting priors'.format(seed,lr,invloss_fedsim_tau,seed,invloss_fedsim_tau))
+# seed = 2
+# commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_priorweight_cosine_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill --aggregation_weighting priors'.format(seed,lr,cosine_fedsim_tau,seed,cosine_fedsim_tau))
+
+# core4
+# origin
+# for seed in seeds:
+#     commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_priorweight_cosine_origin_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill --aggregation_weighting priors'.format(seed,lr,origin_fedsim_tau,seed,origin_fedsim_tau))
+
+# seed = 3
+# commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_priorweight_cosine_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill --aggregation_weighting priors'.format(seed,lr,cosine_fedsim_tau,seed,cosine_fedsim_tau))
+
+### Testing for double
+# cosine_fedavg_tau = 2000
+# origin_fedavg_tau = 2000
+# l2_fedavg_tau = 30
+# invloss_fedavg_tau = 1
+
+# cosine_fedsim_tau = 100
+# origin_fedsim_tau = 300
+# l2_fedsim_tau = 30
+# invloss_fedsim_tau = 1
+# seeds = [1,2,3]
+# for seed in seeds:
+    # commands.append('python3 test_double_MNIST.py --experiment DOUBLE_cosine_seed_{}_tau_{}'.format(seed, cosine_fedavg_tau))
+    # commands.append('python3 test_double_MNIST.py --experiment DOUBLE_cosine_origin_seed_{}_tau_{}'.format(seed, origin_fedavg_tau))
+    # commands.append('python3 test_double_MNIST.py --experiment DOUBLE_l2_seed_{}_tau_{}'.format(seed, l2_fedavg_tau))
+    # commands.append('python3 test_double_MNIST.py --experiment DOUBLE_invloss_seed_{}_tau_{}'.format(seed, invloss_fedavg_tau))
+
+    # commands.append('python3 test_double_MNIST.py --experiment DOUBLE_priorweight_cosine_seed_{}_tau_{}'.format(seed, cosine_fedsim_tau))
+    # commands.append('python3 test_double_MNIST.py --experiment DOUBLE_priorweight_cosine_origin_seed_{}_tau_{}'.format(seed, origin_fedsim_tau))
+    # commands.append('python3 test_double_MNIST.py --experiment DOUBLE_priorweight_l2_seed_{}_tau_{}'.format(seed, l2_fedsim_tau))
+    # commands.append('python3 test_double_MNIST.py --experiment DOUBLE_priorweight_invloss_seed_{}_tau_{}'.format(seed, invloss_fedsim_tau))
+
+
+
 print('Commands to be run: ')
 for command in commands:
     print(command)
@@ -1389,7 +1523,7 @@ print('Running {} commands'.format(len(commands)))
 
 # timebomb sleep for 1 hour
 sleeptime = 0
-sleeptime = 60*60*0.01
+sleeptime = 60*60*0.001
 print('Sleeping for {} seconds'.format(sleeptime))
 time.sleep(sleeptime)
 
