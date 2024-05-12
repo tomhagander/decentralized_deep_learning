@@ -203,25 +203,25 @@ toy_trainingweight_minmax_l2_expnames_lr4 = []
 toy_trainingweight_minmax_cosine_expnames_lr4 = []
 toy_trainingweight_minmax_cosine_origin_expnames_lr4 = []
 
-toy_priorweight_minmax_invloss_expnames_lr1 = []
-toy_priorweight_minmax_l2_expnames_lr1 = []
-toy_priorweight_minmax_cosine_expnames_lr1 = []
-toy_priorweight_minmax_cosine_origin_expnames_lr1 = []
+toy_minmax_priorweight_invloss_expnames_lr1 = []
+toy_minmax_priorweight_l2_expnames_lr1 = []
+toy_minmax_priorweight_cosine_expnames_lr1 = []
+toy_minmax_priorweight_cosine_origin_expnames_lr1 = []
 
-toy_priorweight_minmax_invloss_expnames_lr2 = []
-toy_priorweight_minmax_l2_expnames_lr2 = []
-toy_priorweight_minmax_cosine_expnames_lr2 = []
-toy_priorweight_minmax_cosine_origin_expnames_lr2 = []
+toy_minmax_priorweight_invloss_expnames_lr2 = []
+toy_minmax_priorweight_l2_expnames_lr2 = []
+toy_minmax_priorweight_cosine_expnames_lr2 = []
+toy_minmax_priorweight_cosine_origin_expnames_lr2 = []
 
-toy_priorweight_minmax_invloss_expnames_lr3 = []
-toy_priorweight_minmax_l2_expnames_lr3 = []
-toy_priorweight_minmax_cosine_expnames_lr3 = []
-toy_priorweight_minmax_cosine_origin_expnames_lr3 = []
+toy_minmax_priorweight_invloss_expnames_lr3 = []
+toy_minmax_priorweight_l2_expnames_lr3 = []
+toy_minmax_priorweight_cosine_expnames_lr3 = []
+toy_minmax_priorweight_cosine_origin_expnames_lr3 = []
 
-toy_priorweight_minmax_invloss_expnames_lr4 = []
-toy_priorweight_minmax_l2_expnames_lr4 = []
-toy_priorweight_minmax_cosine_expnames_lr4 = []
-toy_priorweight_minmax_cosine_origin_expnames_lr4 = []
+toy_minmax_priorweight_invloss_expnames_lr4 = []
+toy_minmax_priorweight_l2_expnames_lr4 = []
+toy_minmax_priorweight_cosine_expnames_lr4 = []
+toy_minmax_priorweight_cosine_origin_expnames_lr4 = []
 
 lr = lrs[0]
 for tau in taus_trainingweight_invloss:
@@ -237,17 +237,17 @@ for tau in taus_trainingweight_cosine_origin:
     expname = 'TOY_DAC_minmax_cosine_origin_lr_{}_tau_{}_seed_1'.format(lr, tau)
     toy_trainingweight_minmax_cosine_origin_expnames_lr1.append(expname)
 for tau in taus_priorweight_invloss:
-    expname = 'TOY_DAC_priorweight_minmax_invloss_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_invloss_expnames_lr1.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_invloss_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_invloss_expnames_lr1.append(expname)
 for tau in taus_priorweight_l2:
-    expname = 'TOY_DAC_priorweight_minmax_l2_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_l2_expnames_lr1.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_l2_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_l2_expnames_lr1.append(expname)
 for tau in taus_priorweight_cosine:
-    expname = 'TOY_DAC_priorweight_minmax_cosine_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_cosine_expnames_lr1.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_cosine_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_cosine_expnames_lr1.append(expname)
 for tau in taus_priorweight_cosine_origin:
-    expname = 'TOY_DAC_priorweight_minmax_cosine_origin_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_cosine_origin_expnames_lr1.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_cosine_origin_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_cosine_origin_expnames_lr1.append(expname)
 
 lr = lrs[1]
 for tau in taus_trainingweight_invloss:
@@ -263,17 +263,17 @@ for tau in taus_trainingweight_cosine_origin:
     expname = 'TOY_DAC_minmax_cosine_origin_lr_{}_tau_{}_seed_1'.format(lr, tau)
     toy_trainingweight_minmax_cosine_origin_expnames_lr2.append(expname)
 for tau in taus_priorweight_invloss:
-    expname = 'TOY_DAC_priorweight_minmax_invloss_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_invloss_expnames_lr2.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_invloss_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_invloss_expnames_lr2.append(expname)
 for tau in taus_priorweight_l2:
-    expname = 'TOY_DAC_priorweight_minmax_l2_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_l2_expnames_lr2.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_l2_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_l2_expnames_lr2.append(expname)
 for tau in taus_priorweight_cosine:
-    expname = 'TOY_DAC_priorweight_minmax_cosine_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_cosine_expnames_lr2.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_cosine_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_cosine_expnames_lr2.append(expname)
 for tau in taus_priorweight_cosine_origin:
-    expname = 'TOY_DAC_priorweight_minmax_cosine_origin_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_cosine_origin_expnames_lr2.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_cosine_origin_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_cosine_origin_expnames_lr2.append(expname)
 
 lr = lrs[2]
 for tau in taus_trainingweight_invloss:
@@ -289,17 +289,17 @@ for tau in taus_trainingweight_cosine_origin:
     expname = 'TOY_DAC_minmax_cosine_origin_lr_{}_tau_{}_seed_1'.format(lr, tau)
     toy_trainingweight_minmax_cosine_origin_expnames_lr3.append(expname)
 for tau in taus_priorweight_invloss:
-    expname = 'TOY_DAC_priorweight_minmax_invloss_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_invloss_expnames_lr3.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_invloss_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_invloss_expnames_lr3.append(expname)
 for tau in taus_priorweight_l2:
-    expname = 'TOY_DAC_priorweight_minmax_l2_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_l2_expnames_lr3.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_l2_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_l2_expnames_lr3.append(expname)
 for tau in taus_priorweight_cosine:
-    expname = 'TOY_DAC_priorweight_minmax_cosine_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_cosine_expnames_lr3.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_cosine_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_cosine_expnames_lr3.append(expname)
 for tau in taus_priorweight_cosine_origin:
-    expname = 'TOY_DAC_priorweight_minmax_cosine_origin_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_cosine_origin_expnames_lr3.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_cosine_origin_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_cosine_origin_expnames_lr3.append(expname)
 
 lr = lrs[3]
 for tau in taus_trainingweight_invloss:
@@ -315,17 +315,17 @@ for tau in taus_trainingweight_cosine_origin:
     expname = 'TOY_DAC_minmax_cosine_origin_lr_{}_tau_{}_seed_1'.format(lr, tau)
     toy_trainingweight_minmax_cosine_origin_expnames_lr4.append(expname)
 for tau in taus_priorweight_invloss:
-    expname = 'TOY_DAC_priorweight_minmax_invloss_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_invloss_expnames_lr4.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_invloss_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_invloss_expnames_lr4.append(expname)
 for tau in taus_priorweight_l2:
-    expname = 'TOY_DAC_priorweight_minmax_l2_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_l2_expnames_lr4.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_l2_prior_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_l2_expnames_lr4.append(expname)
 for tau in taus_priorweight_cosine:
-    expname = 'TOY_DAC_priorweight_minmax_cosine_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_cosine_expnames_lr4.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_cosine_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_cosine_expnames_lr4.append(expname)
 for tau in taus_priorweight_cosine_origin:
-    expname = 'TOY_DAC_priorweight_minmax_cosine_origin_lr_{}_tau_{}_seed_1'.format(lr, tau)
-    toy_priorweight_minmax_cosine_origin_expnames_lr4.append(expname)
+    expname = 'TOY_DAC_minmax_priorweight_cosine_origin_lr_{}_tau_{}_seed_1'.format(lr, tau)
+    toy_minmax_priorweight_cosine_origin_expnames_lr4.append(expname)
 
 
 toy_trainingweight_expnames_collection_lr1 = [toy_invloss_expnames_lr1, toy_l2_expnames_lr1, toy_cosine_expnames_lr1, toy_origin_expnames_lr1]
@@ -340,10 +340,10 @@ toy_trainingweight_minmax_expnames_collection_lr1 = [toy_trainingweight_minmax_i
 toy_trainingweight_minmax_expnames_collection_lr2 = [toy_trainingweight_minmax_invloss_expnames_lr2, toy_trainingweight_minmax_l2_expnames_lr2, toy_trainingweight_minmax_cosine_expnames_lr2, toy_trainingweight_minmax_cosine_origin_expnames_lr2]
 toy_trainingweight_minmax_expnames_collection_lr3 = [toy_trainingweight_minmax_invloss_expnames_lr3, toy_trainingweight_minmax_l2_expnames_lr3, toy_trainingweight_minmax_cosine_expnames_lr3, toy_trainingweight_minmax_cosine_origin_expnames_lr3]
 toy_trainingweight_minmax_expnames_collection_lr4 = [toy_trainingweight_minmax_invloss_expnames_lr4, toy_trainingweight_minmax_l2_expnames_lr4, toy_trainingweight_minmax_cosine_expnames_lr4, toy_trainingweight_minmax_cosine_origin_expnames_lr4]
-toy_priorweight_minmax_expnames_collection_lr1 = [toy_priorweight_minmax_invloss_expnames_lr1, toy_priorweight_minmax_l2_expnames_lr1, toy_priorweight_minmax_cosine_expnames_lr1, toy_priorweight_minmax_cosine_origin_expnames_lr1]
-toy_priorweight_minmax_expnames_collection_lr2 = [toy_priorweight_minmax_invloss_expnames_lr2, toy_priorweight_minmax_l2_expnames_lr2, toy_priorweight_minmax_cosine_expnames_lr2, toy_priorweight_minmax_cosine_origin_expnames_lr2]
-toy_priorweight_minmax_expnames_collection_lr3 = [toy_priorweight_minmax_invloss_expnames_lr3, toy_priorweight_minmax_l2_expnames_lr3, toy_priorweight_minmax_cosine_expnames_lr3, toy_priorweight_minmax_cosine_origin_expnames_lr3]
-toy_priorweight_minmax_expnames_collection_lr4 = [toy_priorweight_minmax_invloss_expnames_lr4, toy_priorweight_minmax_l2_expnames_lr4, toy_priorweight_minmax_cosine_expnames_lr4, toy_priorweight_minmax_cosine_origin_expnames_lr4]
+toy_minmax_priorweight_expnames_collection_lr1 = [toy_minmax_priorweight_invloss_expnames_lr1, toy_minmax_priorweight_l2_expnames_lr1, toy_minmax_priorweight_cosine_expnames_lr1, toy_minmax_priorweight_cosine_origin_expnames_lr1]
+toy_minmax_priorweight_expnames_collection_lr2 = [toy_minmax_priorweight_invloss_expnames_lr2, toy_minmax_priorweight_l2_expnames_lr2, toy_minmax_priorweight_cosine_expnames_lr2, toy_minmax_priorweight_cosine_origin_expnames_lr2]
+toy_minmax_priorweight_expnames_collection_lr3 = [toy_minmax_priorweight_invloss_expnames_lr3, toy_minmax_priorweight_l2_expnames_lr3, toy_minmax_priorweight_cosine_expnames_lr3, toy_minmax_priorweight_cosine_origin_expnames_lr3]
+toy_minmax_priorweight_expnames_collection_lr4 = [toy_minmax_priorweight_invloss_expnames_lr4, toy_minmax_priorweight_l2_expnames_lr4, toy_minmax_priorweight_cosine_expnames_lr4, toy_minmax_priorweight_cosine_origin_expnames_lr4]
 
 load_run_and_save(toy_trainingweight_expnames_collection_lr1, 'toy_trainingweight_results_lr1.pkl', toy=True)
 load_run_and_save(toy_trainingweight_expnames_collection_lr2, 'toy_trainingweight_results_lr2.pkl', toy=True)
@@ -357,8 +357,8 @@ load_run_and_save(toy_trainingweight_minmax_expnames_collection_lr1, 'toy_traini
 load_run_and_save(toy_trainingweight_minmax_expnames_collection_lr2, 'toy_trainingweight_minmax_results_lr2.pkl', toy=True)
 load_run_and_save(toy_trainingweight_minmax_expnames_collection_lr3, 'toy_trainingweight_minmax_results_lr3.pkl', toy=True)
 load_run_and_save(toy_trainingweight_minmax_expnames_collection_lr4, 'toy_trainingweight_minmax_results_lr4.pkl', toy=True)
-load_run_and_save(toy_priorweight_minmax_expnames_collection_lr1, 'toy_priorweight_minmax_results_lr1.pkl', toy=True)
-load_run_and_save(toy_priorweight_minmax_expnames_collection_lr2, 'toy_priorweight_minmax_results_lr2.pkl', toy=True)
-load_run_and_save(toy_priorweight_minmax_expnames_collection_lr3, 'toy_priorweight_minmax_results_lr3.pkl', toy=True)
-load_run_and_save(toy_priorweight_minmax_expnames_collection_lr4, 'toy_priorweight_minmax_results_lr4.pkl', toy=True)
+load_run_and_save(toy_minmax_priorweight_expnames_collection_lr1, 'toy_minmax_priorweight_results_lr1.pkl', toy=True)
+load_run_and_save(toy_minmax_priorweight_expnames_collection_lr2, 'toy_minmax_priorweight_results_lr2.pkl', toy=True)
+load_run_and_save(toy_minmax_priorweight_expnames_collection_lr3, 'toy_minmax_priorweight_results_lr3.pkl', toy=True)
+load_run_and_save(toy_minmax_priorweight_expnames_collection_lr4, 'toy_minmax_priorweight_results_lr4.pkl', toy=True)
 

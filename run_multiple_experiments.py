@@ -1056,7 +1056,7 @@ taus_priorweight_cosine_origin = np.logspace(np.log10(50), np.log10(5000), num=8
 # first two lrs on targetbox core1, next two on core2
 '''
 for lr in lrs:
-    
+
     # invloss
     for tau in taus_trainingweight_invloss:
         commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_invloss_lr_{}_tau_{}_seed_{} --delusion 0.0 --minmax True'.format(seed, lr, tau, lr, tau, seed))
@@ -1072,7 +1072,8 @@ for lr in lrs:
     # cosine origin
     for tau in taus_trainingweight_cosine_origin:
         commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_cosine_origin_lr_{}_tau_{}_seed_{} --delusion 0.0 --minmax True'.format(seed, lr, tau, lr, tau, seed))
-    
+
+    # rerun from here for some reason
     # invloss
     for tau in taus_priorweight_invloss:
         commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_priorweight_invloss_prior_lr_{}_tau_{}_seed_{} --delusion 0.0 --aggregation_weighting priors --minmax True'.format(seed, lr, tau, lr, tau, seed))
@@ -1096,7 +1097,6 @@ for lr in lrs:
     commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30 --client_information_exchange oracle --experiment_name TOY_random_lr_{}_seed_{} --delusion -1.0 --measure_all_similarities True'.format(seed, lr, lr, seed))
     # no comm
     commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau 30 --client_information_exchange no_exchange --experiment_name TOY_no_comm_lr_{}_seed_{} --delusion 0.0 --measure_all_similarities True'.format(seed, lr, lr, seed))
-
 
 
 ##### TOYPROBLEM BENCHMARKS ##### - running on targetbox core3_tb
@@ -1174,17 +1174,17 @@ toy_trainingweight_l2_tauopt = 10
 toy_trainingweight_cosine_tauopt = 100
 toy_trainingweight_cosine_origin_tauopt = 100
 
-seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+seeds = [8, 9, 10]
 lr = 0.003
 lr_invloss_l2 = 0.008
 
 # invloss
-for seed in seeds:
-    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_invloss_tau_{}_seed_{} --delusion 0.0 --minmax True'.format(seed, lr_invloss_l2, toy_trainingweight_invloss_tauopt, toy_trainingweight_invloss_tauopt, seed))
+#for seed in seeds:
+#    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_invloss_tau_{}_seed_{} --delusion 0.0 --minmax True'.format(seed, lr_invloss_l2, toy_trainingweight_invloss_tauopt, toy_trainingweight_invloss_tauopt, seed))
 
 # l2
-for seed in seeds:
-    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_l2_tau_{}_seed_{} --delusion 0.0 --minmax True'.format(seed, lr, toy_trainingweight_l2_tauopt, toy_trainingweight_l2_tauopt, seed))
+#for seed in seeds:
+#    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_l2_tau_{}_seed_{} --delusion 0.0 --minmax True'.format(seed, lr, toy_trainingweight_l2_tauopt, toy_trainingweight_l2_tauopt, seed))
 
 # cosine
 for seed in seeds:
@@ -1194,6 +1194,31 @@ for seed in seeds:
 for seed in seeds:
     commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_cosine_origin_tau_{}_seed_{} --delusion 0.0 --minmax True'.format(seed, lr, toy_trainingweight_cosine_origin_tauopt, toy_trainingweight_cosine_origin_tauopt, seed))
 
+
+# priorweight
+toy_priorweight_invloss_tauopt = 10 
+toy_priorweight_l2_tauopt = 10
+toy_priorweight_cosine_tauopt = 100
+toy_priorweight_cosine_origin_tauopt = 100
+
+seeds = [8, 9, 10]
+lr = 0.003
+
+# invloss
+#for seed in seeds:
+#    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_priorweight_invloss_tau_{}_seed_{} --delusion 0.0 --aggregation_weighting priors --minmax True'.format(seed, lr, toy_priorweight_invloss_tauopt, toy_priorweight_invloss_tauopt, seed))
+
+# l2
+#for seed in seeds:
+#    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_priorweight_l2_tau_{}_seed_{} --delusion 0.0 --aggregation_weighting priors --minmax True'.format(seed, lr, toy_priorweight_l2_tauopt, toy_priorweight_l2_tauopt, seed))
+
+# cosine
+for seed in seeds:
+    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_priorweight_cosine_tau_{}_seed_{} --delusion 0.0 --aggregation_weighting priors --minmax True'.format(seed, lr, toy_priorweight_cosine_tauopt, toy_priorweight_cosine_tauopt, seed))
+
+# cosine origin
+for seed in seeds:
+    commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train 50 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0.0 --tau {} --client_information_exchange DAC --experiment_name TOY_DAC_minmax_priorweight_cosine_origin_tau_{}_seed_{} --delusion 0.0 --aggregation_weighting priors --minmax True'.format(seed, lr, toy_priorweight_cosine_origin_tauopt, toy_priorweight_cosine_origin_tauopt, seed))
 
 
 # testing
@@ -1316,8 +1341,8 @@ seed = 1
 #for tau in [500,2000,5000]:
  #   commands.append('python3 run_experiment.py --gpu 0 --dataset double --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name DOUBLE_priorweight_cosine_origin_seed_{}_tau_{}  --measure_all_similarities True --mergatron chill --aggregation_weighting priors'.format(seed,lr,tau,seed,tau))
 
-
 '''
+
 ##### HUNDRED BENCHMARKS ##### - wait for space
 # pretrained
 seeds = [1,2,3]
@@ -1341,44 +1366,98 @@ for seed in seeds:
     # no comm
     commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric invloss --tau 30 --client_information_exchange no_exchange --experiment_name HUNDRED_nonpretrained_no_comm_seed_{} --delusion 0.0 --measure_all_similarities True --model nonpretrained'.format(seed, lr, seed))
 
-
-
+'''
 ##### HUNDRED REPRODUCTION ##### - wait for tautuning and reproduction
 # pretrained
 seeds = [2, 3]
-hundred_pretrained_invloss_tauopt = 1 # not determined
-hundred_pretrained_l2_tauopt = 1 # not determined
-hundred_pretrained_cosine_tauopt = 1 # not determined
-hundred_pretrained_cosine_origin_tauopt = 1 # not determined
+hundred_pretrained_invloss_tauopt = 1 # inte g
+hundred_pretrained_l2_tauopt = 30 # g
+hundred_pretrained_cosine_tauopt = 5 # inte g
+hundred_pretrained_cosine_origin_tauopt = 30 # g
 
 for seed in seeds:
     # invloss
-    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric invloss --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_invloss_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model pretrained'.format(seed, hundred_pretrained_invloss_tauopt, hundred_pretrained_invloss_tauopt, seed))
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_invloss_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model pretrained'.format(seed, hundred_pretrained_invloss_tauopt, hundred_pretrained_invloss_tauopt, seed))
     # l2
-    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_l2_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model pretrained'.format(seed, hundred_pretrained_l2_tauopt, hundred_pretrained_l2_tauopt, seed))
+    #commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_l2_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model pretrained'.format(seed, hundred_pretrained_l2_tauopt, hundred_pretrained_l2_tauopt, seed))
     # cosine
-    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_cosine_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model pretrained'.format(seed, hundred_pretrained_cosine_tauopt, hundred_pretrained_cosine_tauopt, seed))
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_cosine_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model pretrained'.format(seed, hundred_pretrained_cosine_tauopt, hundred_pretrained_cosine_tauopt, seed))
     # cosine origin
-    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_cosine_origin_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model pretrained'.format(seed, hundred_pretrained_cosine_origin_tauopt, hundred_pretrained_cosine_origin_tauopt, seed))
-
+    #commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name HUNDRED_pretrained_cosine_origin_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model pretrained'.format(seed, hundred_pretrained_cosine_origin_tauopt, hundred_pretrained_cosine_origin_tauopt, seed))
+'''
 # nonpretrained
 seeds = [2, 3]
-hundred_nonpretrained_invloss_tauopt = 1 # not determined
-hundred_nonpretrained_l2_tauopt = 1 # not determined
-hundred_nonpretrained_cosine_tauopt = 1 # not determined
-hundred_nonpretrained_cosine_origin_tauopt = 1 # not determined
+hundred_nonpretrained_invloss_tauopt = 5 # inte g
+hundred_nonpretrained_l2_tauopt = 5 # g
+hundred_nonpretrained_cosine_tauopt = 5 # inte g
+hundred_nonpretrained_cosine_origin_tauopt = 30 # g
 
 for seed in seeds:
     # invloss
-    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric invloss --tau {} --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_invloss_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model nonpretrained'.format(seed, hundred_nonpretrained_invloss_tauopt, hundred_nonpretrained_invloss_tauopt, seed))
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau {} --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_invloss_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model nonpretrained'.format(seed, hundred_nonpretrained_invloss_tauopt, hundred_nonpretrained_invloss_tauopt, seed))
     # l2
-    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_l2_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model nonpretrained'.format(seed, hundred_nonpretrained_l2_tauopt, hundred_nonpretrained_l2_tauopt, seed))
+    #commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --tau {} --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_l2_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model nonpretrained'.format(seed, hundred_nonpretrained_l2_tauopt, hundred_nonpretrained_l2_tauopt, seed))
     # cosine
-    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine --tau {} --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_cosine_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model nonpretrained'.format(seed, hundred_nonpretrained_cosine_tauopt, hundred_nonpretrained_cosine_tauopt, seed))
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau {} --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_cosine_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model nonpretrained'.format(seed, hundred_nonpretrained_cosine_tauopt, hundred_nonpretrained_cosine_tauopt, seed))
     # cosine origin
-    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_cosine_origin_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model nonpretrained'.format(seed, hundred_nonpretrained_cosine_origin_tauopt, hundred_nonpretrained_cosine_origin_tauopt, seed))
+    #commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_cosine_origin_tau_{}_seed_{} --delusion 0.0 --measure_all_similarities False --model nonpretrained'.format(seed, hundred_nonpretrained_cosine_origin_tauopt, hundred_nonpretrained_cosine_origin_tauopt, seed))
+
+
+
+##### HUNDRED ADDITIONAL TAUTUNING ##### - running
+
+# pretrined invloss
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --tau 0.5 --client_information_exchange DAC --experiment_name HUNDRED_pretrained_invloss_tau_0.5 --delusion 0.0 --measure_all_similarities True --model pretrained')
+
+# pretrained cosine
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 5 --client_information_exchange DAC --experiment_name HUNDRED_pretrained_cosine_tau_5 --delusion 0.0 --measure_all_similarities True --model pretrained')
+
+# pretrained cosine origin
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau 5 --client_information_exchange DAC --experiment_name HUNDRED_pretrained_cosine_origin_tau_5 --delusion 0.0 --measure_all_similarities True --model pretrained')
+
+# nonpretrained cosine
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 5 --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_cosine_tau_5 --delusion 0.0 --measure_all_similarities True --model nonpretrained')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 1000 --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_cosine_tau_1000 --delusion 0.0 --measure_all_similarities True --model nonpretrained')
+
+# nonpretrained cosine origin
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau 5 --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_cosine_origin_tau_5 --delusion 0.0 --measure_all_similarities True --model nonpretrained')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau 1000 --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_cosine_origin_tau_1000 --delusion 0.0 --measure_all_similarities True --model nonpretrained')
+
+
+# npt cosine
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 1 --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_cosine_tau_1.0 --delusion 0.0 --measure_all_similarities False --model nonpretrained')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 3 --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_cosine_tau_3.0 --delusion 0.0 --measure_all_similarities False --model nonpretrained')
+
+# npt cosine origin
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau 3000 --client_information_exchange DAC --experiment_name HUNDRED_nonpretrained_cosine_origin_tau_3000.0 --delusion 0.0 --measure_all_similarities False --model nonpretrained')
+
+
+#pt cosine
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 1 --client_information_exchange DAC --experiment_name HUNDRED_pretrained_cosine_tau_1.0 --delusion 0.0 --measure_all_similarities False --model pretrained')
+commands.append('python3 run_experiment.py --gpu 0 --dataset cifar100 --shift label --nbr_rounds 270 --nbr_clients 52 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr 7.5e-05 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --tau 3 --client_information_exchange DAC --experiment_name HUNDRED_pretrained_cosine_tau_3.0 --delusion 0.0 --measure_all_similarities False --model pretrained')
+
+
+
+#### PANM ####
+# cifar10 label shift with panm
+seeds = [1,2,3]
+for seed in seeds:
+    # invloss
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0.0 --tau 5.0 --client_information_exchange PANM --experiment_name CIFAR_label_PANM_invloss_seed_{} --delusion 0 --NAEM_frequency 2 --T1 50 --CIFAR_ratio 0.4 --nbr_deluded_clients 0 --measure_all_similarities True --mergatron chill --aggregation_weighting trainset_size --nbr_classes 10 --nbr_channels 3'.format(seed, seed))
+
+    # l2
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0.0 --tau 5.0 --client_information_exchange PANM --experiment_name CIFAR_label_PANM_l2_seed_{} --delusion 0 --NAEM_frequency 2 --T1 50 --CIFAR_ratio 0.4 --nbr_deluded_clients 0 --measure_all_similarities True --mergatron chill --aggregation_weighting trainset_size --nbr_classes 10 --nbr_channels 3'.format(seed, seed))
+
+    # cosine
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0.0 --tau 5.0 --client_information_exchange PANM --experiment_name CIFAR_label_PANM_cosine_seed_{} --delusion 0 --NAEM_frequency 2 --T1 50 --CIFAR_ratio 0.4 --nbr_deluded_clients 0 --measure_all_similarities True --mergatron chill --aggregation_weighting trainset_size --nbr_classes 10 --nbr_channels 3'.format(seed, seed))
+
+    # cosine origin
+    commands.append('python3 run_experiment.py --gpu 0 --dataset cifar10 --shift label --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 0.001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0.0 --tau 5.0 --client_information_exchange PANM --experiment_name CIFAR_label_PANM_cosine_origin_seed_{} --delusion 0 --NAEM_frequency 2 --T1 50 --CIFAR_ratio 0.4 --nbr_deluded_clients 0 --measure_all_similarities True --mergatron chill --aggregation_weighting trainset_size --nbr_classes 10 --nbr_channels 3'.format(seed, seed))
 
 '''
+    
+# test_multiple
+#commands.append('python3 test_multiple.py')
 
 print('Commands to be run: ')
 for command in commands:
@@ -1389,7 +1468,7 @@ print('Running {} commands'.format(len(commands)))
 
 # timebomb sleep for 1 hour
 sleeptime = 0
-sleeptime = 60*60*0.01
+sleeptime = 60*60*0.001
 print('Sleeping for {} seconds'.format(sleeptime))
 time.sleep(sleeptime)
 

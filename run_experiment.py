@@ -449,12 +449,6 @@ if __name__ == '__main__':
         for client in clients:
             client.measure_all_similarities(clients, args.similarity_metric)
     
-
-    # measure all similarities if flag is set
-    if args.measure_all_similarities:
-        for client in clients:
-            client.measure_all_similarities(clients, args.similarity_metric)
-    
     for round in range(args.nbr_rounds):
         # information exchange
 
