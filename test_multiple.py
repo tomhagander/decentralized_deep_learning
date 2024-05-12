@@ -343,8 +343,26 @@ hundred_nonpretrained_cosine_expnames = ['HUNDRED_nonpretrained_cosine_tau_{}_se
 hundred_nonpretrained_cosine_origin_expnames = ['HUNDRED_nonpretrained_cosine_origin_tau_{}_seed_{}'.format(hundred_nonpretrained_cosine_origin_tauopt, seed) for seed in seeds]
 
 
+#### DOUBLE ####
+DOUBLE_invloss_expnames = []
+DOUBLE_cosine_expnames = []
+DOUBLE_origin_expnames = []
+DOUBLE_l2_expnames = []
 
+DOUBLE_fedsim_invloss_expnames = []
+DOUBLE_fedsim_cosine_expnames = []
+DOUBLE_fedsim_origin_expnames = []
+DOUBLE_fedsim_l2_expnames = []
+for seed in [1,2,3]:
+    DOUBLE_invloss_expnames.append('DOUBLE_invloss_seed_{}_tau_1'.format(seed))
+    DOUBLE_cosine_expnames.append('DOUBLE_cosine_seed_{}_tau_2000'.format(seed))
+    DOUBLE_origin_expnames.append('DOUBLE_origin_seed_{}_tau_2000'.format(seed))
+    DOUBLE_l2_expnames.append('DOUBLE_l2_seed_{}_tau_1'.format(seed))
 
+    DOUBLE_fedsim_invloss_expnames.append('DOUBLE_priorweights_invloss_seed_{}_tau_1'.format(seed))
+    DOUBLE_fedsim_cosine_expnames.append('DOUBLE_priorweights_cosine_seed_{}_tau_100'.format(seed))
+    DOUBLE_fedsim_origin_expnames.append('DOUBLE_priorweights_cosine_origin_seed_{}_tau_300'.format(seed))
+    DOUBLE_fedsim_l2_expnames.append('DOUBLE_priorweights_l2_seed_{}_tau_30'.format(seed))
 
 ##### TESTING #####
 
@@ -428,7 +446,15 @@ all_expnames = [cifar_label_trainingweight_invloss_expnames,
                 hundred_nonpretrained_invloss_expnames,
                 hundred_nonpretrained_l2_expnames,
                 hundred_nonpretrained_cosine_expnames,
-                hundred_nonpretrained_cosine_origin_expnames,]
+                hundred_nonpretrained_cosine_origin_expnames, 
+                DOUBLE_invloss_expnames,
+                DOUBLE_cosine_expnames,
+                DOUBLE_origin_expnames,
+                DOUBLE_l2_expnames,
+                DOUBLE_fedsim_invloss_expnames,
+                DOUBLE_fedsim_cosine_expnames,
+                DOUBLE_fedsim_origin_expnames,
+                DOUBLE_fedsim_l2_expnames]
 
 
 if __name__ == '__main__':
