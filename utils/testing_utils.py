@@ -404,6 +404,7 @@ def test_on_double_MNIST(clients, quick = True, verbose = True):
         if verbose:
             print('Client: {} Group: {} Acc: {:.2f}'.format(client.idx, client.group, acc))
             print('Testing time: {:.2f} s'.format(time.time()-start_client))
+    return acc_matrix
 
 def test_on_fashion_MNIST(clients, quick = True, verbose = True):
     import torchvision.transforms as transforms
