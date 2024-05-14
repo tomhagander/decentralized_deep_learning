@@ -20,3 +20,22 @@ class fashion_CNN(nn.Module):
         x = self.output(x)
         x = self.activation(x)
         return x
+    
+
+class Classifier(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.fc1 = nn.Linear(784, 512)
+        self.fc2 = nn.Linear(512, 20)
+        
+        # Dropout module with a 0.2 drop probability 
+        self.dropout = nn.Dropout(p=0.2)
+        
+    def forward(self, x):
+        # Flatten the input tensor
+        x = x.view(x.shape[0], -1)    
+        # Set the activation functions
+        x = self.dropout(F.relu(self.fc1(x)))
+        x = F.log_softmax(self.fc2(x), dim=1)
+    
+        return x
