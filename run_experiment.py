@@ -17,7 +17,7 @@ from utils.initialization_utils import set_seed
 from utils.toy_regression_utils import generate_regression_multi, LinearRegression
 
 from models.cifar_models import simple_CNN
-from models.fashion_models import fashion_CNN
+from models.fashion_models import fashion_CNN, Classifier
 
 from utils.classes import LabelShiftedDataset
 
@@ -290,7 +290,10 @@ if __name__ == '__main__':
     elif args.dataset == 'fashion_mnist':
         client_model_init = fashion_CNN(nbr_classes=args.nbr_classes)
     elif args.dataset == 'double':
-        client_model_init = fashion_CNN(nbr_classes=args.nbr_classes)
+        if args.model == 'MLP':
+            client_model_init = Classifier()
+        else:
+            client_model_init = fashion_CNN(nbr_classes=args.nbr_classes)
     elif args.dataset == 'toy_problem':
         client_model_init = LinearRegression(10, 1)
     elif args.dataset == 'cifar100': 

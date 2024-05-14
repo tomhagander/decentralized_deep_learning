@@ -95,6 +95,13 @@ fashion_mnist_trainingweight_origin_expnames = ['fashion_MNIST_DAC_cosine_origin
                                                     'fashion_MNIST_DAC_cosine_origin_tau_2000_seed_2',
                                                     'fashion_MNIST_DAC_cosine_origin_tau_2000_seed_3',]
 
+fashion_mnist_PANM_invloss_expnames = ['fashion_MNIST_PANM_invloss_seed_1',
+                                        'fashion_MNIST_PANM_invloss_seed_2',
+                                        'fashion_MNIST_PANM_invloss_seed_3',]
+
+fashiom_mnist_PANM_cosine_expnames = ['fashion_MNIST_PANM_cosine_seed_1',
+                                        'fashion_MNIST_PANM_cosine_seed_2',
+                                        'fashion_MNIST_PANM_cosine_seed_3',]
 
 #-----
 fashion_mnist_priorweight_invloss_expnames = ['fashion_MNIST_DAC_priorweight_invloss_tau_5_seed_1',
@@ -353,16 +360,24 @@ DOUBLE_fedsim_invloss_expnames = []
 DOUBLE_fedsim_cosine_expnames = []
 DOUBLE_fedsim_origin_expnames = []
 DOUBLE_fedsim_l2_expnames = []
+
+DOUBLE_oracle_expnames = []
+DOUBLE_random_expnames = []
+DOUBLE_no_comm_expnames = []
 for seed in [1,2,3]:
     DOUBLE_invloss_expnames.append('DOUBLE_invloss_seed_{}_tau_1'.format(seed))
     DOUBLE_cosine_expnames.append('DOUBLE_cosine_seed_{}_tau_2000'.format(seed))
-    DOUBLE_origin_expnames.append('DOUBLE_origin_seed_{}_tau_2000'.format(seed))
-    DOUBLE_l2_expnames.append('DOUBLE_l2_seed_{}_tau_1'.format(seed))
+    DOUBLE_origin_expnames.append('DOUBLE_cosine_origin_seed_{}_tau_2000'.format(seed))
+    DOUBLE_l2_expnames.append('DOUBLE_l2_seed_{}_tau_30'.format(seed))
 
-    DOUBLE_fedsim_invloss_expnames.append('DOUBLE_priorweights_invloss_seed_{}_tau_1'.format(seed))
-    DOUBLE_fedsim_cosine_expnames.append('DOUBLE_priorweights_cosine_seed_{}_tau_100'.format(seed))
-    DOUBLE_fedsim_origin_expnames.append('DOUBLE_priorweights_cosine_origin_seed_{}_tau_300'.format(seed))
-    DOUBLE_fedsim_l2_expnames.append('DOUBLE_priorweights_l2_seed_{}_tau_30'.format(seed))
+    DOUBLE_fedsim_invloss_expnames.append('DOUBLE_priorweight_invloss_seed_{}_tau_1'.format(seed))
+    DOUBLE_fedsim_cosine_expnames.append('DOUBLE_priorweight_cosine_seed_{}_tau_100'.format(seed))
+    DOUBLE_fedsim_origin_expnames.append('DOUBLE_priorweight_cosine_origin_seed_{}_tau_300'.format(seed))
+    DOUBLE_fedsim_l2_expnames.append('DOUBLE_priorweight_l2_seed_{}_tau_30'.format(seed))
+
+    DOUBLE_oracle_expnames.append('DOUBLE_oracle_seed_{}'.format(seed))
+    DOUBLE_random_expnames.append('DOUBLE_random_seed_{}'.format(seed))
+    DOUBLE_no_comm_expnames.append('DOUBLE_no_comm_seed_{}'.format(seed))
 
 ##### TESTING #####
 
@@ -390,6 +405,8 @@ all_expnames = [cifar_label_trainingweight_invloss_expnames,
                 fashion_mnist_priorweight_invloss_expnames,
                 fashion_mnist_priorweight_l2_expnames,
                 fashion_mnist_priorweight_cosine_expnames,
+                fashion_mnist_PANM_invloss_expnames,
+                fashiom_mnist_PANM_cosine_expnames,
                 cifar_label_benchmark_no_comm,
                 cifar_label_benchmark_oracle,
                 cifar_label_benchmark_random,
@@ -454,7 +471,10 @@ all_expnames = [cifar_label_trainingweight_invloss_expnames,
                 DOUBLE_fedsim_invloss_expnames,
                 DOUBLE_fedsim_cosine_expnames,
                 DOUBLE_fedsim_origin_expnames,
-                DOUBLE_fedsim_l2_expnames]
+                DOUBLE_fedsim_l2_expnames,
+                DOUBLE_oracle_expnames,
+                DOUBLE_random_expnames,
+                DOUBLE_no_comm_expnames]
 
 
 if __name__ == '__main__':
