@@ -20,4 +20,4 @@ data/
 figs/
 MNIST/
 tau_tuning_plots/
-heatmap_figs/
+heatmaps_figs/
