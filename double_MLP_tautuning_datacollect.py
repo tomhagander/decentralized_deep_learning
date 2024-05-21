@@ -22,6 +22,7 @@ double_MLP_trainingweight_cosine_expnames = []
 for tau in taus:
     expname = 'DOUBLE_MLP_cosine_trainingweight_tau_{}'.format(tau)
     double_MLP_trainingweight_cosine_expnames.append(expname)
+double_MLP_trainingweight_cosine_expnames.append('DOUBLE_MLP_cosine_trainingweight_tau_6000')
 
 # cosine origin
 double_MLP_trainingweight_cosine_origin_expnames = []
@@ -36,6 +37,7 @@ double_MLP_priorweight_invloss_expnames = []
 for tau in taus:
     expname = 'DOUBLE_MLP_invloss_priorweight_tau_{}'.format(tau)
     double_MLP_priorweight_invloss_expnames.append(expname)
+double_MLP_priorweight_invloss_expnames.append('DOUBLE_MLP_invloss_priorweight_tau_0.5')
 
 # L2
 double_MLP_priorweight_l2_expnames = []
