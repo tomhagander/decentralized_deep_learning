@@ -398,6 +398,126 @@ for seed in [1,2,3]:
     DOUBLE_no_comm_expnames.append('DOUBLE_no_comm_seed_{}'.format(seed))
 
 
+
+#### TOY Trainset size experiments ####
+# seeds one to 15
+seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+trainset_sizes = [10, 100, 200]
+
+toy_trainingweight_invloss_tauopt = 10000
+toy_trainingweight_l2_tauopt = 19
+toy_trainingweight_cosine_tauopt = 140
+toy_trainingweight_cosine_origin_tauopt = 140
+toy_priorweight_invloss_tauopt = 5000
+toy_priorweight_l2_tauopt = 19
+toy_priorweight_cosine_tauopt = 140
+toy_priorweight_cosine_origin_tauopt = 140
+
+lr = 0.003
+lr_invloss_l2 = 0.008
+
+toy_ts50_trainingweight_invloss_expnames = []
+toy_ts50_trainingweight_l2_expnames = []
+toy_ts50_trainingweight_cosine_expnames = []
+toy_ts50_trainingweight_origin_expnames = []
+toy_ts50_priorweight_invloss_expnames = []
+toy_ts50_priorweight_l2_expnames = []
+toy_ts50_priorweight_cosine_expnames = []
+toy_ts50_priorweight_origin_expnames = []
+toy_ts100_trainingweight_invloss_expnames = []
+toy_ts100_trainingweight_l2_expnames = []
+toy_ts100_trainingweight_cosine_expnames = []
+toy_ts100_trainingweight_origin_expnames = []
+toy_ts100_priorweight_invloss_expnames = []
+toy_ts100_priorweight_l2_expnames = []
+toy_ts100_priorweight_cosine_expnames = []
+toy_ts100_priorweight_origin_expnames = []
+toy_ts200_trainingweight_invloss_expnames = []
+toy_ts200_trainingweight_l2_expnames = []
+toy_ts200_trainingweight_cosine_expnames = []
+toy_ts200_trainingweight_origin_expnames = []
+toy_ts200_priorweight_invloss_expnames = []
+toy_ts200_priorweight_l2_expnames = []
+toy_ts200_priorweight_cosine_expnames = []
+toy_ts200_priorweight_origin_expnames = []
+
+
+for seed in seeds:
+    # invloss trainingweight ts 50
+    expname = 'TOY_invloss_trainingweight_trainset_size_10_seed_{}'.format(seed)
+    toy_ts50_trainingweight_invloss_expnames.append(expname)
+    # l2 trainingweight ts 50
+    expname = 'TOY_l2_trainingweight_trainset_size_10_seed_{}'.format(seed)
+    toy_ts50_trainingweight_l2_expnames.append(expname)
+    # cosine trainingweight ts 50
+    expname = 'TOY_cosine_trainingweight_trainset_size_10_seed_{}'.format(seed)
+    toy_ts50_trainingweight_cosine_expnames.append(expname)
+    # cosine origin trainingweight ts 50
+    expname = 'TOY_cosine_origin_trainingweight_trainset_size_10_seed_{}'.format(seed)
+    toy_ts50_trainingweight_origin_expnames.append(expname)
+    # invloss priorweight ts 50
+    expname = 'TOY_invloss_priorweight_trainset_size_10_seed_{}'.format(seed)
+    toy_ts50_priorweight_invloss_expnames.append(expname)
+    # l2 priorweight ts 50
+    expname = 'TOY_l2_priorweight_trainset_size_10_seed_{}'.format(seed)
+    toy_ts50_priorweight_l2_expnames.append(expname)
+    # cosine priorweight ts 50
+    expname = 'TOY_cosine_priorweight_trainset_size_10_seed_{}'.format(seed)
+    toy_ts50_priorweight_cosine_expnames.append(expname)
+    # cosine origin priorweight ts 50
+    expname = 'TOY_cosine_origin_priorweight_trainset_size_10_seed_{}'.format(seed)
+    toy_ts50_priorweight_origin_expnames.append(expname)
+    # invloss trainingweight ts 100
+    expname = 'TOY_invloss_trainingweight_trainset_size_100_seed_{}'.format(seed)
+    toy_ts100_trainingweight_invloss_expnames.append(expname)
+    # l2 trainingweight ts 100
+    expname = 'TOY_l2_trainingweight_trainset_size_100_seed_{}'.format(seed)
+    toy_ts100_trainingweight_l2_expnames.append(expname)
+    # cosine trainingweight ts 100
+    expname = 'TOY_cosine_trainingweight_trainset_size_100_seed_{}'.format(seed)
+    toy_ts100_trainingweight_cosine_expnames.append(expname)
+    # cosine origin trainingweight ts 100
+    expname = 'TOY_cosine_origin_trainingweight_trainset_size_100_seed_{}'.format(seed)
+    toy_ts100_trainingweight_origin_expnames.append(expname)
+    # invloss priorweight ts 100
+    expname = 'TOY_invloss_priorweight_trainset_size_100_seed_{}'.format(seed)
+    toy_ts100_priorweight_invloss_expnames.append(expname)
+    # l2 priorweight ts 100
+    expname = 'TOY_l2_priorweight_trainset_size_100_seed_{}'.format(seed)
+    toy_ts100_priorweight_l2_expnames.append(expname)
+    # cosine priorweight ts 100
+    expname = 'TOY_cosine_priorweight_trainset_size_100_seed_{}'.format(seed)
+    toy_ts100_priorweight_cosine_expnames.append(expname)
+    # cosine origin priorweight ts 100
+    expname = 'TOY_cosine_origin_priorweight_trainset_size_100_seed_{}'.format(seed)
+    toy_ts100_priorweight_origin_expnames.append(expname)
+    # invloss trainingweight ts 200
+    expname = 'TOY_invloss_trainingweight_trainset_size_200_seed_{}'.format(seed)
+    toy_ts200_trainingweight_invloss_expnames.append(expname)
+    # l2 trainingweight ts 200
+    expname = 'TOY_l2_trainingweight_trainset_size_200_seed_{}'.format(seed)
+    toy_ts200_trainingweight_l2_expnames.append(expname)
+    # cosine trainingweight ts 200
+    expname = 'TOY_cosine_trainingweight_trainset_size_200_seed_{}'.format(seed)
+    toy_ts200_trainingweight_cosine_expnames.append(expname)
+    # cosine origin trainingweight ts 200
+    expname = 'TOY_cosine_origin_trainingweight_trainset_size_200_seed_{}'.format(seed)
+    toy_ts200_trainingweight_origin_expnames.append(expname)
+    # invloss priorweight ts 200
+    expname = 'TOY_invloss_priorweight_trainset_size_200_seed_{}'.format(seed)
+    toy_ts200_priorweight_invloss_expnames.append(expname)
+    # l2 priorweight ts 200
+    expname = 'TOY_l2_priorweight_trainset_size_200_seed_{}'.format(seed)
+    toy_ts200_priorweight_l2_expnames.append(expname)
+    # cosine priorweight ts 200
+    expname = 'TOY_cosine_priorweight_trainset_size_200_seed_{}'.format(seed)
+    toy_ts200_priorweight_cosine_expnames.append(expname)
+    # cosine origin priorweight ts 200
+    expname = 'TOY_cosine_origin_priorweight_trainset_size_200_seed_{}'.format(seed)
+    toy_ts200_priorweight_origin_expnames.append(expname)
+
+
+
 ##### DOUBLE MLP #####
 
 DOUBLE_MLP_invloss_expnames = []
@@ -569,6 +689,31 @@ all_expnames = [cifar_label_trainingweight_invloss_expnames,
                 DOUBLE_fedsim_l2_expnames,
                 DOUBLE_oracle_expnames,
                 DOUBLE_random_expnames,
+                DOUBLE_no_comm_expnames,
+                toy_ts50_trainingweight_invloss_expnames,
+                toy_ts50_trainingweight_l2_expnames,
+                toy_ts50_trainingweight_cosine_expnames,
+                toy_ts50_trainingweight_origin_expnames,
+                toy_ts50_priorweight_invloss_expnames,
+                toy_ts50_priorweight_l2_expnames,
+                toy_ts50_priorweight_cosine_expnames,
+                toy_ts50_priorweight_origin_expnames,
+                toy_ts100_trainingweight_invloss_expnames,
+                toy_ts100_trainingweight_l2_expnames,
+                toy_ts100_trainingweight_cosine_expnames,
+                toy_ts100_trainingweight_origin_expnames,
+                toy_ts100_priorweight_invloss_expnames,
+                toy_ts100_priorweight_l2_expnames,
+                toy_ts100_priorweight_cosine_expnames,
+                toy_ts100_priorweight_origin_expnames,
+                toy_ts200_trainingweight_invloss_expnames,
+                toy_ts200_trainingweight_l2_expnames,
+                toy_ts200_trainingweight_cosine_expnames,
+                toy_ts200_trainingweight_origin_expnames,
+                toy_ts200_priorweight_invloss_expnames,
+                toy_ts200_priorweight_l2_expnames,
+                toy_ts200_priorweight_cosine_expnames,
+                toy_ts200_priorweight_origin_expnames,
                 DOUBLE_no_comm_expnames,
                 DOUBLE_MLP_invloss_expnames,
                 DOUBLE_MLP_cosine_expnames,

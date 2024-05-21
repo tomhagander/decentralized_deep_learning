@@ -1744,7 +1744,7 @@ toy_priorweight_cosine_origin_tauopt = 140
 
 lr = 0.003
 lr_invloss_l2 = 0.008
-
+'''
 # invloss trainingweight
 for seed in seeds:
     for trainset_size in trainset_sizes:
@@ -1794,6 +1794,8 @@ for seed in seeds:
         commands.append('python3 run_experiment.py --gpu 0 --dataset toy_problem --nbr_rounds 40 --nbr_clients 99 --n_data_train {} --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --tau {} --client_information_exchange DAC --experiment_name {} --aggregation_weighting priors'.format(trainset_size, seed, lr, toy_priorweight_cosine_origin_tauopt, expname))
 '''
 
+commands.append('python3 test_multiple.py')
+
 print('Commands to be run: ')
 for command in commands:
     print(command)
@@ -1803,7 +1805,7 @@ print('Running {} commands'.format(len(commands)))
 
 # timebomb sleep for 1 hour
 sleeptime = 0
-sleeptime = 60*60*0.001
+sleeptime = 60*60*12.5
 print('Sleeping for {} seconds'.format(sleeptime))
 time.sleep(sleeptime)
 
