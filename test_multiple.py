@@ -517,6 +517,81 @@ for seed in seeds:
     toy_ts200_priorweight_origin_expnames.append(expname)
 
 
+
+##### DOUBLE MLP #####
+
+DOUBLE_MLP_invloss_expnames = []
+DOUBLE_MLP_cosine_expnames = []
+DOUBLE_MLP_origin_expnames = []
+DOUBLE_MLP_l2_expnames = []
+DOUBLE_MLP_priorweight_invloss_expnames = []
+DOUBLE_MLP_priorweight_cosine_expnames = []
+DOUBLE_MLP_priorweight_origin_expnames = []
+DOUBLE_MLP_priorweight_l2_expnames = []
+DOUBLE_MLP_oracle_expnames = []
+DOUBLE_MLP_random_expnames = []
+DOUBLE_MLP_no_comm_expnames = []
+
+trainingweight_invloss_tauopt = 5
+trainingweight_l2_tauopt = 10
+trainingweight_cosine_tauopt = 3000 
+trainingweight_cosine_origin_tauopt = 140 # not set, the only one left
+priorweight_invloss_tauopt = 1 
+priorweight_l2_tauopt = 5 
+priorweight_cosine_tauopt = 300 
+priorweight_cosine_origin_tauopt = 5
+
+# add optimal run from tuning
+DOUBLE_MLP_invloss_expnames.append('DOUBLE_MLP_invloss_trainingweight_tau_{}'.format(trainingweight_invloss_tauopt))
+DOUBLE_MLP_l2_expnames.append('DOUBLE_MLP_l2_trainingweight_tau_{}'.format(trainingweight_l2_tauopt))
+DOUBLE_MLP_cosine_expnames.append('DOUBLE_MLP_cosine_trainingweight_tau_{}'.format(trainingweight_cosine_tauopt))
+DOUBLE_MLP_origin_expnames.append('DOUBLE_MLP_cosine_origin_trainingweight_tau_{}'.format(trainingweight_cosine_origin_tauopt))
+DOUBLE_MLP_priorweight_invloss_expnames.append('DOUBLE_MLP_priorweight_invloss_tau_{}'.format(priorweight_invloss_tauopt))
+DOUBLE_MLP_priorweight_l2_expnames.append('DOUBLE_MLP_priorweight_l2_tau_{}'.format(priorweight_l2_tauopt))
+DOUBLE_MLP_priorweight_cosine_expnames.append('DOUBLE_MLP_priorweight_cosine_tau_{}'.format(priorweight_cosine_tauopt))
+DOUBLE_MLP_priorweight_origin_expnames.append('DOUBLE_MLP_priorweight_cosine_origin_tau_{}'.format(priorweight_cosine_origin_tauopt))
+
+# add reproduction runs
+for seed in [2,3]:
+    expname = 'DOUBLE_MLP_invloss_trainingweight_tau_{}_seed_{}'.format(trainingweight_invloss_tauopt, seed)
+    DOUBLE_MLP_invloss_expnames.append(expname)
+
+    expname = 'DOUBLE_MLP_l2_trainingweight_tau_{}_seed_{}'.format(trainingweight_l2_tauopt, seed)
+    DOUBLE_MLP_l2_expnames.append(expname)
+
+    expname = 'DOUBLE_MLP_cosine_trainingweight_tau_{}_seed_{}'.format(trainingweight_cosine_tauopt, seed)
+    DOUBLE_MLP_cosine_expnames.append(expname)
+
+    expname = 'DOUBLE_MLP_cosine_origin_trainingweight_tau_{}_seed_{}'.format(trainingweight_cosine_origin_tauopt, seed)
+    DOUBLE_MLP_origin_expnames.append(expname)
+
+    expname = 'DOUBLE_MLP_priorweight_invloss_tau_{}_seed_{}'.format(priorweight_invloss_tauopt, seed)
+    DOUBLE_MLP_priorweight_invloss_expnames.append(expname)
+
+    expname = 'DOUBLE_MLP_priorweight_l2_tau_{}_seed_{}'.format(priorweight_l2_tauopt, seed)
+    DOUBLE_MLP_priorweight_l2_expnames.append(expname)
+
+    expname = 'DOUBLE_MLP_priorweight_cosine_tau_{}_seed_{}'.format(priorweight_cosine_tauopt, seed)
+    DOUBLE_MLP_priorweight_cosine_expnames.append(expname)
+
+    expname = 'DOUBLE_MLP_priorweight_cosine_origin_tau_{}_seed_{}'.format(priorweight_cosine_origin_tauopt, seed)
+    DOUBLE_MLP_priorweight_origin_expnames.append(expname)
+
+# benchmarks
+DOUBLE_MLP_oracle_expnames = ['DOUBLE_MLP_oracle_seed_1',
+                            'DOUBLE_MLP_oracle_seed_2',
+                            'DOUBLE_MLP_oracle_seed_3',]
+
+DOUBLE_MLP_random_expnames = ['DOUBLE_MLP_random_seed_1',
+                            'DOUBLE_MLP_random_seed_2',
+                            'DOUBLE_MLP_random_seed_3',]
+
+DOUBLE_MLP_no_comm_expnames = ['DOUBLE_MLP_no_comm_seed_1',
+                            'DOUBLE_MLP_no_comm_seed_2',
+                            'DOUBLE_MLP_no_comm_seed_3',]
+
+
+
 ##### TESTING #####
 
 all_expnames = [cifar_label_trainingweight_invloss_expnames, 
@@ -638,7 +713,19 @@ all_expnames = [cifar_label_trainingweight_invloss_expnames,
                 toy_ts200_priorweight_invloss_expnames,
                 toy_ts200_priorweight_l2_expnames,
                 toy_ts200_priorweight_cosine_expnames,
-                toy_ts200_priorweight_origin_expnames,]
+                toy_ts200_priorweight_origin_expnames,
+                DOUBLE_no_comm_expnames,
+                DOUBLE_MLP_invloss_expnames,
+                DOUBLE_MLP_cosine_expnames,
+                DOUBLE_MLP_origin_expnames,
+                DOUBLE_MLP_l2_expnames,
+                DOUBLE_MLP_priorweight_invloss_expnames,
+                DOUBLE_MLP_priorweight_cosine_expnames,
+                DOUBLE_MLP_priorweight_origin_expnames,
+                DOUBLE_MLP_priorweight_l2_expnames,
+                DOUBLE_MLP_oracle_expnames,
+                DOUBLE_MLP_random_expnames,
+                DOUBLE_MLP_no_comm_expnames,]
 
 
 if __name__ == '__main__':
