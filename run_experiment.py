@@ -497,7 +497,7 @@ if __name__ == '__main__':
         elif args.client_information_exchange == 'some_delusion':
 
             parameters = {'nbr_neighbors_sampled': args.nbr_neighbors_sampled,
-                          'start_delusion': 15,
+                          'start_delusion': 50,
                           'delusional_client_idxs': delusional_client_idxs}
             clients = client_information_exchange_some_delusion(clients, 
                                                                 parameters=parameters, 

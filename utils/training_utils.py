@@ -331,6 +331,8 @@ def client_information_exchange_oracle(clients, parameters, verbose=False, round
 
                 # update client sampling record
                 clients[i].n_sampled[j] += 1
+
+            clients[i].exchanges_every_round.append(copy.deepcopy(neighbor_indices_sampled))
             
             # weighted average of models
             neighbor_weights.append(clients[i].local_model.state_dict())
@@ -503,6 +505,8 @@ def client_information_exchange_some_delusion(clients, parameters, verbose=False
 
                 # update client sampling record
                 clients[i].n_sampled[j] += 1
+
+            clients[i].exchanges_every_round.append(copy.deepcopy(neighbor_indices_sampled))
             
             # weighted average of models
             neighbor_weights.append(clients[i].local_model.state_dict())

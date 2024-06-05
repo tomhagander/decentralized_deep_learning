@@ -1633,6 +1633,8 @@ for tau in taus:
     expname = 'DOUBLE_MLP_cosine_trainingweight_tau_{}'.format(tau)
     commands.append('python3 run_experiment.py --gpu 0 --dataset double --model MLP --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name {} --delusion 0.0 --mergatron chill'.format(lr,tau,expname))
 
+
+taus = [12000]
 # cosine origin trainingweight
 for tau in taus:
     expname = 'DOUBLE_MLP_cosine_origin_trainingweight_tau_{}'.format(tau)
@@ -1655,6 +1657,7 @@ for tau in taus:
     expname = 'DOUBLE_MLP_cosine_priorweight_tau_{}'.format(tau)
     commands.append('python3 run_experiment.py --gpu 0 --dataset double --model MLP --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed 1 --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name {} --delusion 0.0 --mergatron chill --aggregation_weighting priors'.format(lr,tau,expname))
 
+taus = [12000]
 # cosine origin priorweight
 for tau in taus:
     expname = 'DOUBLE_MLP_cosine_origin_priorweight_tau_{}'.format(tau)
@@ -1667,11 +1670,11 @@ lr = 0.0001
 trainingweight_invloss_tauopt = 5
 trainingweight_l2_tauopt = 10
 trainingweight_cosine_tauopt = 3000 
-trainingweight_cosine_origin_tauopt = 140 # not set, the only one left
+trainingweight_cosine_origin_tauopt = 6000
 priorweight_invloss_tauopt = 1 
 priorweight_l2_tauopt = 5 
 priorweight_cosine_tauopt = 300 
-priorweight_cosine_origin_tauopt = 5
+priorweight_cosine_origin_tauopt = 3000
 '''
 # invloss trainingweight
 for seed in seeds:
@@ -1682,22 +1685,22 @@ for seed in seeds:
 for seed in seeds:
     expname = 'DOUBLE_MLP_l2_trainingweight_tau_{}_seed_{}'.format(trainingweight_l2_tauopt, seed)
     commands.append('python3 run_experiment.py --gpu 0 --dataset double --model MLP --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name {} --delusion 0.0 --mergatron chill'.format(seed,lr,trainingweight_l2_tauopt,expname))
-'''
+
 # cosine trainingweight
 for seed in seeds:
     expname = 'DOUBLE_MLP_cosine_trainingweight_tau_{}_seed_{}'.format(trainingweight_cosine_tauopt, seed)
     commands.append('python3 run_experiment.py --gpu 0 --dataset double --model MLP --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_similarity --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name {} --delusion 0.0 --mergatron chill'.format(seed,lr,trainingweight_cosine_tauopt,expname))
-'''
+
 # cosine origin trainingweight
 for seed in seeds:
     expname = 'DOUBLE_MLP_cosine_origin_trainingweight_tau_{}_seed_{}'.format(trainingweight_cosine_origin_tauopt, seed)
     commands.append('python3 run_experiment.py --gpu 0 --dataset double --model MLP --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name {} --delusion 0.0 --mergatron chill'.format(seed,lr,trainingweight_cosine_origin_tauopt,expname))
-'''
+
 # invloss priorweight
 for seed in seeds:
     expname = 'DOUBLE_MLP_invloss_priorweight_tau_{}_seed_{}'.format(priorweight_invloss_tauopt, seed)
     commands.append('python3 run_experiment.py --gpu 0 --dataset double --model MLP --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric inverse_training_loss --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name {} --delusion 0.0 --mergatron chill --aggregation_weighting priors'.format(seed,lr,priorweight_invloss_tauopt,expname))
-'''
+
 # l2 priorweight
 for seed in seeds:
     expname = 'DOUBLE_MLP_l2_priorweight_tau_{}_seed_{}'.format(priorweight_l2_tauopt, seed)
@@ -1712,7 +1715,7 @@ for seed in seeds:
 for seed in seeds:
     expname = 'DOUBLE_MLP_cosine_origin_priorweight_tau_{}_seed_{}'.format(priorweight_cosine_origin_tauopt, seed)
     commands.append('python3 run_experiment.py --gpu 0 --dataset double --model MLP --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr {} --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric cosine_origin --cosine_alpha 0 --tau {} --client_information_exchange DAC --experiment_name {} --delusion 0.0 --mergatron chill --aggregation_weighting priors'.format(seed,lr,priorweight_cosine_origin_tauopt,expname))
-
+'''
 # benchmarks
 seeds = [1,2,3]
 for seed in seeds:
@@ -1727,7 +1730,7 @@ for seed in seeds:
     # random
     expname = 'DOUBLE_MLP_random_seed_{}'.format(seed)
     commands.append('python3 run_experiment.py --gpu 0 --dataset double --model MLP --nbr_rounds 300 --nbr_clients 100 --n_data_train 400 --n_data_val 100 --seed {} --batch_size 8 --nbr_local_epochs 1 --lr 0.0001 --stopping_rounds 50 --nbr_neighbors_sampled 5 --prior_update_rule softmax --similarity_metric l2 --cosine_alpha 0 --client_information_exchange oracle --experiment_name {} --delusion -1.0 --mergatron chill'.format(seed,expname))
-'''
+
 #### TOY Trainset size experiments ####
 # seeds one to 15
 seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
@@ -1744,7 +1747,7 @@ toy_priorweight_cosine_origin_tauopt = 140
 
 lr = 0.003
 lr_invloss_l2 = 0.008
-'''
+
 # invloss trainingweight
 for seed in seeds:
     for trainset_size in trainset_sizes:
@@ -1805,7 +1808,7 @@ print('Running {} commands'.format(len(commands)))
 
 # timebomb sleep for 1 hour
 sleeptime = 0
-sleeptime = 60*60*12.5
+sleeptime = 60*60*0.001
 print('Sleeping for {} seconds'.format(sleeptime))
 time.sleep(sleeptime)
 

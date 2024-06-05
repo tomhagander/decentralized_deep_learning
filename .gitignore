@@ -22,3 +22,9 @@ MNIST/
 tau_tuning_plots/
 heatmaps_figs/
 analyze_accdistributions.ipynb
+heatmap_gifs/
+heatmap_gifs.ipynb
+clusterdeath_gif.ipynb
+clusterdeath_gifs/
+heatmap_gifs/
+heatmap_gif.ipynb
