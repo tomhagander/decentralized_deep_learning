@@ -253,6 +253,28 @@ def client_information_exchange_DAC(clients, parameters, verbose=False, round=0)
                 new_weights = FedAvg(neighbor_weights,train_set_sizes)
             elif parameters['aggregation_weighting'] == 'priors':
                 new_weights = FedAvg(neighbor_weights,priors_of_sampled)
+            elif parameters['aggregation_weighting'] == 'self_weighted':
+                self_weight = parameters.get('self_weight', 0.7)
+                neighbor_weight = (1 - self_weight) / len(neighbor_indices_sampled)
+                new_weights = FedAvg(
+                    neighbor_weights,
+                    [neighbor_weight] * len(neighbor_indices_sampled) + [self_weight],
+                )
+            elif parameters['aggregation_weighting'] == 'self_half_priors':
+                self_weight = parameters.get('self_weight', 0.5)
+                neighbor_priors = np.asarray(priors_of_sampled[:-1], dtype=float)
+                prior_total = np.sum(neighbor_priors)
+                if prior_total > 0:
+                    neighbor_weights_scaled = (1 - self_weight) * neighbor_priors / prior_total
+                else:
+                    neighbor_weights_scaled = np.full(
+                        len(neighbor_indices_sampled),
+                        (1 - self_weight) / len(neighbor_indices_sampled),
+                    )
+                new_weights = FedAvg(
+                    neighbor_weights,
+                    list(neighbor_weights_scaled) + [self_weight],
+                )
             if parameters['mergatron'] == 'activate':
                 # save old model
                 clients[i].pre_merge_model = copy.deepcopy(clients[i].local_model.state_dict())
