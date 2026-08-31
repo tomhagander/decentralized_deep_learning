@@ -1,4 +1,7 @@
 
+.venv/
+__pycache__/
+*.pyc
 save/*
 cifar-10-batches-py/*
 cifar-10-python.tar.gz
